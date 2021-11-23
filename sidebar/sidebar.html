@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="sidebar_utils.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <title>Heximo->Sidebar</title>
+</head>
+
+<body>
+    <h1 class="text-center">Select Interval</h1>
+    <div class="mt-2 flex-column-center">
+        <div>
+            <label class="f3">
+                <input type="radio" name="period" value="1h" checked>
+                every 1 hour
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="period" value="2h">
+                every 2 hours
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="period" value="3h">
+                every 3 hours
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="period" value="4h">
+                every 4 hours
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="period" value="5h">
+                every 5 hours
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="period" value="6h">
+                every 6 hours
+            </label>
+        </div>
+    </div>
+    <h1 class="text-center">Keep For</h1>
+    <div class="mt-2 flex-column-center">
+        <div>
+            <label class="f3">
+                <input type="radio" name="keep" value="2d" checked>
+                2 days
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keep" value="3d">
+                3 days
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keep" value="4d">
+                4 days
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keep" value="5d">
+                5 days
+            </label>
+        </div>
+    </div>
+    <div class="mt-2 flex-column-center">
+        <button id="action" class="w-25 mt-2 text-center f3">Set</button>
+    </div>
+    <script src="sidebar.js"></script>
+</body>
+
+</html>

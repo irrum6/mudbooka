@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="120"
+   height="120"
+   viewBox="0 0 31.75 31.75"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1">
+    <rect
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#d2e5cc;fill-opacity:1;fill-rule:evenodd;stroke:none;stop-color:#000000;stop-opacity:1"
+       id="rect26154"
+       width="32"
+       height="32"
+       x="0"
+       y="0"
+       ry="0.15345621" />
+    <path
+       style="fill:#989cd7;stroke:#000000;stroke-width:0.663612px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 6.987271,4.2565613 C 8.7797487,3.3249809 11.302918,2.4647524 13.620247,2.2300256 15.699311,1.9984152 22.982318,2.18991 24.859449,2.1760043 24.850949,3.936449 24.88453,5.4830294 24.915424,7.4015275 22.471753,7.2992922 19.201759,6.4756506 17.865002,7.0263 c -1.067605,0.4142717 -0.738747,6.423417 -0.752957,10.601106 -0.01007,4.382802 0.430971,9.897227 0.486242,12.757728 -1.502468,8.36e-4 -2.527092,-0.05641 -4.1305,-0.01602 -0.08762,-2.764117 0.150432,-8.48197 0.122117,-11.841404 C 13.566833,15.2734 13.492989,8.6337894 12.583502,6.9142089 10.880541,5.3762527 6.0243671,7.2389667 3.5134898,8.0925516 3.8346754,6.0644929 5.7527627,5.1231219 6.987271,4.2565613 Z"
+       id="path584" />
+    <path
+       style="fill:#cd8282;stroke:#000000;stroke-width:0.28936px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 19.381464,19.796068 c 0.753629,1.996535 2.801382,3.741056 5.249115,3.838564 2.285542,-0.08747 4.411626,-1.782467 4.973673,-3.764016 0.304161,-1.752793 0.240969,-6.918373 0.201331,-8.262359 -2.402409,0.02818 -3.998603,-0.04614 -5.37407,-0.01652 -1.205357,-0.02897 -5.250372,0.01039 -5.250372,0.01039 0.04068,2.107649 -0.220299,6.345851 0.200323,8.193946 z"
+       id="path13261" />
+    <rect
+       style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.0935779;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1"
+       id="rect17169"
+       width="3"
+       height="4.5"
+       x="22.969898"
+       y="11.596637"
+       ry="0" />
+  </g>
+</svg>
