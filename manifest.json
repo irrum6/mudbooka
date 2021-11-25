@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
     "name": "Mudbooka",
-    "version": "0.1",
-    "description": "Autobookmaker active tabs",
+    "version": "0.2",
+    "description": "Automatically bookmarks active tabs",
     "icons": {
         "16": "icons/logo.svg",
         "32": "icons/logo.svg",
@@ -10,11 +10,13 @@
         "96": "icons/logo.svg"
     },
     "browser_action": {
-        "default_icon": "icons/logo.svg"
+        "default_icon": {
+            "16": "icons/logo.svg",
+            "32": "icons/logo.svg"
+        }
     },
-    "sidebar_action": {
-        "default_title": "Mudbooka",
-        "default_panel": "sidebar/sidebar.html"
+    "options_ui": {
+        "page": "options/index.html"
     },
     "background": {
         "scripts": [
@@ -24,9 +26,12 @@
     "permissions": [
         "<all_urls>",
         "bookmarks",
-        "downloads",
-        "history",
-        "menus",
-        "tabs"
-    ]
+        "tabs",
+        "storage"
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "Mudbooka02@temporary-addon"
+        }
+    }
 }

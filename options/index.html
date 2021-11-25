@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="sidebar_utils.css">
-    <link rel="stylesheet" href="sidebar.css">
-    <title>Heximo->Sidebar</title>
+    <link rel="stylesheet" href="utils.css">
+    <link rel="stylesheet" href="options.css">
+    <title>Mudbooka:Settings</title>
 </head>
 
 <body>
@@ -15,37 +15,37 @@
     <div class="mt-2 flex-column-center">
         <div>
             <label class="f3">
-                <input type="radio" name="period" value="1h" checked>
+                <input type="radio" name="interval" value="1h" data-int="1h" checked>
                 every 1 hour
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="period" value="2h">
+                <input type="radio" name="interval" value="2h" data-int="2h">
                 every 2 hours
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="period" value="3h">
+                <input type="radio" name="interval" value="3h" data-int="3h">
                 every 3 hours
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="period" value="4h">
+                <input type="radio" name="interval" value="4h" data-int="4h">
                 every 4 hours
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="period" value="5h">
+                <input type="radio" name="interval" value="5h" data-int="5h">
                 every 5 hours
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="period" value="6h">
+                <input type="radio" name="interval" value="6h" data-int="6h">
                 every 6 hours
             </label>
         </div>
@@ -54,25 +54,37 @@
     <div class="mt-2 flex-column-center">
         <div>
             <label class="f3">
-                <input type="radio" name="keep" value="2d" checked>
+                <input type="radio" name="keepfor" value="12h" data-keep="12h">
+                12 Hours
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="1d" data-keep="1d">
+                1 day
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="2d" data-keep="2d" checked>
                 2 days
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="keep" value="3d">
+                <input type="radio" name="keepfor" value="3d" data-keep="3d">
                 3 days
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="keep" value="4d">
+                <input type="radio" name="keepfor" value="4d" data-keep="4d">
                 4 days
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="keep" value="5d">
+                <input type="radio" name="keepfor" value="5d" data-keep="5d">
                 5 days
             </label>
         </div>
@@ -80,7 +92,7 @@
     <div class="mt-2 flex-column-center">
         <button id="action" class="w-25 mt-2 text-center f3">Set</button>
     </div>
-    <script src="sidebar.js"></script>
+    <script src="options.js"></script>
 </body>
 
 </html>
