@@ -24,11 +24,11 @@ set_keep_value = data => {
 const onSetParameters = async () => {
     let interval = "1h";
     let keepfor = "2d";
-    let inter = query("input[name=period]:checked");
+    let inter = query("input[name=interval]:checked");
     if (inter !== undefined && inter !== null) {
         interval = inter.value;
     }
-    let keeper = query("input[name=keep]:checked");
+    let keeper = query("input[name=keepfor]:checked");
     if (keeper !== undefined && keeper !== null) {
         keepfor = keeper.value;
     }

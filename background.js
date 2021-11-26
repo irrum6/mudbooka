@@ -38,7 +38,8 @@ const input_to_keepfor = value => {
         case "3d":
         case "4d":
         case "5d":
-            returnval = HOUR * 24 * Number(value.replace("d", ""));
+            let replaced = value.replace("d", "");
+            returnval = HOUR * 24 * Number(replaced);
             break;
         default:
             returnval = HOUR * 48;
@@ -97,6 +98,7 @@ browser.storage.onChanged.addListener(async () => {
     if (undefined !== got_keepfor) {
         keepfor = input_to_keepfor(got_keepfor.keepfor);
     }
+    console.log(got_interval, got_keepfor);
     console.log(interval, keepfor);
     runner_id = window.setInterval(runner, interval);
 });
