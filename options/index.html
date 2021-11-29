@@ -12,71 +12,70 @@
 
 <body>
     <h1 class="text-center">Select Interval</h1>
-    <div class="mt-2 flex-column-center">
+    <div class="text-center f3">Every:</div>
+    <div class="flex-column-center">
         <div>
             <label class="f3">
                 <input type="radio" name="interval" value="1h" data-int="1h" checked>
-                every 1 hour
+                1 hour
+            </label>
+           
+            <label class="f3">
+                <input type="radio" name="interval" value="5h" data-int="5h">
+                5 hours
             </label>
         </div>
         <div>
             <label class="f3">
                 <input type="radio" name="interval" value="2h" data-int="2h">
-                every 2 hours
+                2 hours
+            </label>
+            <label class="f3">
+                <input type="radio" name="interval" value="6h" data-int="6h">
+                6 hours
             </label>
         </div>
         <div>
             <label class="f3">
                 <input type="radio" name="interval" value="3h" data-int="3h">
-                every 3 hours
+                3 hours
+            </label>
+            <label class="f3">
+                <input type="radio" name="interval" value="7h" data-int="7h">
+                7 hours
             </label>
         </div>
         <div>
             <label class="f3">
                 <input type="radio" name="interval" value="4h" data-int="4h">
-                every 4 hours
+                4 hours
+            </label>
+            <label class="f3">
+                <input type="radio" name="interval" value="8h" data-int="8h">
+                8 hours
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="interval" value="5h" data-int="5h">
-                every 5 hours
+                <input type="radio" name="interval" value="c" data-int="c">
+                custom
             </label>
         </div>
         <div>
             <label class="f3">
-                <input type="radio" name="interval" value="6h" data-int="6h">
-                every 6 hours
+                <input type="range" id="interval_range" min="15" max="480" step="15" value="60" disabled>
+                <span id="display_interval_range">60</span>
+                minutes
             </label>
         </div>
     </div>
-    <h1 class="text-center">Keep For</h1>
-    <div class="mt-2 flex-column-center">
+    <h1 class="text-center">Keep For:</h1>
+    <div class="flex-column-center">
         <div>
             <label class="f3">
                 <input type="radio" name="keepfor" value="12h" data-keep="12h">
                 12 Hours
             </label>
-        </div>
-        <div>
-            <label class="f3">
-                <input type="radio" name="keepfor" value="1d" data-keep="1d">
-                1 day
-            </label>
-        </div>
-        <div>
-            <label class="f3">
-                <input type="radio" name="keepfor" value="2d" data-keep="2d" checked>
-                2 days
-            </label>
-        </div>
-        <div>
-            <label class="f3">
-                <input type="radio" name="keepfor" value="3d" data-keep="3d">
-                3 days
-            </label>
-        </div>
-        <div>
             <label class="f3">
                 <input type="radio" name="keepfor" value="4d" data-keep="4d">
                 4 days
@@ -84,10 +83,48 @@
         </div>
         <div>
             <label class="f3">
+                <input type="radio" name="keepfor" value="1d" data-keep="1d">
+                1 day
+            </label>
+            <label class="f3">
                 <input type="radio" name="keepfor" value="5d" data-keep="5d">
                 5 days
             </label>
         </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="2d" data-keep="2d" checked>
+                2 days
+            </label>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="6d" data-keep="6d">
+                6 days
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="3d" data-keep="3d">
+                3 days
+            </label>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="7d" data-keep="7d">
+                1 week
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="radio" name="keepfor" value="c" data-keep="c">
+                custom
+            </label>
+        </div>
+        <div>
+            <label class="f3">
+                <input type="range" id="keepfor_range" min="1" max="168" step="1" value="48" disabled>
+                <span id="display_keepfor_range">48</span>
+                hours
+            </label>
+        </div>
+
     </div>
     <div class="mt-2 flex-column-center">
         <button id="action" class="w-25 mt-2 text-center f3">Set</button>
