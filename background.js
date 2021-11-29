@@ -87,8 +87,6 @@ let runner = async () => {
 
 }
 
-let runner_id = window.setInterval(runner, interval);
-
 const load_and_set_interval = async () => {
     let got_interval = await browser.storage.local.get("interval");
     if (undefined !== got_interval) {
@@ -114,6 +112,16 @@ const load_and_set_keepfor = async () => {
         }
     }
 }
+
+let runner_id = 0;
+
+window.setTimeout(async () => {
+    // load and set interval
+    await load_and_set_interval();
+    //load and set keepfor
+    await load_and_set_keepfor();
+    runner_id = window.setInterval(runner, interval);
+}, 2000);
 
 browser.storage.onChanged.addListener(async () => {
     window.clearInterval(runner_id);
