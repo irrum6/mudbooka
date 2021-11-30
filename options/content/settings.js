@@ -33,6 +33,27 @@ const set_keepfor_range_value = data => {
     query("#display_keepfor_range").textContent = data.custom_keepfor;
 }
 
+const SetPrefixValue = data => {
+    if (undefined === data || null === data || undefined === data.prefix) {
+        return;
+    }
+    if (typeof data.prefix == "string" && data.prefix != "") {
+        query("#enable_pfx").checked = true;
+        query("#naming_prefix").disabled = false;
+        query("#naming_prefix").value = data.prefix;
+    }
+}
+
+const SetSuffixValue = data => {
+    if (undefined === data || null === data || undefined === data.suffix) {
+        return;
+    }
+    if (typeof data.prefix == "string" && data.suffix != "") {
+        query("#enable_sufx").checked = true;
+        query("#naming_suffix").disabled = false;
+        query("#naming_suffix").value = data.suffix;
+    }
+}
 
 // interval range functions 
 const onIntervalRangeValueChange = e => {
@@ -85,51 +106,67 @@ for (const input of keepfor_inputs) {
     })
 }
 
+query("#enable_sufx")[on]("click", e => {
+    if (true === e.target.checked) {
+        ToggleInputEnabledState("naming_suffix", true);
+        return;
+    }
+    ToggleInputEnabledState("naming_suffix", false);
+});
 /**
  * Retrieves input values and sets interval and keepfor values
  */
-const onSetParameters = async () => {
+const SaveIntervalValue = async () => {
     let interval = "1h";
-    let keepfor = "2d";
     let inter = query("input[name=interval]:checked");
     if (inter !== undefined && inter !== null) {
         interval = inter.value;
     }
+    let custom_interval = "60";
+    if ("c" === interval) {
+        custom_interval = query("#interval_range").value;
+    }
+    await browser.storage.local.set({ interval, custom_interval });
+}
+const SaveKeepValue = async () => {
+    let keepfor = "2d";
+
     let keeper = query("input[name=keepfor]:checked");
     if (keeper !== undefined && keeper !== null) {
         keepfor = keeper.value;
     }
-    let custom_interval = "60";
+
     let custom_keepfor = "48";
 
-    if ("c" === interval) {
-        custom_interval = query("#interval_range").value;
-    }
     if ("c" === keepfor) {
         custom_keepfor = query("#keepfor_range").value;
     }
-
-    console.log(custom_interval, custom_keepfor);
-
-    await browser.storage.local.set({ interval, keepfor, custom_interval, custom_keepfor });
+    await browser.storage.local.set({ keepfor, custom_keepfor });
 }
 
-query("#action")[on]("click", onSetParameters);
-
-const onFullSettingsOpen = async () => {
-    let createProperties = {
-        url: "content/settings.html",
-        active: true
+const SaveNaming = async () => {
+    let prefix = query("#naming_prefix").value;;
+    if ("" === prefix) {
+        alert("prefix can't be empty");
     }
-    await browser.tabs.create(
-        createProperties
-    )
+    await browser.storage.local.set({ prefix });
+
+    let enable_sufx = query("#enable_sufx").checked;
+    let suffix = "";
+    if (enable_sufx) {
+        suffix = query("#naming_suffix").value;
+    }
+    await browser.storage.local.set({ suffix });
 }
 
-query("#full_throtle")[on]("click", onFullSettingsOpen);
+query("#save_interval")[on]("click", SaveIntervalValue);
+query("#save_keep")[on]("click", SaveKeepValue);
+query("#save_naming")[on]("click", SaveNaming);
 
 //set input values from storage
 browser.storage.local.get("interval").then(set_interval_value);
 browser.storage.local.get("keepfor").then(set_keep_value);
 browser.storage.local.get("custom_interval").then(set_interval_range_value);
 browser.storage.local.get("custom_keepfor").then(set_keepfor_range_value);
+browser.storage.local.get("prefix").then(SetPrefixValue);
+browser.storage.local.get("suffix").then(SetSuffixValue);

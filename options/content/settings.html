@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../utils.css">
+    <link rel="stylesheet" href="settings.css">
+    <title>Mudbooker:Full Settings</title>
+</head>
+
+<body>
+    <h1 class="text-center">Full Settings</h1>
+    <div class="flex-row-center">
+        <div class="flex-column-center grow1 mr-4">
+            <div class="text-center">
+                <span class="f3 bold900">Select Interval&rArr; Every:</span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="1h" data-int="1h" checked>
+                    1 hour
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="2h" data-int="2h">
+                    2 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="3h" data-int="3h">
+                    3 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="4h" data-int="4h">
+                    4 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="5h" data-int="5h">
+                    5 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="6h" data-int="6h">
+                    6 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="7h" data-int="7h">
+                    7 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="8h" data-int="8h">
+                    8 hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="interval" value="c" data-int="c">
+                    custom
+                </label>
+            </div>
+            <div class="w-75">
+                <input type="range" class="w-100" id="interval_range" min="15" max="480" step="15" value="60" disabled>
+                <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
+            </div>
+            <div>
+                <button id="save_interval" class="f3">Save Interval</button>
+            </div>
+        </div>
+        <div class="flex-column-center grow1 ml-4">
+            <div class="text-center">
+                <span class="f3 bold900">Keep For:</span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="12h" data-keep="12h">
+                    12 Hours
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="1d" data-keep="1d">
+                    1 day
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="2d" data-keep="2d" checked>
+                    2 days
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="3d" data-keep="3d">
+                    3 days
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="4d" data-keep="4d">
+                    4 days
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="5d" data-keep="5d">
+                    5 days
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="6d" data-keep="6d">
+                    6 days
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="7d" data-keep="7d">
+                    1 week
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="keepfor" value="c" data-keep="c">
+                    custom
+                </label>
+            </div>
+            <div class="w-75">
+                <input type="range" class="w-100" id="keepfor_range" min="1" max="168" step="1" value="48" disabled>
+                <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
+            </div>
+            <div>
+                <button id="save_keep" class="f3">Save Keep Duration</button>
+            </div>
+        </div>
+        <div class="flex-column-center grow1 ml-4">
+            <div class="text-center">
+                <span class="f3 bold900">Folder Naming</span>
+            </div>
+            <div>
+                <label class="f3">
+                    Prefix:
+                    <input type="text" name="prefix" id="naming_prefix" value="fobpzpep">
+                </label>
+            </div>
+            <div>
+                <input type="checkbox" name="" id="enable_sufx">
+                <label for="enable_sufx" class="f3"> Use suffix</label>
+            </div>
+            <div>
+                <label class="f3">
+                    Suffix:
+                    <input type="text" name="suffix" id="naming_suffix" disabled>
+                </label>
+            </div>
+            <div class="mt-4">
+                <button id="save_naming" class="f3">Save Naming</button>
+            </div>
+        </div>
+    </div>
+    <script src="../utils.js"></script>
+    <script src="settings.js"></script>
+</body>
+
+</html>

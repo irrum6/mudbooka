@@ -8,6 +8,11 @@ const VALID_KEEPS = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
 Object.freeze(VALID_INTERVALS);
 Object.freeze(VALID_KEEPS);
 
+let prefix = "fobpzpep";
+let suffix = "";
+
+let debuging = false;
+
 const input_to_interval = value => {
     let returnval = HOUR * 0.5;
     if (!VALID_INTERVALS.includes(value)) {
@@ -59,16 +64,6 @@ interval = SECOND * 120;
 keepfor = SECOND * 360;
 
 let runner = async () => {
-    let tabs = await browser.tabs.query({});
-    let prefix = "m_bookmkarks_"
-
-    let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-    let formated = new Date().toLocaleString('default', format_options).replace(/[\s:,]+/gi, "_");
-    let title = `${prefix}${formated}_${randstr()}`;//some randomness
-    let folder = await browser.bookmarks.create({ title });
-
-    const folder_id = folder.id;
-
     //delete old items
     let folders = await browser.bookmarks.search({ query: prefix });
     let early_date = new Date(Date.now() - keepfor);
@@ -80,6 +75,21 @@ let runner = async () => {
         }
     }
 
+    let tabs = await browser.tabs.query({});
+
+    let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    let formated = new Date().toLocaleString('default', format_options).replace(/[\s:,]+/gi, "_");
+    let title = `${prefix}_${formated}_${suffix}`;
+
+    if (debuging) {
+        //add some randomness
+        let _substr = `_${randstr()}`;
+        title = title.concat(_substr);
+    }
+    let folder = await browser.bookmarks.create({ title });
+
+    const folder_id = folder.id;
+
     for (const t of tabs) {
         const { title, url } = t;
         await browser.bookmarks.create({ parentId: folder_id, title, url });
@@ -88,6 +98,9 @@ let runner = async () => {
 }
 
 const load_and_set_interval = async () => {
+    if (debuging) {
+        return;
+    }
     let got_interval = await browser.storage.local.get("interval");
     if (undefined !== got_interval) {
         let _value = got_interval.interval;
@@ -101,6 +114,9 @@ const load_and_set_interval = async () => {
 }
 
 const load_and_set_keepfor = async () => {
+    if (debuging) {
+        return;
+    }
     let got_keepfor = await browser.storage.local.get("keepfor");
     if (undefined !== got_keepfor) {
         let _value = got_keepfor.keepfor;
@@ -110,6 +126,17 @@ const load_and_set_keepfor = async () => {
         } else {
             keepfor = input_to_keepfor(_value);
         }
+    }
+}
+
+const load_and_set_naming = async () => {
+    let pre = await browser.storage.local.get("prefix");
+    if (undefined !== pre && typeof pre.prefix == "string" && pre.prefix != "") {
+        prefix = pre.prefix;
+    }
+    let su = await browser.storage.local.get("suffix");
+    if (undefined !== su && typeof su.suffix == "string" && su.suffix != "") {
+        suffix = su.suffix;
     }
 }
 
@@ -129,6 +156,8 @@ browser.storage.onChanged.addListener(async () => {
     await load_and_set_interval();
     //load and set keepfor
     await load_and_set_keepfor();
+    // load 
+    await load_and_set_naming();
     runner_id = window.setInterval(runner, interval);
 });
 
