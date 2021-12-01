@@ -53,6 +53,30 @@ const SetSuffixValue = data => {
     }
 }
 
+const SetFormatValues = data => {
+    if (undefined === data || null === data) {
+        return;
+    }
+
+    let { format_year, format_mon, format_day, locale } = data;
+
+    if(is_nonempty_string(format_year)){
+        query(`[data-fy='${format_year}']`).checked = true;
+    }
+    if(is_nonempty_string(format_mon)){
+        query(`[data-fm='${format_mon}']`).checked = true;
+    }
+    if(is_nonempty_string(format_day)){
+        query(`[data-fd='${format_day}']`).checked = true;
+    }
+    if("default"===locale){
+        query(`[data-locale=default]`).checked = true;
+    }else{
+        query(`[data-locale=select]`).checked = true;
+        query("select[name=select_locale]").value = locale;
+    }
+}
+
 // interval range functions 
 const onIntervalRangeValueChange = e => {
     query("#display_interval_range").textContent = e.target.value;
@@ -184,3 +208,5 @@ browser.storage.local.get("custom_interval").then(set_interval_range_value);
 browser.storage.local.get("custom_keepfor").then(set_keepfor_range_value);
 browser.storage.local.get("prefix").then(SetPrefixValue);
 browser.storage.local.get("suffix").then(SetSuffixValue);
+
+browser.storage.local.get(["format_year", "format_mon", "format_day", "locale"], SetFormatValues);

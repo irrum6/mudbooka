@@ -35,3 +35,9 @@ const randa = (entropy, radix) => {
 
     return Array.prototype.map.call(arrayarra, e => e.toString(radix)).join("")
 }
+/**
+ * check if parameter is nonempty string
+ * @param {Any} s 
+ * @returns {Boolean}
+ */
+const is_nonempty_string = s => (typeof s === "string" && s !== "");
