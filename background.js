@@ -92,22 +92,22 @@ const load_and_set_interval = async (runner_id) => {
     if (debuging) {
         return;
     }
-    let _interval = 0;
-    let got_interval = await browser.storage.local.get("interval");
-    if (undefined !== got_interval) {
-        let _value = got_interval.interval;
-        if ("c" === _value) {
-            let _range = await browser.storage.local.get("custom_interval");
-            _interval = parse_interval_range(_range.custom_interval);
-        } else {
-            _interval = input_to_interval(_value);
-        }
+    let data = await browser.storage.local.get(["interval", "custom_interval"]);
+    if (undefined === data || null === data) {
+        return;
+    }
+    let _interval = data.interval;
+    let _custom = data.custom_interval;
+    if ("c" === _interval) {
+        _interval = parse_interval_range(_custom);
+    } else {
+        _interval = input_to_interval(_interval);
     }
     //if interval was changed
     if (_interval != interval) {
         window.clearInterval(runner_id);
+        runner_id = window.setInterval(runner, _interval);
         interval = _interval;
-        runner_id = window.setInterval(runner, interval);
     }
 }
 
@@ -115,43 +115,49 @@ const load_and_set_keepfor = async () => {
     if (debuging) {
         return;
     }
-    let got_keepfor = await browser.storage.local.get("keepfor");
-    if (undefined !== got_keepfor) {
-        let _value = got_keepfor.keepfor;
-        if ("c" === _value) {
-            let _range = await browser.storage.local.get("custom_keepfor");
-            keepfor = parse_keepfor_range(_range.custom_keepfor);
-        } else {
-            keepfor = input_to_keepfor(_value);
-        }
+    let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
+    if (undefined === data || null === data) {
+        return;
+    }
+
+    let _keepfor = data.keepfor;
+    let _custom = data.custom_keepfor;
+    if ("c" === _keepfor) {
+        keepfor = parse_keepfor_range(_custom);
+    } else {
+        keepfor = input_to_keepfor(_keepfor);
     }
 }
 
 const load_and_set_naming = async () => {
-    let pre = await browser.storage.local.get("prefix");
-    if (undefined !== pre && typeof pre.prefix == "string" && pre.prefix != "") {
-        prefix = pre.prefix;
+    let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day", "locale"];
+
+    let data = await browser.storage.local.get(sarraya);
+
+    if (undefined === data || null === data) {
+        return;
     }
-    let su = await browser.storage.local.get("suffix");
-    if (undefined !== su && typeof su.suffix == "string" && su.suffix != "") {
-        suffix = su.suffix;
+    let {format_year,format_mon,format_day} = data;
+    let _suffix = data.suffix;
+    let _locale = data.locale;
+
+    if (is_nonempty_string(data.prefix)){
+        prefix = data.prefix;
     }
-    let fyv = await browser.storage.local.get("format_year");
-    if (undefined !== su && typeof fyv.format_year == "string" && fyv.format_year != "") {
-        format_options.year = fyv.format_year;
+    if (is_nonempty_string(data.suffix)){
+        suffix = data.suffix;
     }
-    let fmv = await browser.storage.local.get("format_mon");
-    if (undefined !== fmv && typeof fmv.format_mon == "string" && fmv.format_mon != "") {
-        format_options.month = fmv.format_mon;
+    if (is_nonempty_string(data.locale)){
+        locale = data.locale;
     }
-    let fdv = await browser.storage.local.get("format_day");
-    if (undefined !== fdv && typeof fdv.format_day == "string" && fdv.format_day != "") {
-        format_options.day = fdv.format_day;
+    if (is_nonempty_string(format_year)){
+        format_options.year = format_year;
     }
-    
-    let get_locale = await browser.storage.local.get("locale");
-    if (undefined !== get_locale && typeof get_locale.locale == "string" && get_locale.locale != "") {
-        locale = get_locale.locale;
+    if (is_nonempty_string(format_mon)){
+        format_options.month = format_mon;
+    }
+    if (is_nonempty_string(format_day)){
+        format_options.day = format_day;
     }
 }
 
@@ -162,6 +168,8 @@ window.setTimeout(async () => {
     await load_and_set_interval(runner_id);
     //load and set keepfor
     await load_and_set_keepfor();
+    // load and set prefix/suffix
+    await load_and_set_naming();
 }, 2000);
 
 browser.storage.onChanged.addListener(async () => {
