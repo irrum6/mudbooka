@@ -12,10 +12,13 @@
 
 <body>
     <h1 class="text-center">Full Settings</h1>
-    <div class="flex-row-center">
+    <div class="flex-row-center" style="align-items: start;">
         <div class="flex-column-center grow1 mr-4">
             <div class="text-center">
-                <span class="f3 bold900">Select Interval&rArr; Every:</span>
+                <span class="f4 bold900">Select Interval</span>
+            </div>
+            <div>
+                <span class="f3 bold"> Every:</span>
             </div>
             <div>
                 <label class="f3">
@@ -72,7 +75,9 @@
                 </label>
             </div>
             <div class="w-75">
-                <input type="range" class="w-100" id="interval_range" min="15" max="480" step="15" value="60" disabled>
+                <input type="range" class="w-100" id="interval_range" min="5" max="480" step="5" value="60" disabled>
+            </div>
+            <div>
                 <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
             </div>
             <div>
@@ -81,7 +86,7 @@
         </div>
         <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
-                <span class="f3 bold900">Keep For:</span>
+                <span class="f4 bold900">Keep For:</span>
             </div>
             <div>
                 <label class="f3">
@@ -147,23 +152,84 @@
         </div>
         <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
-                <span class="f3 bold900">Folder Naming</span>
+                <span class="f4 bold900">Folder Naming</span>
             </div>
             <div>
-                <label class="f3">
+                <label class="f3" for="naming_prefix">
                     Prefix:
-                    <input type="text" name="prefix" id="naming_prefix" value="fobpzpep">
+                    <input type="text" class="f3" name="prefix" id="naming_prefix" value="mudbz_">
                 </label>
             </div>
             <div>
-                <input type="checkbox" name="" id="enable_sufx">
+                <input type="checkbox" id="enable_sufx">
                 <label for="enable_sufx" class="f3"> Use suffix</label>
             </div>
             <div>
-                <label class="f3">
+                <label class="f3" for="naming_suffix">
                     Suffix:
-                    <input type="text" name="suffix" id="naming_suffix" disabled>
+                    <input type="text" class="f3" name="suffix" id="naming_suffix" disabled>
                 </label>
+            </div>
+            <div class="text-center">
+                <span class="f3 bold">
+                    Year Format
+                </span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="format_year" value="2-digit">2-digit
+                </label>
+                <label class="f3">
+                    <input type="radio" name="format_year" value="numeric" checked>Numeric
+                </label>
+            </div>
+            <div class="text-center">
+                <span class="f3 bold">Month Format</span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="format_mon" value="numeric" checked>Numeric
+                </label>
+                <label class="f3">
+                    <input type="radio" name="format_mon" value="long" checked>Long
+                </label>
+                <label class="f3">
+                    <input type="radio" name="format_mon" value="short" checked>Short
+                </label>
+            </div>
+            <div class="text-center">
+                <span class="f3 bold">
+                    Day Format
+                </span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="format_day" value="2-digit">2-digit
+                </label>
+                <label class="f3">
+                    <input type="radio" name="format_day" value="numeric" checked>Numeric
+                </label>
+            </div>
+            <div class="text-center">
+                <span class="f3 bold">
+                    Locale
+                </span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="locale" value="default" checked>Default (Browser)
+                </label>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" name="locale" value="numeric">Select
+                </label>
+            </div>
+            <div>
+                <select name="" id="" class="f3">
+                    <option value="us">English(US)</option>
+                    <option value="ka">ქართული(Georgia)</option>
+                </select>
             </div>
             <div class="mt-4">
                 <button id="save_naming" class="f3">Save Naming</button>

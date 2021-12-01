@@ -4,7 +4,7 @@ const set_interval_value = data => {
     }
     query(`[data-int='${data.interval}']`).checked = true;
     if ("c" === data.interval) {
-        toggleIntervalRangeValueEnabledState(true);
+        ToggleInputEnabledState("interval_range", true);
     }
 }
 const set_interval_range_value = data => {
@@ -21,7 +21,7 @@ const set_keep_value = data => {
     }
     query(`[data-keep='${data.keepfor}']`).checked = true;
     if ("c" === data.keepfor) {
-        toggleKeepForRangeValueEnabledState(true);
+        ToggleInputEnabledState("keepfor_range", true);
     }
 }
 
@@ -38,8 +38,6 @@ const SetPrefixValue = data => {
         return;
     }
     if (typeof data.prefix == "string" && data.prefix != "") {
-        query("#enable_pfx").checked = true;
-        query("#naming_prefix").disabled = false;
         query("#naming_prefix").value = data.prefix;
     }
 }
@@ -48,7 +46,7 @@ const SetSuffixValue = data => {
     if (undefined === data || null === data || undefined === data.suffix) {
         return;
     }
-    if (typeof data.prefix == "string" && data.suffix != "") {
+    if (typeof data.suffix == "string" && data.suffix != "") {
         query("#enable_sufx").checked = true;
         query("#naming_suffix").disabled = false;
         query("#naming_suffix").value = data.suffix;
@@ -62,22 +60,14 @@ const onIntervalRangeValueChange = e => {
 query("#interval_range")[on]("change", onIntervalRangeValueChange);
 query("#interval_range")[on]("input", onIntervalRangeValueChange);
 
-const toggleIntervalRangeValueEnabledState = v => {
-    if (true === v) {
-        query("#interval_range").disabled = false;
-        return;
-    }
-    query("#interval_range").disabled = true;
-}
-
 const interval_inputs = query_all("input[name=interval]");
 for (const input of interval_inputs) {
     input[on]("change", e => {
         if ("c" === e.target.value) {
-            toggleIntervalRangeValueEnabledState(true);
+            ToggleInputEnabledState("interval_range", true);
             return;
         }
-        toggleIntervalRangeValueEnabledState(false);
+        ToggleInputEnabledState("interval_range", false);
     })
 }
 // keepfor range functions 
@@ -87,22 +77,14 @@ const onKeepForRangeValueChange = e => {
 query("#keepfor_range")[on]("change", onKeepForRangeValueChange);
 query("#keepfor_range")[on]("input", onKeepForRangeValueChange);
 
-const toggleKeepForRangeValueEnabledState = v => {
-    if (true === v) {
-        query("#keepfor_range").disabled = false;
-        return;
-    }
-    query("#keepfor_range").disabled = true;
-}
-
 const keepfor_inputs = query_all("input[name=keepfor]");
 for (const input of keepfor_inputs) {
     input[on]("change", e => {
         if ("c" === e.target.value) {
-            toggleKeepForRangeValueEnabledState(true);
+            ToggleInputEnabledState("keepfor_range", true);
             return;
         }
-        toggleKeepForRangeValueEnabledState(false);
+        ToggleInputEnabledState("keepfor_range", false);
     })
 }
 
@@ -157,6 +139,27 @@ const SaveNaming = async () => {
         suffix = query("#naming_suffix").value;
     }
     await browser.storage.local.set({ suffix });
+
+    let format_year = "numeric";
+    let radio = query("input[name=format_year]:checked");
+    if (radio !== undefined && radio !== null) {
+        format_year = radio.value;
+    }
+    await browser.storage.local.set({ format_year });
+
+    let format_mon = "numeric";
+    radio = query("input[name=format_mon]:checked");
+    if (radio !== undefined && radio !== null) {
+        format_mon = radio.value;
+    }
+    await browser.storage.local.set({ format_mon });
+
+    let format_day = "numeric";
+    radio = query("input[name=format_day]:checked");
+    if (radio !== undefined && radio !== null) {
+        format_day = radio.value;
+    }
+    await browser.storage.local.set({ format_day });
 }
 
 query("#save_interval")[on]("click", SaveIntervalValue);

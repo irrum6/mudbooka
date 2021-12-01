@@ -2,9 +2,14 @@ html {
     font-size: 16px;
 }
 
-input[disabled]{
+input[disabled] {
     background-color: lightgrey;
 }
+
+input[type="range"] {
+    height:32px;
+  }
+
 .flex-column-center {
     display: flex;
     flex-direction: column;
@@ -105,8 +110,16 @@ input[disabled]{
 }
 
 /* padding */
+.p-1 {
+    padding: 0.25rem;
+}
+
 .p-2 {
     padding: 0.5rem;
+}
+
+.p-3 {
+    padding: 0.75rem;
 }
 
 .p-4 {
