@@ -33,20 +33,15 @@ const set_keepfor_range_value = data => {
     query("#display_keepfor_range").textContent = data.custom_keepfor;
 }
 
-const SetPrefixValue = data => {
-    if (undefined === data || null === data || undefined === data.prefix) {
+const SetPrefixAndSuffix = data => {
+    if (undefined === data || null === data) {
         return;
     }
-    if (typeof data.prefix == "string" && data.prefix != "") {
+    const { prefix, suffix } = data;
+    if (is_nonempty_string(prefix)) {
         query("#naming_prefix").value = data.prefix;
     }
-}
-
-const SetSuffixValue = data => {
-    if (undefined === data || null === data || undefined === data.suffix) {
-        return;
-    }
-    if (typeof data.suffix == "string" && data.suffix != "") {
+    if (is_nonempty_string(suffix)) {
         query("#enable_sufx").checked = true;
         query("#naming_suffix").disabled = false;
         query("#naming_suffix").value = data.suffix;
@@ -60,18 +55,18 @@ const SetFormatValues = data => {
 
     let { format_year, format_mon, format_day, locale } = data;
 
-    if(is_nonempty_string(format_year)){
+    if (is_nonempty_string(format_year)) {
         query(`[data-fy='${format_year}']`).checked = true;
     }
-    if(is_nonempty_string(format_mon)){
+    if (is_nonempty_string(format_mon)) {
         query(`[data-fm='${format_mon}']`).checked = true;
     }
-    if(is_nonempty_string(format_day)){
+    if (is_nonempty_string(format_day)) {
         query(`[data-fd='${format_day}']`).checked = true;
     }
-    if("default"===locale){
+    if ("default" === locale) {
         query(`[data-locale=default]`).checked = true;
-    }else{
+    } else {
         query(`[data-locale=select]`).checked = true;
         query("select[name=select_locale]").value = locale;
     }
@@ -206,7 +201,6 @@ browser.storage.local.get("interval").then(set_interval_value);
 browser.storage.local.get("keepfor").then(set_keep_value);
 browser.storage.local.get("custom_interval").then(set_interval_range_value);
 browser.storage.local.get("custom_keepfor").then(set_keepfor_range_value);
-browser.storage.local.get("prefix").then(SetPrefixValue);
-browser.storage.local.get("suffix").then(SetSuffixValue);
+browser.storage.local.get(["prefix","suffix"]).then(SetPrefixAndSuffix);
 
 browser.storage.local.get(["format_year", "format_mon", "format_day", "locale"], SetFormatValues);
