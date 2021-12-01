@@ -14,6 +14,7 @@ Object.freeze(VALID_KEEPS);
 let prefix = "mudbz_";
 let suffix = "";
 let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+let locale = "default";
 
 /**
  * debuging options
@@ -67,7 +68,7 @@ let runner = async () => {
     //search tabs
     let tabs = await browser.tabs.query({});
 
-    let formated = new Date().toLocaleString('default', format_options).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
+    let formated = new Date().toLocaleString(locale, format_options).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
     let title = `${prefix}${formated}${suffix}`;
 
     if (debuging) {
@@ -146,6 +147,11 @@ const load_and_set_naming = async () => {
     let fdv = await browser.storage.local.get("format_day");
     if (undefined !== fdv && typeof fdv.format_day == "string" && fdv.format_day != "") {
         format_options.day = fdv.format_day;
+    }
+    
+    let get_locale = await browser.storage.local.get("locale");
+    if (undefined !== get_locale && typeof get_locale.locale == "string" && get_locale.locale != "") {
+        locale = get_locale.locale;
     }
 }
 

@@ -160,6 +160,17 @@ const SaveNaming = async () => {
         format_day = radio.value;
     }
     await browser.storage.local.set({ format_day });
+
+    let locale = "default";
+    radio = query("input[name=locale]:checked");
+    if (radio !== undefined && radio !== null) {
+        locale = radio.value;
+    }
+    if ("select" === locale) {
+        locale = query("select[name=select_locale]").value;
+    }
+
+    await browser.storage.local.set({ locale });
 }
 
 query("#save_interval")[on]("click", SaveIntervalValue);
