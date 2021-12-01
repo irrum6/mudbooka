@@ -1,36 +1,39 @@
-const set_interval_value = data => {
-    if (undefined === data || null === data || undefined === data.interval) {
+const SetIntervalValues = data => {
+    if (undefined === data || null === data) {
         return;
     }
-    query(`[data-int='${data.interval}']`).checked = true;
-    if ("c" === data.interval) {
+    const { interval, custom_interval } = data;
+    if (interval === undefined) {
+        return;
+    }
+    query(`[data-int='${interval}']`).checked = true;
+    if ("c" === interval) {
         ToggleInputEnabledState("interval_range", true);
     }
-}
-const set_interval_range_value = data => {
-    if (undefined === data || null === data || undefined === data.custom_interval) {
+    if (custom_interval === undefined) {
         return;
     }
-    query("#interval_range").value = data.custom_interval;
-    query("#display_interval_range").textContent = data.custom_interval;
+    query("#interval_range").value = custom_interval;
+    query("#display_interval_range").textContent = custom_interval;
 }
 
-const set_keep_value = data => {
-    if (undefined === data || null === data || undefined === data.keepfor) {
+const SetKeepValues = data =>{
+    if (undefined === data || null === data) {
         return;
     }
-    query(`[data-keep='${data.keepfor}']`).checked = true;
-    if ("c" === data.keepfor) {
+    const { keepfor, custom_keepfor } = data;
+    if (keepfor === undefined) {
+        return;
+    }
+    query(`[data-keep='${keepfor}']`).checked = true;
+    if ("c" === keepfor) {
         ToggleInputEnabledState("keepfor_range", true);
     }
-}
-
-const set_keepfor_range_value = data => {
-    if (undefined === data || null === data || undefined === data.custom_keepfor) {
+    if (custom_keepfor === undefined) {
         return;
     }
-    query("#keepfor_range").value = data.custom_keepfor;
-    query("#display_keepfor_range").textContent = data.custom_keepfor;
+    query("#keepfor_range").value = custom_keepfor;
+    query("#display_keepfor_range").textContent = custom_keepfor;
 }
 
 const SetPrefixAndSuffix = data => {
@@ -197,10 +200,8 @@ query("#save_keep")[on]("click", SaveKeepValue);
 query("#save_naming")[on]("click", SaveNaming);
 
 //set input values from storage
-browser.storage.local.get("interval").then(set_interval_value);
-browser.storage.local.get("keepfor").then(set_keep_value);
-browser.storage.local.get("custom_interval").then(set_interval_range_value);
-browser.storage.local.get("custom_keepfor").then(set_keepfor_range_value);
-browser.storage.local.get(["prefix","suffix"]).then(SetPrefixAndSuffix);
+browser.storage.local.get(["interval","custom_interval"]).then(SetIntervalValues);
+browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);
+browser.storage.local.get(["prefix", "suffix"]).then(SetPrefixAndSuffix);
 
 browser.storage.local.get(["format_year", "format_mon", "format_day", "locale"], SetFormatValues);
