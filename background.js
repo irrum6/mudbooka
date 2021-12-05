@@ -88,7 +88,7 @@ let runner = async () => {
 
 }
 
-const load_and_set_interval = async (runner_id) => {
+const load_and_set_interval = async process => {
     if (debuging) {
         return;
     }
@@ -105,8 +105,8 @@ const load_and_set_interval = async (runner_id) => {
     }
     //if interval was changed
     if (_interval != interval) {
-        window.clearInterval(runner_id);
-        runner_id = window.setInterval(runner, _interval);
+        window.clearInterval(process.runner_id);
+        process.runner_id = window.setInterval(runner, _interval);
         interval = _interval;
     }
 }
@@ -137,35 +137,34 @@ const load_and_set_naming = async () => {
     if (undefined === data || null === data) {
         return;
     }
-    let {format_year,format_mon,format_day} = data;
-    let _suffix = data.suffix;
-    let _locale = data.locale;
+    let { format_year, format_mon, format_day } = data;
 
-    if (is_nonempty_string(data.prefix)){
+    if (is_nonempty_string(data.prefix)) {
         prefix = data.prefix;
     }
-    if (is_nonempty_string(data.suffix)){
+    if (is_nonempty_string(data.suffix)) {
         suffix = data.suffix;
     }
-    if (is_nonempty_string(data.locale)){
+    if (is_nonempty_string(data.locale)) {
         locale = data.locale;
     }
-    if (is_nonempty_string(format_year)){
+    if (is_nonempty_string(format_year)) {
         format_options.year = format_year;
     }
-    if (is_nonempty_string(format_mon)){
+    if (is_nonempty_string(format_mon)) {
         format_options.month = format_mon;
     }
-    if (is_nonempty_string(format_day)){
+    if (is_nonempty_string(format_day)) {
         format_options.day = format_day;
     }
 }
 
-let runner_id = window.setInterval(runner, interval);
+let process = {};
+process.runner_id = window.setInterval(runner, interval);
 
 window.setTimeout(async () => {
     // load and set interval
-    await load_and_set_interval(runner_id);
+    await load_and_set_interval(process);
     //load and set keepfor
     await load_and_set_keepfor();
     // load and set prefix/suffix
@@ -174,7 +173,7 @@ window.setTimeout(async () => {
 
 browser.storage.onChanged.addListener(async () => {
     // load and set interval
-    await load_and_set_interval(runner_id);
+    await load_and_set_interval(process);
     //load and set keepfor
     await load_and_set_keepfor();
     // load and set prefix/suffix
