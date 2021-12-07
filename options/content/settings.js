@@ -17,7 +17,7 @@ const SetIntervalValues = data => {
     query("#display_interval_range").textContent = custom_interval;
 }
 
-const SetKeepValues = data =>{
+const SetKeepValues = data => {
     if (undefined === data || null === data) {
         return;
     }
@@ -66,12 +66,6 @@ const SetFormatValues = data => {
     }
     if (is_nonempty_string(format_day)) {
         query(`[data-fd='${format_day}']`).checked = true;
-    }
-    if ("default" === locale) {
-        query(`[data-locale=default]`).checked = true;
-    } else {
-        query(`[data-locale=select]`).checked = true;
-        query("select[name=select_locale]").value = locale;
     }
 }
 
@@ -183,25 +177,18 @@ const SaveNaming = async () => {
     }
     await browser.storage.local.set({ format_day });
 
-    let locale = "default";
-    radio = query("input[name=locale]:checked");
-    if (radio !== undefined && radio !== null) {
-        locale = radio.value;
-    }
-    if ("select" === locale) {
-        locale = query("select[name=select_locale]").value;
-    }
-
-    await browser.storage.local.set({ locale });
 }
 
 query("#save_interval")[on]("click", SaveIntervalValue);
 query("#save_keep")[on]("click", SaveKeepValue);
 query("#save_naming")[on]("click", SaveNaming);
 
+const OpenLocaleSelector = () => {
+    query("div#locale-selector").style.display = 'block';
+};
 //set input values from storage
-browser.storage.local.get(["interval","custom_interval"]).then(SetIntervalValues);
+browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);
 browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);
 browser.storage.local.get(["prefix", "suffix"]).then(SetPrefixAndSuffix);
 
-browser.storage.local.get(["format_year", "format_mon", "format_day", "locale"], SetFormatValues);
+browser.storage.local.get(["format_year", "format_mon", "format_day"], SetFormatValues);

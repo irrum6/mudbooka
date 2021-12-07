@@ -130,7 +130,7 @@ const load_and_set_keepfor = async () => {
 }
 
 const load_and_set_naming = async () => {
-    let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day", "locale"];
+    let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day"];
 
     let data = await browser.storage.local.get(sarraya);
 
@@ -144,9 +144,6 @@ const load_and_set_naming = async () => {
     }
     if (is_nonempty_string(data.suffix)) {
         suffix = data.suffix;
-    }
-    if (is_nonempty_string(data.locale)) {
-        locale = data.locale;
     }
     if (is_nonempty_string(format_year)) {
         format_options.year = format_year;
