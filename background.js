@@ -112,6 +112,7 @@ const load_and_set_interval = async process => {
         window.clearInterval(process.runner_id);
         process.runner_id = window.setInterval(runner, interval);
         config.interval = interval;
+        runner();
     }
 }
 
