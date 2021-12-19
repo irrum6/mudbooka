@@ -31,10 +31,5 @@
         "tabs",
         "storage",
         "notifications"
-    ],
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "Mudbooka03@temporary-addon"
-        }
-    }
+    ]
 }
