@@ -42,6 +42,10 @@ const config = {
     interval: HOUR * 1,
     keepfor: DAY * 2
 };
+const data = {
+    last_time: 0,
+    next_time: 0
+};
 
 let runner = async () => {
     //delete old items
@@ -75,7 +79,17 @@ let runner = async () => {
         const { title, url } = t;
         await browser.bookmarks.create({ parentId: folder_id, title, url });
     }
+    data.last_time = Date.now();
+    data.next_time = data.last_time + config.interval;
 
+    browser.notifications.create({
+        "type": "basic",
+        "iconUrl": browser.runtime.getURL("icons/logo.png"),
+        "title": "MudBooker",
+        "message": "Tabs were bookmarked"
+    });
+
+    await browser.storage.local.set({ last: data.last_time, next: data.next_time });
 }
 
 const load_and_set_interval = async process => {
@@ -155,6 +169,7 @@ window.setTimeout(async () => {
     await load_and_set_keepfor();
     // load and set prefix/suffix
     await load_and_set_naming();
+    runner();
 }, 2000);
 
 browser.storage.onChanged.addListener(async () => {
