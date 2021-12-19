@@ -3,29 +3,10 @@ const MINUTE = SECOND * 60;
 const HOUR = SECOND * 3600;
 const DAY = HOUR * 24;
 
-const DEFAULT_INTERVAL = MINUTE * 30;
-const DEFAULT_KEEPFOR = HOUR * 48;
-
-const VALID_INTERVALS = ["1h", "2h", "3h", "4h", "5h", "6h", "7h", "8h"];
-const VALID_KEEPS = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
-Object.freeze(VALID_INTERVALS);
-Object.freeze(VALID_KEEPS);
-
-let prefix = "mudbz_";
-let suffix = "";
-let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-let locale = "default";
-
-/**
- * debuging options
- */
-let debuging = false;
-let debug_entropy = 64;
-let debug_random_radix = "16";
-
 const input_to_interval = value => {
+    const VALID_INTERVALS = ["1h", "2h", "3h", "4h", "5h", "6h", "7h", "8h"];
     if (!VALID_INTERVALS.includes(value)) {
-        return DEFAULT_INTERVAL;
+        return input_to_interval(VALID_INTERVALS[0]);
     }
     let replaced = value.replace("h", "");
     return HOUR * Number(replaced);;
@@ -34,9 +15,10 @@ const input_to_interval = value => {
 const parse_interval_range = value => MINUTE * Number(value);
 
 const input_to_keepfor = value => {
+    const VALID_KEEPS = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
     if (!VALID_KEEPS.includes(value)) {
         //falback to safe value
-        return DEFAULT_KEEPFOR;
+        return input_to_keepfor(VALID_KEEPS[0]);
     }
     if ("12h" === value) {
         return HOUR * 12;
@@ -47,16 +29,24 @@ const input_to_keepfor = value => {
 
 const parse_keepfor_range = value => HOUR * Number(value);
 
-let interval = HOUR;
-let keepfor = DAY * 2;
-//override for testing
-interval = SECOND * 120;
-keepfor = SECOND * 360;
+let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+//const but mutable
+const config = {
+    prefix: "mudbz_",
+    suffix: "",
+    format_options,
+    locale: "default",
+    debuging: false,
+    debug_entropy: 64,
+    debug_random_radix: "16",
+    interval: HOUR * 1,
+    keepfor: DAY * 2
+};
 
 let runner = async () => {
     //delete old items
-    let folders = await browser.bookmarks.search({ query: prefix });
-    let early_date = new Date(Date.now() - keepfor);
+    let folders = await browser.bookmarks.search({ query: config.prefix });
+    let early_date = new Date(Date.now() - config.keepfor);
     for (const fold of folders) {
         if (fold.dateAdded < early_date) {
             console.log(`DELETE:${fold.title}`);
@@ -68,12 +58,12 @@ let runner = async () => {
     //search tabs
     let tabs = await browser.tabs.query({});
 
-    let formated = new Date().toLocaleString(locale, format_options).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
-    let title = `${prefix}${formated}${suffix}`;
+    let formated = new Date().toLocaleString(config.locale, config.format_options).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
+    let title = `${config.prefix}${formated}${config.suffix}`;
 
-    if (debuging) {
+    if (config.debuging) {
         //add some randomness
-        let _substr = `_${randa(debug_entropy, debug_random_radix)}`;
+        let _substr = `_${randa(config.debug_entropy, config.debug_random_radix)}`;
         title = title.concat(_substr);
     }
     let folder = await browser.bookmarks.create({ title });
@@ -89,30 +79,30 @@ let runner = async () => {
 }
 
 const load_and_set_interval = async process => {
-    if (debuging) {
+    if (config.debuging) {
         return;
     }
     let data = await browser.storage.local.get(["interval", "custom_interval"]);
     if (undefined === data || null === data) {
         return;
     }
-    let _interval = data.interval;
-    let _custom = data.custom_interval;
-    if ("c" === _interval) {
-        _interval = parse_interval_range(_custom);
+
+    let { interval, custom_interval } = data;
+    if ("c" === interval) {
+        interval = parse_interval_range(custom_interval);
     } else {
-        _interval = input_to_interval(_interval);
+        interval = input_to_interval(interval);
     }
     //if interval was changed
-    if (_interval != interval) {
+    if (interval != config.interval) {
         window.clearInterval(process.runner_id);
-        process.runner_id = window.setInterval(runner, _interval);
-        interval = _interval;
+        process.runner_id = window.setInterval(runner, interval);
+        config.interval = interval;
     }
 }
 
 const load_and_set_keepfor = async () => {
-    if (debuging) {
+    if (config.debuging) {
         return;
     }
     let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
@@ -120,12 +110,11 @@ const load_and_set_keepfor = async () => {
         return;
     }
 
-    let _keepfor = data.keepfor;
-    let _custom = data.custom_keepfor;
-    if ("c" === _keepfor) {
-        keepfor = parse_keepfor_range(_custom);
+    let { keepfor, custom_keepfor } = data;
+    if ("c" === keepfor) {
+        config.keepfor = parse_keepfor_range(custom_keepfor);
     } else {
-        keepfor = input_to_keepfor(_keepfor);
+        config.keepfor = input_to_keepfor(keepfor);
     }
 }
 
@@ -140,24 +129,24 @@ const load_and_set_naming = async () => {
     let { format_year, format_mon, format_day } = data;
 
     if (is_nonempty_string(data.prefix)) {
-        prefix = data.prefix;
+        config.prefix = data.prefix;
     }
     if (is_nonempty_string(data.suffix)) {
-        suffix = data.suffix;
+        config.suffix = data.suffix;
     }
     if (is_nonempty_string(format_year)) {
-        format_options.year = format_year;
+        config.format_options.year = format_year;
     }
     if (is_nonempty_string(format_mon)) {
-        format_options.month = format_mon;
+        config.format_options.month = format_mon;
     }
     if (is_nonempty_string(format_day)) {
-        format_options.day = format_day;
+        config.format_options.day = format_day;
     }
 }
 
 let process = {};
-process.runner_id = window.setInterval(runner, interval);
+process.runner_id = window.setInterval(runner, config.interval);
 
 window.setTimeout(async () => {
     // load and set interval

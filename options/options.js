@@ -109,7 +109,7 @@ const onSetParameters = async () => {
         custom_keepfor = query("#keepfor_range").value;
     }
 
-    console.log(custom_interval, custom_keepfor);
+    // console.log(custom_interval, custom_keepfor);
 
     await browser.storage.local.set({ interval, keepfor, custom_interval, custom_keepfor });
 }
