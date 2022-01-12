@@ -6,6 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        span.display-symbol {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-left: 0.5rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,7 +24,8 @@
         Next run at
     </div>
     <div><span id="next"></span></div>
-    <button id="quickset">Quick Settings</button>
+    <button id="quickset"> <span class="display-symbol">&#x2699;</span>Options</button>
+    <button id="booknow"> <span class="display-symbol">&#x27A1;</span>Bookmark Now</button>
     <script src="popup.js"></script>
 </body>
 

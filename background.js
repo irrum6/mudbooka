@@ -32,7 +32,7 @@ const parse_keepfor_range = value => HOUR * Number(value);
 let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
 //const but mutable
 const config = {
-    prefix: "mudbz_",
+    prefix: "tabs_",
     suffix: "",
     format_options,
     locale: "default",
@@ -182,6 +182,8 @@ browser.storage.onChanged.addListener(async () => {
     await load_and_set_naming();
 });
 
-browser.browserAction.onClicked.addListener(async () => {
-    await browser.runtime.openOptionsPage();
-})
+browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+    if (request.command == "tuesday") {
+        runner();
+    }
+});

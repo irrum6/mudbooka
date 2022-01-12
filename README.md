@@ -14,3 +14,7 @@ default interval is 1 hour (can be set).
 To avoid overbuerden, folders aren't kept forever but for 
 definite time (default 48 Hours (2days)), after that older 
 folders are deleted.
+
+note 0.7 "bookmark" now action was added
+
+Available from AMO here: https://addons.mozilla.org/firefox/addon/mudbooker/
