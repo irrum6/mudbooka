@@ -184,6 +184,8 @@ browser.storage.onChanged.addListener(async () => {
 
 browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (request.command == "tuesday") {
+        window.clearInterval(process.runner_id);
+        process.runner_id = window.setInterval(runner, config.interval);
         runner();
     }
 });
