@@ -29,11 +29,15 @@ const input_to_keepfor = value => {
 
 const parse_keepfor_range = value => HOUR * Number(value);
 
-let format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+const format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+
 //const but mutable
+//config for program
 const config = {
     prefix: "tabs_",
+    prefixes: ["tabs_"],
     suffix: "",
+    suffixes: [],
     format_options,
     locale: "default",
     debuging: false,
@@ -42,15 +46,16 @@ const config = {
     interval: HOUR * 1,
     keepfor: DAY * 2
 };
-const data = {
+// process data
+const pdata = {
     last_time: 0,
     next_time: 0
 };
 
-let runner = async () => {
+const search_and_destroy_old_folders = async (prefix, keep) => {
     //delete old items
-    let folders = await browser.bookmarks.search({ query: config.prefix });
-    let early_date = new Date(Date.now() - config.keepfor);
+    let folders = await browser.bookmarks.search({ query: prefix });
+    let early_date = new Date(Date.now() - keep);
     for (const fold of folders) {
         if (fold.dateAdded < early_date) {
             console.log(`DELETE:${fold.title}`);
@@ -58,6 +63,15 @@ let runner = async () => {
 
         }
     }
+}
+let runner = async () => {
+
+    while (config.prefixes.length > 1) {
+        let prefix = config.prefixes.shift();
+        await search_and_destroy_old_folders(prefix, config.keepfor);
+    }
+
+    await search_and_destroy_old_folders(config.prefix, config.keepfor);
 
     //search tabs
     let tabs = await browser.tabs.query({});
@@ -79,8 +93,8 @@ let runner = async () => {
         const { title, url } = t;
         await browser.bookmarks.create({ parentId: folder_id, title, url });
     }
-    data.last_time = Date.now();
-    data.next_time = data.last_time + config.interval;
+    pdata.last_time = Date.now();
+    pdata.next_time = pdata.last_time + config.interval;
 
     browser.notifications.create({
         "type": "basic",
@@ -89,10 +103,14 @@ let runner = async () => {
         "message": "Tabs were bookmarked"
     });
 
-    await browser.storage.local.set({ last: data.last_time, next: data.next_time });
+    await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
 }
-
-const load_and_set_interval = async process => {
+/**
+ * 
+ * @param {ProcessData} pdata 
+ * @returns 
+ */
+const load_and_set_interval = async pdata => {
     if (config.debuging) {
         return;
     }
@@ -109,8 +127,8 @@ const load_and_set_interval = async process => {
     }
     //if interval was changed
     if (interval != config.interval) {
-        window.clearInterval(process.runner_id);
-        process.runner_id = window.setInterval(runner, interval);
+        window.clearInterval(pdata.runner_id);
+        pdata.runner_id = window.setInterval(runner, interval);
         config.interval = interval;
         runner();
     }
@@ -145,6 +163,7 @@ const load_and_set_naming = async () => {
 
     if (is_nonempty_string(data.prefix)) {
         config.prefix = data.prefix;
+        config.prefixes.push(data.prefix);
     }
     if (is_nonempty_string(data.suffix)) {
         config.suffix = data.suffix;
@@ -160,12 +179,11 @@ const load_and_set_naming = async () => {
     }
 }
 
-let process = {};
-process.runner_id = window.setInterval(runner, config.interval);
+pdata.runner_id = window.setInterval(runner, config.interval);
 
 window.setTimeout(async () => {
     // load and set interval
-    await load_and_set_interval(process);
+    await load_and_set_interval(pdata);
     //load and set keepfor
     await load_and_set_keepfor();
     // load and set prefix/suffix
@@ -175,7 +193,7 @@ window.setTimeout(async () => {
 
 browser.storage.onChanged.addListener(async () => {
     // load and set interval
-    await load_and_set_interval(process);
+    await load_and_set_interval(pdata);
     //load and set keepfor
     await load_and_set_keepfor();
     // load and set prefix/suffix
@@ -184,8 +202,8 @@ browser.storage.onChanged.addListener(async () => {
 
 browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (request.command == "tuesday") {
-        window.clearInterval(process.runner_id);
-        process.runner_id = window.setInterval(runner, config.interval);
+        window.clearInterval(pdata.runner_id);
+        pdata.runner_id = window.setInterval(runner, config.interval);
         runner();
     }
 });
