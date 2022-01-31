@@ -12,6 +12,11 @@
             font-weight: 900;
             margin-left: 0.5rem;
         }
+
+        span.display-number {
+            color: #365;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -24,8 +29,8 @@
         Next run at
     </div>
     <div><span id="next"></span></div>
-    <div>
-        Open tabs:<span id="open_tabs"> </span>
+    <div style="margin-bottom: 0.5rem;">
+        Open tabs :<span id="open_tabs" class="display-number"> </span>
     </div>
     <button id="quickset"> <span class="display-symbol">&#x2699;</span>Options</button>
     <button id="booknow"> <span class="display-symbol">&#x27A1;</span>Bookmark Now</button>

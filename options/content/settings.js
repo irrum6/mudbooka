@@ -1,4 +1,4 @@
-const SetIntervalValues = data => {
+function SetIntervalValues(data) {
     if (undefined === data || null === data) {
         return;
     }
@@ -17,7 +17,7 @@ const SetIntervalValues = data => {
     query("#display_interval_range").textContent = custom_interval;
 }
 
-const SetKeepValues = data => {
+function SetKeepValues(data) {
     if (undefined === data || null === data) {
         return;
     }
@@ -36,22 +36,21 @@ const SetKeepValues = data => {
     query("#display_keepfor_range").textContent = custom_keepfor;
 }
 
-const SetPrefixAndSuffix = data => {
+function SetPrefixAndSuffix(data) {
     if (undefined === data || null === data) {
         return;
     }
     const { prefix, suffix } = data;
-    if (is_nonempty_string(prefix)) {
-        query("#naming_prefix").value = data.prefix;
-    }
+    query("#naming_prefix").value = prefix;
+
     if (is_nonempty_string(suffix)) {
         query("#enable_sufx").checked = true;
         query("#naming_suffix").disabled = false;
-        query("#naming_suffix").value = data.suffix;
+        query("#naming_suffix").value = suffix;
     }
 }
 
-const SetFormatValues = data => {
+function SetFormatValues(data) {
     if (undefined === data || null === data) {
         return;
     }
@@ -70,11 +69,15 @@ const SetFormatValues = data => {
 }
 
 // interval range functions 
-const onIntervalRangeValueChange = e => {
-    query("#display_interval_range").textContent = e.target.value;
-}
+const onIntervalRangeValueChange = e => query("#display_interval_range").textContent = e.target.value;
+
 query("#interval_range")[on]("change", onIntervalRangeValueChange);
 query("#interval_range")[on]("input", onIntervalRangeValueChange);
+
+// keepfor range functions
+const onKeepForRangeValueChange = e => query("#display_keepfor_range").textContent = e.target.value;
+query("#keepfor_range")[on]("change", onKeepForRangeValueChange);
+query("#keepfor_range")[on]("input", onKeepForRangeValueChange);
 
 const interval_inputs = query_all("input[name=interval]");
 for (const input of interval_inputs) {
@@ -86,12 +89,7 @@ for (const input of interval_inputs) {
         ToggleInputEnabledState("interval_range", false);
     })
 }
-// keepfor range functions 
-const onKeepForRangeValueChange = e => {
-    query("#display_keepfor_range").textContent = e.target.value;
-}
-query("#keepfor_range")[on]("change", onKeepForRangeValueChange);
-query("#keepfor_range")[on]("input", onKeepForRangeValueChange);
+
 
 const keepfor_inputs = query_all("input[name=keepfor]");
 for (const input of keepfor_inputs) {
@@ -114,7 +112,7 @@ query("#enable_sufx")[on]("click", e => {
 /**
  * Retrieves input values and sets interval and keepfor values
  */
-const SaveIntervalValue = async () => {
+async function SaveIntervalValue() {
     let interval = "1h";
     let inter = query("input[name=interval]:checked");
     if (inter !== undefined && inter !== null) {
@@ -126,7 +124,7 @@ const SaveIntervalValue = async () => {
     }
     await browser.storage.local.set({ interval, custom_interval });
 }
-const SaveKeepValue = async () => {
+async function SaveKeepValue() {
     let keepfor = "2d";
 
     let keeper = query("input[name=keepfor]:checked");
@@ -142,19 +140,28 @@ const SaveKeepValue = async () => {
     await browser.storage.local.set({ keepfor, custom_keepfor });
 }
 
-const SaveNaming = async () => {
-    let prefix = query("#naming_prefix").value;;
-    if ("" === prefix) {
-        alert("prefix can't be empty");
-    }
-    await browser.storage.local.set({ prefix });
+async function SaveNaming() {
+    let prefix = query("#naming_prefix").value;
 
     let enable_sufx = query("#enable_sufx").checked;
     let suffix = "";
     if (enable_sufx) {
         suffix = query("#naming_suffix").value;
     }
-    await browser.storage.local.set({ suffix });
+
+    if ("" === prefix && "" === suffix) {
+        alert("prefix and suffix can't be empty same time");
+        return;
+    }
+
+    if ("" === prefix && suffix.length < 3) {
+        alert("suffix shall be at least 3 symbols");
+    }
+    if ("" !== prefix && prefix.length < 3) {
+        alert("prefix shall be at least 3 symbols");
+    }
+
+    await browser.storage.local.set({ prefix, suffix });
 
     let format_year = "numeric";
     let radio = query("input[name=format_year]:checked");

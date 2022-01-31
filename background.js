@@ -3,7 +3,12 @@ const MINUTE = SECOND * 60;
 const HOUR = SECOND * 3600;
 const DAY = HOUR * 24;
 
-const input_to_interval = value => {
+/**
+ * convert string value to number
+ * @param {String} value 
+ * @returns {Number}
+ */
+function input_to_interval(value) {
     const VALID_INTERVALS = ["1h", "2h", "3h", "4h", "5h", "6h", "7h", "8h"];
     if (!VALID_INTERVALS.includes(value)) {
         return input_to_interval(VALID_INTERVALS[0]);
@@ -12,9 +17,12 @@ const input_to_interval = value => {
     return HOUR * Number(replaced);;
 }
 
-const parse_interval_range = value => MINUTE * Number(value);
-
-const input_to_keepfor = value => {
+/**
+ * convert string value to number
+ * @param {String} value 
+ * @returns {Number}
+ */
+function input_to_keepfor(value) {
     const VALID_KEEPS = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
     if (!VALID_KEEPS.includes(value)) {
         //falback to safe value
@@ -27,7 +35,7 @@ const input_to_keepfor = value => {
     return HOUR * 24 * Number(replaced);
 }
 
-const parse_keepfor_range = value => HOUR * Number(value);
+
 
 const format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
 
@@ -52,7 +60,11 @@ const pdata = {
     next_time: 0
 };
 
-const search_and_destroy_old_folders = async (prefix, keep) => {
+/**
+ * @param {String} prefix 
+ * @param {Number} keep 
+ */
+async function search_and_destroy_old_folders(prefix, keep) {
     //delete old items
     let folders = await browser.bookmarks.search({ query: prefix });
     let early_date = new Date(Date.now() - keep);
@@ -64,7 +76,7 @@ const search_and_destroy_old_folders = async (prefix, keep) => {
         }
     }
 }
-let runner = async () => {
+async function runner() {
 
     while (config.prefixes.length > 1) {
         let prefix = config.prefixes.shift();
@@ -106,11 +118,10 @@ let runner = async () => {
     await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
 }
 /**
- * 
- * @param {ProcessData} pdata 
- * @returns 
+ * @param {Object} pdata 
+ * @returns {void}
  */
-const load_and_set_interval = async pdata => {
+async function load_and_set_interval(pdata) {
     if (config.debuging) {
         return;
     }
@@ -118,6 +129,7 @@ const load_and_set_interval = async pdata => {
     if (undefined === data || null === data) {
         return;
     }
+    const parse_interval_range = value => MINUTE * Number(value);
 
     let { interval, custom_interval } = data;
     if ("c" === interval) {
@@ -134,7 +146,7 @@ const load_and_set_interval = async pdata => {
     }
 }
 
-const load_and_set_keepfor = async () => {
+async function load_and_set_keepfor() {
     if (config.debuging) {
         return;
     }
@@ -142,6 +154,7 @@ const load_and_set_keepfor = async () => {
     if (undefined === data || null === data) {
         return;
     }
+    const parse_keepfor_range = value => HOUR * Number(value);
 
     let { keepfor, custom_keepfor } = data;
     if ("c" === keepfor) {
@@ -151,7 +164,7 @@ const load_and_set_keepfor = async () => {
     }
 }
 
-const load_and_set_naming = async () => {
+async function load_and_set_naming() {
     let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day"];
 
     let data = await browser.storage.local.get(sarraya);
