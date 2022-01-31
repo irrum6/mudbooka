@@ -1,3 +1,15 @@
 .grow1 {
     flex-grow: 1;
 }
+
+button.circle {
+    border-radius: 25%;
+    width: max-content;
+    padding: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 1.5rem;
+    background-color: rgb(80, 40, 40);
+    color: rgb(224,255,192);
+    border: none;
+}

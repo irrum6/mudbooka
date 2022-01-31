@@ -72,11 +72,47 @@ function SetFormatValues(data) {
 const onIntervalRangeValueChange = e => query("#display_interval_range").textContent = e.target.value;
 
 query("#interval_range")[on]("change", onIntervalRangeValueChange);
+query("#interval_range")[on]("progchange", onIntervalRangeValueChange);
 query("#interval_range")[on]("input", onIntervalRangeValueChange);
+
+
+function ChangeRangeValue(event) {
+    let targetid = event.target.getAttribute("data-target");
+    let action = event.target.getAttribute("data-action");
+    let targetElement = query(`#${targetid}`);
+    if (targetElement.disabled) {
+        return false;
+    }
+    let value = Number(targetElement.value);
+    let step = Number(targetElement.step);
+    switch (action) {
+        case "minus":
+            value -= step;
+            break;
+        case "plus":
+            value += step;
+            break;
+        default:
+            //nothing
+            break;
+    }
+    targetElement.value = value;
+    //programatically changing values does not fire change or input events
+    //so we create custom event and fire on input element
+    const eventor = new Event("progchange");
+    targetElement.dispatchEvent(eventor);
+
+}
+//setu event listeners
+const rangers = query_all("button.ranger");
+for (const ranger of rangers) {
+    ranger[on]("click", ChangeRangeValue);
+}
 
 // keepfor range functions
 const onKeepForRangeValueChange = e => query("#display_keepfor_range").textContent = e.target.value;
 query("#keepfor_range")[on]("change", onKeepForRangeValueChange);
+query("#keepfor_range")[on]("progchange", onKeepForRangeValueChange);
 query("#keepfor_range")[on]("input", onKeepForRangeValueChange);
 
 const interval_inputs = query_all("input[name=interval]");

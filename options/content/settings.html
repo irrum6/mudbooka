@@ -76,7 +76,10 @@
                 </label>
             </div>
             <div class="w-75">
-                <input type="range" class="w-100" id="interval_range" min="5" max="480" step="5" value="60" disabled>
+                <button class="circle ranger" data-action="minus" data-target="interval_range">-</button>
+                <input type="range" class="w-75" id="interval_range" min="5" max="480" step="5" value="60" disabled>
+                <button class="circle ranger" data-action="plus" data-target="interval_range">+</button>
+                <div>You can use slider or controls</div>
             </div>
             <div>
                 <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
@@ -145,7 +148,12 @@
                 </label>
             </div>
             <div class="w-75">
-                <input type="range" class="w-100" id="keepfor_range" min="3" max="168" step="3" value="48" disabled>
+                <button class="circle ranger" data-action="minus" data-target="keepfor_range">-</button>
+                <input type="range" class="w-75" id="keepfor_range" min="3" max="168" step="3" value="48" disabled>
+                <button class="circle ranger" data-action="plus" data-target="keepfor_range">+</button>
+                <div>You can use slider or controls</div>
+            </div>
+            <div>
                 <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
             </div>
             <div>
