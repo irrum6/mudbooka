@@ -8,7 +8,7 @@ function SetIntervalValues(data) {
     }
     query(`[data-int='${interval}']`).checked = true;
     if ("c" === interval) {
-        ToggleInputEnabledState("interval_range", true);
+        Utils.ToggleInputEnabledState("interval_range", true);
     }
     if (custom_interval === undefined) {
         return;
@@ -27,7 +27,7 @@ function SetKeepValues(data) {
     }
     query(`[data-keep='${keepfor}']`).checked = true;
     if ("c" === keepfor) {
-        ToggleInputEnabledState("keepfor_range", true);
+        Utils.ToggleInputEnabledState("keepfor_range", true);
     }
     if (custom_keepfor === undefined) {
         return;
@@ -43,7 +43,7 @@ function SetPrefixAndSuffix(data) {
     const { prefix, suffix } = data;
     query("#naming_prefix").value = prefix;
 
-    if (is_nonempty_string(suffix)) {
+    if (Utils.isNoneEmptyString(suffix)) {
         query("#enable_sufx").checked = true;
         query("#naming_suffix").disabled = false;
         query("#naming_suffix").value = suffix;
@@ -57,13 +57,13 @@ function SetFormatValues(data) {
 
     let { format_year, format_mon, format_day, locale } = data;
 
-    if (is_nonempty_string(format_year)) {
+    if (Utils.isNoneEmptyString(format_year)) {
         query(`[data-fy='${format_year}']`).checked = true;
     }
-    if (is_nonempty_string(format_mon)) {
+    if (Utils.isNoneEmptyString(format_mon)) {
         query(`[data-fm='${format_mon}']`).checked = true;
     }
-    if (is_nonempty_string(format_day)) {
+    if (Utils.isNoneEmptyString(format_day)) {
         query(`[data-fd='${format_day}']`).checked = true;
     }
 }
@@ -119,10 +119,10 @@ const interval_inputs = query_all("input[name=interval]");
 for (const input of interval_inputs) {
     input[on]("change", e => {
         if ("c" === e.target.value) {
-            ToggleInputEnabledState("interval_range", true);
+            Utils.ToggleInputEnabledState("interval_range", true);
             return;
         }
-        ToggleInputEnabledState("interval_range", false);
+        Utils.ToggleInputEnabledState("interval_range", false);
     })
 }
 
@@ -131,19 +131,19 @@ const keepfor_inputs = query_all("input[name=keepfor]");
 for (const input of keepfor_inputs) {
     input[on]("change", e => {
         if ("c" === e.target.value) {
-            ToggleInputEnabledState("keepfor_range", true);
+            Utils.ToggleInputEnabledState("keepfor_range", true);
             return;
         }
-        ToggleInputEnabledState("keepfor_range", false);
+        Utils.ToggleInputEnabledState("keepfor_range", false);
     })
 }
 
 query("#enable_sufx")[on]("click", e => {
     if (true === e.target.checked) {
-        ToggleInputEnabledState("naming_suffix", true);
+        Utils.ToggleInputEnabledState("naming_suffix", true);
         return;
     }
-    ToggleInputEnabledState("naming_suffix", false);
+    Utils.ToggleInputEnabledState("naming_suffix", false);
 });
 /**
  * Retrieves input values and sets interval and keepfor values
