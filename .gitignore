@@ -3,3 +3,6 @@ web-ext-artifacts
 *.zip
 z_ignore
 manifest.backup.json
+node-modules
+package.json
+package-lock.json
