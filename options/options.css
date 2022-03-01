@@ -2,3 +2,15 @@ body {
     min-width: 200px;
     min-height: 300px;
 }
+
+button.circle {
+    border-radius: 25%;
+    width: max-content;
+    padding: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 1.5rem;
+    background-color: rgb(32, 64, 32);
+    color: rgb(224,255,192);
+    border: none;
+}

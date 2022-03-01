@@ -1,45 +1,82 @@
-const set_interval_value = data => {
-    if (undefined === data || null === data || undefined === data.interval) {
+function SetIntervalValues(data) {
+    if (undefined === data || null === data) {
         return;
     }
-    query(`[data-int='${data.interval}']`).checked = true;
-    if ("c" === data.interval) {
-        toggleIntervalRangeValueEnabledState(true);
-    }
-}
-const set_interval_range_value = data => {
-    if (undefined === data || null === data || undefined === data.custom_interval) {
+    const { interval, custom_interval } = data;
+    if (interval === undefined) {
         return;
     }
-    query("#interval_range").value = data.custom_interval;
-    query("#display_interval_range").textContent = data.custom_interval;
-}
-
-const set_keep_value = data => {
-    if (undefined === data || null === data || undefined === data.keepfor) {
+    query(`[data-int='${interval}']`).checked = true;
+    if ("c" === interval) {
+        Utils.ToggleInputEnabledState("interval_range", true);
+    }
+    if (custom_interval === undefined) {
         return;
     }
-    query(`[data-keep='${data.keepfor}']`).checked = true;
-    if ("c" === data.keepfor) {
-        toggleKeepForRangeValueEnabledState(true);
-    }
+    query("#interval_range").value = custom_interval;
+    query("#display_interval_range").textContent = custom_interval;
 }
 
-const set_keepfor_range_value = data => {
-    if (undefined === data || null === data || undefined === data.custom_keepfor) {
+function SetKeepValues(data) {
+    if (undefined === data || null === data) {
         return;
     }
-    query("#keepfor_range").value = data.custom_keepfor;
-    query("#display_keepfor_range").textContent = data.custom_keepfor;
+    const { keepfor, custom_keepfor } = data;
+    if (keepfor === undefined) {
+        return;
+    }
+    query(`[data-keep='${keepfor}']`).checked = true;
+    if ("c" === keepfor) {
+        Utils.ToggleInputEnabledState("keepfor_range", true);
+    }
+    if (custom_keepfor === undefined) {
+        return;
+    }
+    query("#keepfor_range").value = custom_keepfor;
+    query("#display_keepfor_range").textContent = custom_keepfor;
 }
 
 
 // interval range functions 
-const onIntervalRangeValueChange = e => {
-    query("#display_interval_range").textContent = e.target.value;
-}
+const onIntervalRangeValueChange = e => query("#display_interval_range").textContent = e.target.value;
+
 query("#interval_range")[on]("change", onIntervalRangeValueChange);
+query("#interval_range")[on]("progchange", onIntervalRangeValueChange);
 query("#interval_range")[on]("input", onIntervalRangeValueChange);
+
+
+function ChangeRangeValue(event) {
+    let targetid = event.target.getAttribute("data-target");
+    let action = event.target.getAttribute("data-action");
+    let targetElement = query(`#${targetid}`);
+    if (targetElement.disabled) {
+        return false;
+    }
+    let value = Number(targetElement.value);
+    let step = Number(targetElement.step);
+    switch (action) {
+        case "minus":
+            value -= step;
+            break;
+        case "plus":
+            value += step;
+            break;
+        default:
+            //nothing
+            break;
+    }
+    targetElement.value = value;
+    //programatically changing values does not fire change or input events
+    //so we create custom event and fire on input element
+    const eventor = new Event("progchange");
+    targetElement.dispatchEvent(eventor);
+
+}
+//setup event listeners
+const rangers = query_all("button.ranger");
+for (const ranger of rangers) {
+    ranger[on]("click", ChangeRangeValue);
+}
 
 const toggleIntervalRangeValueEnabledState = v => {
     if (true === v) {
@@ -64,6 +101,7 @@ const onKeepForRangeValueChange = e => {
     query("#display_keepfor_range").textContent = e.target.value;
 }
 query("#keepfor_range")[on]("change", onKeepForRangeValueChange);
+query("#keepfor_range")[on]("progchange", onKeepForRangeValueChange);
 query("#keepfor_range")[on]("input", onKeepForRangeValueChange);
 
 const toggleKeepForRangeValueEnabledState = v => {
@@ -129,7 +167,5 @@ const onFullSettingsOpen = async () => {
 query("#full_throtle")[on]("click", onFullSettingsOpen);
 
 //set input values from storage
-browser.storage.local.get("interval").then(set_interval_value);
-browser.storage.local.get("keepfor").then(set_keep_value);
-browser.storage.local.get("custom_interval").then(set_interval_range_value);
-browser.storage.local.get("custom_keepfor").then(set_keepfor_range_value);
+browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);
+browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);

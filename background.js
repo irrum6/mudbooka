@@ -42,10 +42,10 @@ const format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: 
 //const but mutable
 //config for program
 const config = {
-    prefix: "tabs_",
-    prefixes: ["tabs_"],
-    suffix: "",
-    suffixes: [],
+    prefix: "",
+    prefixes: [],
+    suffix: "_tabs",
+    suffixes: ["_tabs"],
     format_options,
     locale: "default",
     debuging: false,
@@ -69,9 +69,10 @@ async function search_and_destroy_old_folders(psx, keep) {
     let folders = await browser.bookmarks.search({ query: psx });
     let early_date = new Date(Date.now() - keep);
     for (const fold of folders) {
+        console.log(fold);
         if (fold.dateAdded < early_date) {
             console.log(`DELETE:${fold.title}`);
-            await browser.bookmarks.removeTree(fold.id);
+            //await browser.bookmarks.removeTree(fold.id);
 
         }
     }

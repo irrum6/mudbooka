@@ -103,7 +103,7 @@ function ChangeRangeValue(event) {
     targetElement.dispatchEvent(eventor);
 
 }
-//setu event listeners
+//setup event listeners
 const rangers = query_all("button.ranger");
 for (const ranger of rangers) {
     ranger[on]("click", ChangeRangeValue);
@@ -176,6 +176,37 @@ async function SaveKeepValue() {
     await browser.storage.local.set({ keepfor, custom_keepfor });
 }
 
+/**
+ * 
+ * @param {String} prefix 
+ * @param {String} suffix
+ * @returns Boolean 
+ */
+function ValidateAfixValues(prefix, suffix) {
+    if ("" === prefix && "" === suffix) {
+        alert("prefix and suffix can't be empty same time");
+        return false;
+    }
+
+    if ("" === prefix && suffix.length < 3) {
+        alert("suffix shall be at least 3 symbols");
+        return false;
+    }
+    if ("" !== prefix && prefix.length < 3) {
+        alert("prefix shall be at least 3 symbols");
+        return false;
+    }
+    if (prefix.length > 32) {
+        alert("Preffix shall be at most 32 symbols");
+        return false;
+    }
+    if (suffix.length > 32) {
+        alert("Suffix shall be at most 32 symbols");
+        return false;
+    }
+    return true;
+}
+
 async function SaveNaming() {
     let prefix = query("#naming_prefix").value;
 
@@ -185,16 +216,8 @@ async function SaveNaming() {
         suffix = query("#naming_suffix").value;
     }
 
-    if ("" === prefix && "" === suffix) {
-        alert("prefix and suffix can't be empty same time");
+    if (!ValidateAfixValues(prefix, suffix)) {
         return;
-    }
-
-    if ("" === prefix && suffix.length < 3) {
-        alert("suffix shall be at least 3 symbols");
-    }
-    if ("" !== prefix && prefix.length < 3) {
-        alert("prefix shall be at least 3 symbols");
     }
 
     await browser.storage.local.set({ prefix, suffix });

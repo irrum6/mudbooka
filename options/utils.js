@@ -39,7 +39,7 @@ const Utils = (() => {
 
     o.isString = s => typeof s === "string";
 
-    o.isNoneEmptyString = s => (o.isString() && s !== "");
+    o.isNoneEmptyString = s => (o.isString(s) && s !== "");
 
     /**
      * check if object or array contains value
