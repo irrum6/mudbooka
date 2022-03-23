@@ -148,9 +148,9 @@ const config = {
     suffix: "_tabs",
     formatOptions,
     locale: "default",
-    debuging: true,
-    debug_entropy: 64,
-    debug_random_radix: "16",
+    debuging: false,
+    debugEntropy: 64,
+    debugRandomRadix: "16",
     // interval: HOUR * 1,
     // keepfor: DAY * 2
     interval: SECOND * 10,
@@ -187,7 +187,7 @@ async function runner() {
 
     if (config.debuging) {
         //add some randomness
-        let _substr = `_${Utils.GetRandomString(config.debug_entropy, config.debug_random_radix)}`;
+        let _substr = `_${Utils.GetRandomString(config.debugEntropy, config.debugRandomRadix)}`;
         title = title.concat(_substr);
     }
     let folder = await browser.bookmarks.create({ title });

@@ -182,26 +182,15 @@ async function SaveKeepValue() {
  * @param {String} suffix
  * @returns Boolean 
  */
-function ValidateAfixValues(prefix, suffix) {
-    if ("" === prefix && "" === suffix) {
-        alert("prefix and suffix can't be empty same time");
+function ValidateAfixValues(prefix, suffix) {    
+    const MAXIMUM_SYMBOL_LENGTH = 32;
+ 
+    if (prefix.length > MAXIMUM_SYMBOL_LENGTH) {
+        alert("Preffix can not be longer than 32 symbols");
         return false;
     }
-
-    if ("" === prefix && suffix.length < 3) {
-        alert("suffix shall be at least 3 symbols");
-        return false;
-    }
-    if ("" !== prefix && prefix.length < 3) {
-        alert("prefix shall be at least 3 symbols");
-        return false;
-    }
-    if (prefix.length > 32) {
-        alert("Preffix shall be at most 32 symbols");
-        return false;
-    }
-    if (suffix.length > 32) {
-        alert("Suffix shall be at most 32 symbols");
+    if (suffix.length > MAXIMUM_SYMBOL_LENGTH) {
+        alert("Suffix can not be longer than 32 symbols");
         return false;
     }
     return true;
@@ -249,9 +238,6 @@ query("#save_interval")[on]("click", SaveIntervalValue);
 query("#save_keep")[on]("click", SaveKeepValue);
 query("#save_naming")[on]("click", SaveNaming);
 
-const OpenLocaleSelector = () => {
-    query("div#locale-selector").style.display = 'block';
-};
 //set input values from storage
 browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);
 browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);
