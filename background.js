@@ -41,16 +41,32 @@ function input_to_keepfor(value) {
  * @returns {Array<String>} 
  */
 async function delete_old_folders(idsArray, keep) {
-    let bookmarkFolders = await browser.bookmarks.get(idsArray);
     let earlyDate = new Date(Date.now() - keep);
+    console.log(Number(earlyDate));
     const clearIds = [];
-    for (const fold of bookmarkFolders) {
+    /**
+     * yes i know that i can pass array as whole
+     * but if one of the folders is deleted , then whole get operation will fail due to invalid id.
+     */
+    for (const id of idsArray) {
+        if (!Utils.isNoneEmptyString(id)) {
+            continue;
+        }
+        let fold = null;
+        try {
+            fold = await browser.bookmarks.get(id);
+        } catch (e) {
+            console.log("Folder by id not found");
+        }
+        if (!Utils.is_non_empty_object(fold)) {
+            continue;
+        }
         if (fold.dateAdded < earlyDate) {
-            //console.log(`Now deleting:${fold.title}`);
+            console.log(`Now deleting:${fold.title}`);
             await browser.bookmarks.removeTree(fold.id);
             continue;
         }
-        clearIds.push(fold.id);
+        clearIds.push(id);
     }
     return clearIds;
 }
@@ -67,11 +83,11 @@ async function load_and_set_interval(pdata, config) {
     if (undefined === data || null === data) {
         return;
     }
-    const parse_interval_range = value => MINUTE * Number(value);
 
     let { interval, custom_interval } = data;
     if ("c" === interval) {
-        interval = parse_interval_range(custom_interval);
+        let intervalRangeParsed = MINUTE * custom_interval
+        interval = intervalRangeParsed;
     } else {
         interval = input_to_interval(interval);
     }
@@ -118,7 +134,7 @@ async function load_and_set_naming(config) {
     if (undefined === data || null === data) {
         return;
     }
-    let { prefix, suffix, format_year, format_mon, format_day } = data;    
+    let { prefix, suffix, format_year, format_mon, format_day } = data;
 
     if (Utils.isNoneEmptyString(prefix)) {
         config.prefix = prefix;
@@ -151,10 +167,8 @@ const config = {
     debuging: false,
     debugEntropy: 64,
     debugRandomRadix: "16",
-    // interval: HOUR * 1,
-    // keepfor: DAY * 2
-    interval: SECOND * 10,
-    keepfor: SECOND * 180
+    interval: HOUR * 1,
+    keepfor: DAY * 2
 };
 // process data
 const pdata = {

@@ -39,7 +39,7 @@ const Utils = (() => {
 
     o.isString = s => typeof s === "string";
 
-    o.is_actual_object = s => typeof s === "object" & s !== null;
+    o.is_actual_object = s => (typeof s === "object" & s !== null);
 
     o.isNoneEmptyString = s => (o.isString(s) && s !== "");
 
