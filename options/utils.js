@@ -10,7 +10,7 @@ const Utils = (() => {
     * @param {Boolean} v
     * @void
     */
-    o.ToggleInputEnabledState = (id,v) => {
+    o.ToggleInputEnabledState = (id, v) => {
         let elem = query(`#${id}`);
         if (true === v) {
             elem.disabled = false;
@@ -39,7 +39,11 @@ const Utils = (() => {
 
     o.isString = s => typeof s === "string";
 
+    o.is_actual_object = s => typeof s === "object" & s !== null;
+
     o.isNoneEmptyString = s => (o.isString(s) && s !== "");
+
+    o.is_non_empty_object = s => (o.is_actual_object(s) && s !== {});
 
     /**
      * check if object or array contains value

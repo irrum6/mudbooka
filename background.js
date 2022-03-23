@@ -35,112 +35,31 @@ function input_to_keepfor(value) {
     return HOUR * 24 * Number(replaced);
 }
 
-
-
-const format_options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-
-//const but mutable
-//config for program
-const config = {
-    prefix: "",
-    prefixes: [],
-    suffix: "_tabs",
-    suffixes: ["_tabs"],
-    format_options,
-    locale: "default",
-    debuging: false,
-    debug_entropy: 64,
-    debug_random_radix: "16",
-    interval: HOUR * 1,
-    keepfor: DAY * 2
-};
-// process data
-const pdata = {
-    last_time: 0,
-    next_time: 0
-};
-
-/**
- * @param {String} psx //prefix or suffix
- * @param {Number} keep 
+/** 
+ * @param {Array<String>} idsArray 
+ * @param {Number} keep
+ * @returns {Array<String>} 
  */
-async function search_and_destroy_old_folders(psx, keep) {
-    //delete old items
-    let folders = await browser.bookmarks.search({ query: psx });
-    let early_date = new Date(Date.now() - keep);
-    for (const fold of folders) {
-        console.log(fold);
-        if (fold.dateAdded < early_date) {
-            console.log(`DELETE:${fold.title}`);
-            //await browser.bookmarks.removeTree(fold.id);
-
+async function delete_old_folders(idsArray, keep) {
+    let bookmarkFolders = await browser.bookmarks.get(idsArray);
+    let earlyDate = new Date(Date.now() - keep);
+    const clearIds = [];
+    for (const fold of bookmarkFolders) {
+        if (fold.dateAdded < earlyDate) {
+            //console.log(`Now deleting:${fold.title}`);
+            await browser.bookmarks.removeTree(fold.id);
+            continue;
         }
+        clearIds.push(fold.id);
     }
+    return clearIds;
 }
-async function runner() {
 
-    //take care of old stuff
-    while (config.prefixes.length > 1) {
-        let prefix = config.prefixes.shift();
-        await search_and_destroy_old_folders(prefix, config.keepfor);
-    }
-    while (config.suffixes.length > 1) {
-        let suffix = config.suffixes.shift();
-        await search_and_destroy_old_folders(suffix, config.keepfor);
-    }
-
-    if (Utils.isNoneEmptyString(config.prefix)) {
-        await search_and_destroy_old_folders(config.prefix, config.keepfor);
-    }
-
-    if (Utils.isNoneEmptyString(config.suffix)) {
-        await search_and_destroy_old_folders(config.suffix, config.keepfor);
-    }
-
-    //search tabs
-    let tabs = await browser.tabs.query({});
-
-    let formated = new Date().toLocaleString(config.locale, config.format_options).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
-    //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)
-    let title = `${formated}`
-    if (Utils.isNoneEmptyString(config.prefix)) {
-        title = `${config.prefix}${title}`;
-    }
-    if (Utils.isNoneEmptyString(config.suffix)) {
-        title = `${title}${config.suffix}`;
-    }
-
-    if (config.debuging) {
-        //add some randomness
-        let _substr = `_${Utils.GetRandomString(config.debug_entropy, config.debug_random_radix)}`;
-        title = title.concat(_substr);
-    }
-    let folder = await browser.bookmarks.create({ title });
-
-    const folder_id = folder.id;
-
-    //save tabs to folder
-    for (const t of tabs) {
-        const { title, url } = t;
-        await browser.bookmarks.create({ parentId: folder_id, title, url });
-    }
-    pdata.last_time = Date.now();
-    pdata.next_time = pdata.last_time + config.interval;
-
-    browser.notifications.create({
-        "type": "basic",
-        "iconUrl": browser.runtime.getURL("icons/logo.png"),
-        "title": "MudBooker",
-        "message": "Tabs were bookmarked"
-    });
-
-    await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
-}
 /**
  * @param {Object} pdata 
  * @returns {void}
  */
-async function load_and_set_interval(pdata) {
+async function load_and_set_interval(pdata, config) {
     if (config.debuging) {
         return;
     }
@@ -165,7 +84,11 @@ async function load_and_set_interval(pdata) {
     }
 }
 
-async function load_and_set_keepfor() {
+/** 
+ * @param {Object} config 
+ * @returns 
+ */
+async function load_and_set_keepfor(config) {
     if (config.debuging) {
         return;
     }
@@ -183,7 +106,11 @@ async function load_and_set_keepfor() {
     }
 }
 
-async function load_and_set_naming() {
+/** 
+ * @param {Object} config 
+ * @returns 
+ */
+async function load_and_set_naming(config) {
     let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day"];
 
     let data = await browser.storage.local.get(sarraya);
@@ -191,46 +118,119 @@ async function load_and_set_naming() {
     if (undefined === data || null === data) {
         return;
     }
-    let { prefix, suffix, format_year, format_mon, format_day } = data;
+    let { prefix, suffix, format_year, format_mon, format_day } = data;    
 
-    config.prefix = prefix;
     if (Utils.isNoneEmptyString(prefix)) {
-        config.prefixes.push(prefix);
+        config.prefix = prefix;
     }
-    config.suffix = suffix;
     if (Utils.isNoneEmptyString(suffix)) {
-        config.suffixes.push(suffix);
+        config.suffix = suffix;
     }
+
     if (Utils.isNoneEmptyString(format_year)) {
-        config.format_options.year = format_year;
+        config.formatOptions.year = format_year;
     }
     if (Utils.isNoneEmptyString(format_mon)) {
-        config.format_options.month = format_mon;
+        config.formatOptions.month = format_mon;
     }
     if (Utils.isNoneEmptyString(format_day)) {
-        config.format_options.day = format_day;
+        config.formatOptions.day = format_day;
     }
+}
+
+// main
+const formatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+
+//const but mutable
+//config for program
+const config = {
+    prefix: "",
+    suffix: "_tabs",
+    formatOptions,
+    locale: "default",
+    debuging: true,
+    debug_entropy: 64,
+    debug_random_radix: "16",
+    // interval: HOUR * 1,
+    // keepfor: DAY * 2
+    interval: SECOND * 10,
+    keepfor: SECOND * 180
+};
+// process data
+const pdata = {
+    last_time: 0,
+    next_time: 0
+};
+
+async function runner() {
+    let getSavedTabs = await browser.storage.local.get("saved_tabs");
+    let savedTabs = getSavedTabs["saved_tabs"];
+
+    let folderIds = [];
+    if (Utils.is_non_empty_object(savedTabs) && savedTabs.folderIds) {
+        folderIds = await delete_old_folders(savedTabs.folderIds, config.keepfor);
+    }
+
+    //search tabs
+    let tabs = await browser.tabs.query({});
+
+    let { locale, formatOptions } = config;
+    let formated = new Date().toLocaleString(locale, formatOptions).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
+    //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)
+    let title = `${formated}`
+    if (Utils.isNoneEmptyString(config.prefix)) {
+        title = `${config.prefix}${title}`;
+    }
+    if (Utils.isNoneEmptyString(config.suffix)) {
+        title = `${title}${config.suffix}`;
+    }
+
+    if (config.debuging) {
+        //add some randomness
+        let _substr = `_${Utils.GetRandomString(config.debug_entropy, config.debug_random_radix)}`;
+        title = title.concat(_substr);
+    }
+    let folder = await browser.bookmarks.create({ title });
+
+    const folder_id = folder.id;
+
+    //save tabs to folder
+    for (const t of tabs) {
+        const { title, url } = t;
+        await browser.bookmarks.create({ parentId: folder_id, title, url });
+    }
+
+    folderIds.push(folder_id);
+
+    pdata.last_time = Date.now();
+    pdata.next_time = pdata.last_time + config.interval;
+
+    const saved_tabs = { folderIds }
+    await browser.storage.local.set({ saved_tabs });
+
+    browser.notifications.create({
+        "type": "basic",
+        "iconUrl": browser.runtime.getURL("icons/logo.png"),
+        "title": "MudBooker",
+        "message": "Tabs were bookmarked"
+    });
+
+    await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
 }
 
 pdata.runner_id = window.setInterval(runner, config.interval);
 
 window.setTimeout(async () => {
-    // load and set interval
-    await load_and_set_interval(pdata);
-    //load and set keepfor
-    await load_and_set_keepfor();
-    // load and set prefix/suffix
-    await load_and_set_naming();
+    await load_and_set_interval(pdata, config);
+    await load_and_set_keepfor(config);
+    await load_and_set_naming(config);
     runner();
 }, 2000);
 
 browser.storage.onChanged.addListener(async () => {
-    // load and set interval
-    await load_and_set_interval(pdata);
-    //load and set keepfor
-    await load_and_set_keepfor();
-    // load and set prefix/suffix
-    await load_and_set_naming();
+    await load_and_set_interval(pdata, config);
+    await load_and_set_keepfor(config);
+    await load_and_set_naming(config);
 });
 
 browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
