@@ -136,10 +136,10 @@ async function load_and_set_naming(config) {
     }
     let { prefix, suffix, format_year, format_mon, format_day } = data;
 
-    if (Utils.isNoneEmptyString(prefix)) {
+    if (Utils.isString(prefix)) {
         config.prefix = prefix;
     }
-    if (Utils.isNoneEmptyString(suffix)) {
+    if (Utils.isString(suffix)) {
         config.suffix = suffix;
     }
 
@@ -188,20 +188,21 @@ async function runner() {
     //search tabs
     let tabs = await browser.tabs.query({});
 
-    let { locale, formatOptions } = config;
+    let { locale, formatOptions, prefix, suffix, debuging, debugEntropy, debugRandomRadix } = config;
+
     let formated = new Date().toLocaleString(locale, formatOptions).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
     //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)
     let title = `${formated}`
-    if (Utils.isNoneEmptyString(config.prefix)) {
+    if (Utils.isNoneEmptyString(prefix)) {
         title = `${config.prefix}${title}`;
     }
-    if (Utils.isNoneEmptyString(config.suffix)) {
+    if (Utils.isNoneEmptyString(suffix)) {
         title = `${title}${config.suffix}`;
     }
 
     if (config.debuging) {
         //add some randomness
-        let _substr = `_${Utils.GetRandomString(config.debugEntropy, config.debugRandomRadix)}`;
+        let _substr = `_${Utils.GetRandomString(debugEntropy, debugRandomRadix)}`;
         title = title.concat(_substr);
     }
     let folder = await browser.bookmarks.create({ title });

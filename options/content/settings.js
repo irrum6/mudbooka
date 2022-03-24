@@ -41,7 +41,9 @@ function SetPrefixAndSuffix(data) {
         return;
     }
     const { prefix, suffix } = data;
-    query("#naming_prefix").value = prefix;
+    if (Utils.isNoneEmptyString(prefix)) {
+        query("#naming_prefix").value = prefix;
+    }
 
     if (Utils.isNoneEmptyString(suffix)) {
         query("#enable_sufx").checked = true;
@@ -182,9 +184,9 @@ async function SaveKeepValue() {
  * @param {String} suffix
  * @returns Boolean 
  */
-function ValidateAfixValues(prefix, suffix) {    
+function ValidateAfixValues(prefix, suffix) {
     const MAXIMUM_SYMBOL_LENGTH = 32;
- 
+
     if (prefix.length > MAXIMUM_SYMBOL_LENGTH) {
         alert("Preffix can not be longer than 32 symbols");
         return false;
