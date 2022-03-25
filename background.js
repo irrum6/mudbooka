@@ -42,7 +42,6 @@ function input_to_keepfor(value) {
  */
 async function delete_old_folders(idsArray, keep) {
     let earlyDate = new Date(Date.now() - keep);
-    console.log(Number(earlyDate));
     const clearIds = [];
     /**
      * yes i know that i can pass array as whole
@@ -54,7 +53,8 @@ async function delete_old_folders(idsArray, keep) {
         }
         let fold = null;
         try {
-            fold = await browser.bookmarks.get(id);
+            let data = await browser.bookmarks.get(id);
+            fold = data[0];
         } catch (e) {
             console.log("Folder by id not found");
         }
