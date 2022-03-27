@@ -35,40 +35,32 @@ function input_to_keepfor(value) {
     return HOUR * 24 * Number(replaced);
 }
 
-/** 
- * @param {Array<String>} idsArray 
+/**
  * @param {Number} keep
  * @returns {Array<String>} 
  */
-async function delete_old_folders(idsArray, keep) {
+async function delete_old_folders(keep) {
+    let getSavedTabs = await browser.storage.local.get("saved_tabs");
+    let savedTabs = getSavedTabs["saved_tabs"];
+    let folderArray = savedTabs.folders;
+
     let earlyDate = new Date(Date.now() - keep);
-    const clearIds = [];
-    /**
-     * yes i know that i can pass array as whole
-     * but if one of the folders is deleted , then whole get operation will fail due to invalid id.
-     */
-    for (const id of idsArray) {
-        if (!Utils.isNoneEmptyString(id)) {
-            continue;
-        }
-        let fold = null;
-        try {
-            let data = await browser.bookmarks.get(id);
-            fold = data[0];
-        } catch (e) {
-            console.log("Folder by id not found");
-        }
-        if (!Utils.is_non_empty_object(fold)) {
-            continue;
-        }
-        if (fold.dateAdded < earlyDate) {
-            console.log(`Now deleting:${fold.title}`);
+
+    //do split
+    const cleared = folderArray.filter(e => e.dateAdded > earlyDate);
+    const selectedForDeletion = folderArray.filter(e => e.dateAdded <= earlyDate);
+
+    try {
+        for (const fold of selectedForDeletion) {
+            console.log(`Now deleting bookmark added on ${fold.dateAdded.toLocaleString()}`);
             await browser.bookmarks.removeTree(fold.id);
-            continue;
         }
-        clearIds.push(id);
+    } catch (e) {
+        console.log(e);
+    } finally {
+        return cleared;
     }
-    return clearIds;
+    //return cleared;
 }
 
 /**
@@ -180,10 +172,7 @@ async function runner() {
     let getSavedTabs = await browser.storage.local.get("saved_tabs");
     let savedTabs = getSavedTabs["saved_tabs"];
 
-    let folderIds = [];
-    if (Utils.is_non_empty_object(savedTabs) && savedTabs.folderIds) {
-        folderIds = await delete_old_folders(savedTabs.folderIds, config.keepfor);
-    }
+    let folders = await delete_old_folders(config.keepfor);
 
     //search tabs
     let tabs = await browser.tabs.query({});
@@ -205,9 +194,9 @@ async function runner() {
         let _substr = `_${Utils.GetRandomString(debugEntropy, debugRandomRadix)}`;
         title = title.concat(_substr);
     }
-    let folder = await browser.bookmarks.create({ title });
+    let newFolder = await browser.bookmarks.create({ title });
 
-    const folder_id = folder.id;
+    const folder_id = newFolder.id;
 
     //save tabs to folder
     for (const t of tabs) {
@@ -215,12 +204,12 @@ async function runner() {
         await browser.bookmarks.create({ parentId: folder_id, title, url });
     }
 
-    folderIds.push(folder_id);
+    folders.push({ id: newFolder.id, dateAdded: newFolder.dateAdded });
 
     pdata.last_time = Date.now();
     pdata.next_time = pdata.last_time + config.interval;
 
-    const saved_tabs = { folderIds }
+    const saved_tabs = { folders }
     await browser.storage.local.set({ saved_tabs });
 
     browser.notifications.create({
