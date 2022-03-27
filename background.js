@@ -41,14 +41,28 @@ function input_to_keepfor(value) {
  */
 async function delete_old_folders(keep) {
     let getSavedTabs = await browser.storage.local.get("saved_tabs");
+
+    if (!Utils.is_non_empty_object(getSavedTabs)) {
+        return [];
+    }
+
     let savedTabs = getSavedTabs["saved_tabs"];
+
+    if (!Utils.is_non_empty_object(savedTabs)) {
+        return [];
+    }
+
+    if (savedTabs.folders === undefined) {
+        return [];
+    }
+
     let folderArray = savedTabs.folders;
 
     let earlyDate = new Date(Date.now() - keep);
 
     //do split
-    const cleared = folderArray.filter(e => e.dateAdded > earlyDate);
-    const selectedForDeletion = folderArray.filter(e => e.dateAdded <= earlyDate);
+    let cleared = folderArray.filter(e => e.dateAdded > earlyDate);
+    let selectedForDeletion = folderArray.filter(e => e.dateAdded <= earlyDate);
 
     try {
         for (const fold of selectedForDeletion) {
@@ -58,9 +72,11 @@ async function delete_old_folders(keep) {
     } catch (e) {
         console.log(e);
     } finally {
+        if (cleared === undefined) {
+            cleared = []; //assign empty araay if none value
+        }
         return cleared;
     }
-    //return cleared;
 }
 
 /**
