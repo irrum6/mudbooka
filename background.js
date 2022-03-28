@@ -66,7 +66,8 @@ async function delete_old_folders(keep) {
 
     try {
         for (const fold of selectedForDeletion) {
-            console.log(`Now deleting bookmark added on ${fold.dateAdded.toLocaleString()}`);
+            let dat = new Date(fold.dateAdded);
+            console.log(`Now deleting bookmark added on ${dat.toLocaleString()}`);
             await browser.bookmarks.removeTree(fold.id);
         }
     } catch (e) {
