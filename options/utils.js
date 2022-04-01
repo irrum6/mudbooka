@@ -1,6 +1,7 @@
 const on = "addEventListener";
 const query = s => document.body.querySelector(s);
 const query_all = s => document.body.querySelectorAll(s);
+const val = id => document.getElementById(id).value;
 
 const Utils = (() => {
     let o = Object.create(null);

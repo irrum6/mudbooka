@@ -36,11 +36,13 @@ function SetKeepValues(data) {
     query("#display_keepfor_range").textContent = custom_keepfor;
 }
 
-function SetPrefixAndSuffix(data) {
+function set_naming_format_values(data) {
     if (undefined === data || null === data) {
         return;
     }
-    const { prefix, suffix } = data;
+
+    let { prefix, suffix, format_year, format_mon, format_day, locale } = data;
+
     if (Utils.isNoneEmptyString(prefix)) {
         query("#naming_prefix").value = prefix;
     }
@@ -50,14 +52,6 @@ function SetPrefixAndSuffix(data) {
         query("#naming_suffix").disabled = false;
         query("#naming_suffix").value = suffix;
     }
-}
-
-function SetFormatValues(data) {
-    if (undefined === data || null === data) {
-        return;
-    }
-
-    let { format_year, format_mon, format_day, locale } = data;
 
     if (Utils.isNoneEmptyString(format_year)) {
         query(`[data-fy='${format_year}']`).checked = true;
@@ -68,11 +62,11 @@ function SetFormatValues(data) {
     if (Utils.isNoneEmptyString(format_day)) {
         query(`[data-fd='${format_day}']`).checked = true;
     }
+    display_example_name();
 }
 
 // interval range functions 
 const onIntervalRangeValueChange = e => query("#display_interval_range").textContent = e.target.value;
-
 query("#interval_range")[on]("change", onIntervalRangeValueChange);
 query("#interval_range")[on]("progchange", onIntervalRangeValueChange);
 query("#interval_range")[on]("input", onIntervalRangeValueChange);
@@ -198,6 +192,47 @@ function ValidateAfixValues(prefix, suffix) {
     return true;
 }
 
+function display_example_name() {
+    let prefix = val("naming_prefix");
+
+    let enable_sufx = val("enable_sufx");
+    let suffix = "";
+    if (enable_sufx) {
+        suffix = val("naming_suffix");
+    }
+
+    let year = "numeric";
+    let radio = query("input[name=format_year]:checked");
+    if (radio !== undefined && radio !== null) {
+        year = radio.value;
+    }
+
+    let month = "numeric";
+    radio = query("input[name=format_mon]:checked");
+    if (radio !== undefined && radio !== null) {
+        month = radio.value;
+    }
+
+    let day = "numeric";
+    radio = query("input[name=format_day]:checked");
+    if (radio !== undefined && radio !== null) {
+        day = radio.value;
+    }
+
+    let locale = "default";
+    let formatOptions = { year, month, day, hour: '2-digit', minute: '2-digit' };
+
+    let formated = new Date().toLocaleString(locale, formatOptions).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
+    let title = `${formated}`
+    if (Utils.isNoneEmptyString(prefix)) {
+        title = `${prefix}${title}`;
+    }
+    if (Utils.isNoneEmptyString(suffix)) {
+        title = `${title}${suffix}`;
+    }
+    query("#display_name_example").textContent = title;
+}
+
 async function SaveNaming() {
     let prefix = query("#naming_prefix").value;
 
@@ -236,6 +271,7 @@ async function SaveNaming() {
 
 }
 
+
 query("#save_interval")[on]("click", SaveIntervalValue);
 query("#save_keep")[on]("click", SaveKeepValue);
 query("#save_naming")[on]("click", SaveNaming);
@@ -243,6 +279,29 @@ query("#save_naming")[on]("click", SaveNaming);
 //set input values from storage
 browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);
 browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);
-browser.storage.local.get(["prefix", "suffix"]).then(SetPrefixAndSuffix);
 
-browser.storage.local.get(["format_year", "format_mon", "format_day"], SetFormatValues);
+browser.storage.local.get(["prefix", "suffix","format_year", "format_mon", "format_day"], set_naming_format_values);
+
+// setup event listeners for prefix/suffix inputs
+query("#naming_prefix")[on]("change", display_example_name);
+query("#naming_prefix")[on]("input", display_example_name);
+query("#naming_prefix")[on]("keydown", display_example_name);
+
+query("#naming_suffix")[on]("change", display_example_name);
+query("#naming_suffix")[on]("input", display_example_name);
+query("#naming_suffix")[on]("keydown", display_example_name);
+
+
+// setup event listeners for date format inputs
+// try generic query
+let fy = query_all("[name=format_year]");
+let fm = query_all("[name=format_mon]");
+let fd = query_all("[name=format_day]");
+let fullSet = new Set([...fy,...fm,...fd])
+
+for(const elem of fullSet){
+    elem[on]("click", display_example_name);
+    elem[on]("focus", display_example_name);
+    elem[on]("change", display_example_name);
+    elem[on]("input", display_example_name);
+}
