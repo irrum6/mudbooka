@@ -229,11 +229,14 @@ async function runner() {
     const saved_tabs = { folders }
     await browser.storage.local.set({ saved_tabs });
 
+    let nudate = new Date(pdata.last_time);
+    let message = `${nudate.getHours()}:${nudate.getMinutes()} - tabs were bookmarked`;
+
     browser.notifications.create({
         "type": "basic",
         "iconUrl": browser.runtime.getURL("icons/logo.png"),
         "title": "MudBooker",
-        "message": "Tabs were bookmarked"
+        "message": message
     });
 
     await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
