@@ -40,6 +40,16 @@ function input_to_keepfor(value) {
  * @returns {Array<String>} 
  */
 async function delete_old_folders(keep) {
+    const sorter = (a, b) => {
+        if (a.dateAdded < b.dateAdded) {
+            return -1;
+        }
+        if (a.dateAdded > b.dateAdded) {
+            return 1;
+        }
+        return 0;
+    }
+
     let getSavedTabs = await browser.storage.local.get("saved_tabs");
 
     if (!Utils.is_non_empty_object(getSavedTabs)) {
@@ -63,6 +73,16 @@ async function delete_old_folders(keep) {
     //do split
     let cleared = folderArray.filter(e => e.dateAdded > earlyDate);
     let selectedForDeletion = folderArray.filter(e => e.dateAdded <= earlyDate);
+    selectedForDeletion.sort(sorter);   
+    //console.log(earlyDate, selectedForDeletion, cleared);
+    //select one for saving
+
+    if (selectedForDeletion.length > 0) {
+        let z = selectedForDeletion.pop();
+        console.log(z);
+        cleared.push(z);
+    }
+    cleared.sort(sorter);
 
     try {
         for (const fold of selectedForDeletion) {
@@ -76,8 +96,10 @@ async function delete_old_folders(keep) {
         if (cleared === undefined) {
             cleared = []; //assign empty araay if none value
         }
+        cleared.sort(sorter);
         return cleared;
     }
+
 }
 
 /**
@@ -189,8 +211,6 @@ async function runner() {
     let getSavedTabs = await browser.storage.local.get("saved_tabs");
     let savedTabs = getSavedTabs["saved_tabs"];
 
-    let folders = await delete_old_folders(config.keepfor);
-
     //search tabs
     let tabs = await browser.tabs.query({});
 
@@ -220,6 +240,8 @@ async function runner() {
         const { title, url } = t;
         await browser.bookmarks.create({ parentId: folder_id, title, url });
     }
+
+    let folders = await delete_old_folders(config.keepfor);
 
     folders.push({ id: newFolder.id, dateAdded: newFolder.dateAdded });
 
