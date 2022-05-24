@@ -1,0 +1,5 @@
+0.9.1
+changed from creating folders in "Other Bookmarks" to adding subfolders in specific folder named "mudbooker tabs"
+and saving bookmarked tabs there.
+
+removed "unlimitedStorage"  permission as no longer necessary (we no longer save folder ids).

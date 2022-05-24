@@ -35,11 +35,29 @@ function input_to_keepfor(value) {
     return HOUR * 24 * Number(replaced);
 }
 
+async function touch_parent_id(config) {
+    let bookers = await browser.bookmarks.search({ query: config.folder_name });
+
+    if (bookers.length < 1) {
+        //if doesn't exist, then create it
+        let booker = await browser.bookmarks.create({
+            title: config.folder_name,
+            parentId: "toolbar_____"
+        });
+        return booker.id;
+    }
+
+    return bookers[0].id;
+}
+
 /**
  * @param {Number} keep
  * @returns {Array<String>} 
  */
-async function delete_old_folders(keep) {
+async function delete_old_folders(config) {
+    let keep = config.keepfor
+    //for max number use reverse sort
+    //168 * 4 = 672
     const sorter = (a, b) => {
         if (a.dateAdded < b.dateAdded) {
             return -1;
@@ -50,39 +68,20 @@ async function delete_old_folders(keep) {
         return 0;
     }
 
-    let getSavedTabs = await browser.storage.local.get("saved_tabs");
+    let parent_id = touch_parent_id(config);
 
-    if (!Utils.is_non_empty_object(getSavedTabs)) {
-        return [];
-    }
-
-    let savedTabs = getSavedTabs["saved_tabs"];
-
-    if (!Utils.is_non_empty_object(savedTabs)) {
-        return [];
-    }
-
-    if (savedTabs.folders === undefined) {
-        return [];
-    }
-
-    let folderArray = savedTabs.folders;
+    let children = await browser.bookmarks.getChildren(parent_id);
 
     let earlyDate = new Date(Date.now() - keep);
 
     //do split
-    let cleared = folderArray.filter(e => e.dateAdded > earlyDate);
-    let selectedForDeletion = folderArray.filter(e => e.dateAdded <= earlyDate);
-    selectedForDeletion.sort(sorter);   
-    //console.log(earlyDate, selectedForDeletion, cleared);
-    //select one for saving
+    let selectedForDeletion = children.filter(e => e.dateAdded <= earlyDate);
+    selectedForDeletion.sort(sorter);
 
     if (selectedForDeletion.length > 0) {
         let z = selectedForDeletion.pop();
         console.log(z);
-        cleared.push(z);
     }
-    cleared.sort(sorter);
 
     try {
         for (const fold of selectedForDeletion) {
@@ -198,6 +197,7 @@ const config = {
     debuging: false,
     debugEntropy: 64,
     debugRandomRadix: "16",
+    folder_name: "mudbooker_tabs",
     interval: HOUR * 1,
     keepfor: DAY * 2
 };
@@ -208,9 +208,6 @@ const pdata = {
 };
 
 async function runner() {
-    let getSavedTabs = await browser.storage.local.get("saved_tabs");
-    let savedTabs = getSavedTabs["saved_tabs"];
-
     //search tabs
     let tabs = await browser.tabs.query({});
 
@@ -231,7 +228,10 @@ async function runner() {
         let _substr = `_${Utils.GetRandomString(debugEntropy, debugRandomRadix)}`;
         title = title.concat(_substr);
     }
-    let newFolder = await browser.bookmarks.create({ title });
+
+    let parent_id = await touch_parent_id(config);
+    console.log(parent_id);
+    let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
 
     const folder_id = newFolder.id;
 
@@ -241,15 +241,8 @@ async function runner() {
         await browser.bookmarks.create({ parentId: folder_id, title, url });
     }
 
-    let folders = await delete_old_folders(config.keepfor);
-
-    folders.push({ id: newFolder.id, dateAdded: newFolder.dateAdded });
-
     pdata.last_time = Date.now();
     pdata.next_time = pdata.last_time + config.interval;
-
-    const saved_tabs = { folders }
-    await browser.storage.local.set({ saved_tabs });
 
     let nudate = new Date(pdata.last_time);
     let message = `${nudate.getHours()}:${nudate.getMinutes()} - tabs were bookmarked`;
