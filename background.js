@@ -68,7 +68,7 @@ async function delete_old_folders(config) {
         return 0;
     }
 
-    let parent_id = touch_parent_id(config);
+    let parent_id = await touch_parent_id(config);
 
     let children = await browser.bookmarks.getChildren(parent_id);
 
@@ -92,11 +92,7 @@ async function delete_old_folders(config) {
     } catch (e) {
         console.log(e);
     } finally {
-        if (cleared === undefined) {
-            cleared = []; //assign empty araay if none value
-        }
-        cleared.sort(sorter);
-        return cleared;
+       
     }
 
 }
@@ -255,6 +251,8 @@ async function runner() {
     });
 
     await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
+
+    await delete_old_folders(config);
 }
 
 pdata.runner_id = window.setInterval(runner, config.interval);
