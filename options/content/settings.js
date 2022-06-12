@@ -271,10 +271,15 @@ async function SaveNaming() {
 
 }
 
+async function SaveFolderName(){
+    let folder_name = query("#folder_naming").value;
+    await browser.storage.local.set({folder_name});
+}
 
 query("#save_interval")[on]("click", SaveIntervalValue);
 query("#save_keep")[on]("click", SaveKeepValue);
 query("#save_naming")[on]("click", SaveNaming);
+query("#save_folder_name")[on]("click", SaveFolderName);
 
 //set input values from storage
 browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);

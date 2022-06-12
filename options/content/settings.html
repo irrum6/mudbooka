@@ -95,7 +95,7 @@
             </div>
             <div>
                 <label class="f3">
-                    <input type="radio" name="keepfor" value="12h" data-keep="12h">
+                    <input type="radio" name="keepfor" value="12h" data-keep="12h" checked>
                     12 Hours
                 </label>
             </div>
@@ -107,7 +107,7 @@
             </div>
             <div>
                 <label class="f3">
-                    <input type="radio" name="keepfor" value="2d" data-keep="2d" checked>
+                    <input type="radio" name="keepfor" value="2d" data-keep="2d">
                     2 days
                 </label>
             </div>
@@ -163,7 +163,7 @@
         <!-- naming -->
         <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
-                <span class="f4 bold900">Folder Naming</span>
+                <span class="f4 bold900">Naming</span>
             </div>
             <div>
                 <label class="f3" for="naming_prefix">
@@ -228,6 +228,21 @@
             </div>
             <div class="mt-4">
                 <button id="save_naming" class="f3">Save Naming</button>
+            </div>
+        </div>
+        <!-- other options -->
+        <div class="flex-column-center grow1 ml-4">
+            <div class="text-center">
+                <span class="f4 bold900">Other settings</span>
+            </div>
+            <div>
+                <label class="f3" for="folder_naming">
+                    Save in
+                    <input type="text" class="f3" name="prefix" id="folder_naming" value="mudbooker_tabs">
+                </label>
+            </div>
+            <div class="mt-4">
+                <button id="save_folder_name" class="f3">Save</button>
             </div>
         </div>
     </div>

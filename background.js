@@ -14,7 +14,7 @@ function input_to_interval(value) {
         return input_to_interval(VALID_INTERVALS[0]);
     }
     let replaced = value.replace("h", "");
-    return HOUR * Number(replaced);;
+    return HOUR * Number(replaced);
 }
 
 /**
@@ -79,8 +79,7 @@ async function delete_old_folders(config) {
     selectedForDeletion.sort(sorter);
 
     if (selectedForDeletion.length > 0) {
-        let z = selectedForDeletion.pop();
-        console.log(z);
+        selectedForDeletion.pop();
     }
 
     try {
@@ -153,14 +152,14 @@ async function load_and_set_keepfor(config) {
  * @returns 
  */
 async function load_and_set_naming(config) {
-    let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day"];
+    let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day","folder_name"];
 
     let data = await browser.storage.local.get(sarraya);
 
     if (undefined === data || null === data) {
         return;
     }
-    let { prefix, suffix, format_year, format_mon, format_day } = data;
+    let { prefix, suffix, format_year, format_mon, format_day,folder_name } = data;
 
     if (Utils.isString(prefix)) {
         config.prefix = prefix;
@@ -177,6 +176,9 @@ async function load_and_set_naming(config) {
     }
     if (Utils.isNoneEmptyString(format_day)) {
         config.formatOptions.day = format_day;
+    }
+    if (Utils.isNoneEmptyString(folder_name)) {
+        config.folder_name = folder_name;
     }
 }
 
@@ -226,7 +228,7 @@ async function runner() {
     }
 
     let parent_id = await touch_parent_id(config);
-    console.log(parent_id);
+    //console.log(parent_id);
     let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
 
     const folder_id = newFolder.id;
