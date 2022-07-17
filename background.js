@@ -20,7 +20,7 @@ class AutoBookmarker {
             suffix: "_tabs",
             formatOptions,
             locale: "default",
-            debuging: false,
+            debuging: true,
             debugEntropy: 64,
             debugRandomRadix: "16",
             folder_name: "mudbooker_tabs",
@@ -58,7 +58,7 @@ class AutoBookmarker {
             return 0;
         }
 
-        let parent_id = await touch_parent_id(config);
+        let parent_id = await this.touchParentID();
 
         let children = await browser.bookmarks.getChildren(parent_id);
 
@@ -166,6 +166,7 @@ class AutoBookmarker {
     }
     //the main function
     async runner() {
+        //debugger;
         //search tabs
         let tabs = await browser.tabs.query({});
 
@@ -176,10 +177,10 @@ class AutoBookmarker {
         //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)
         let title = `${formated}`
         if (Utils.isNoneEmptyString(prefix)) {
-            title = `${config.prefix}${title}`;
+            title = `${prefix}${title}`;
         }
         if (Utils.isNoneEmptyString(suffix)) {
-            title = `${title}${config.suffix}`;
+            title = `${title}${suffix}`;
         }
 
         if (debuging) {
@@ -188,7 +189,7 @@ class AutoBookmarker {
             title = title.concat(_substr);
         }
 
-        let parent_id = await touch_parent_id(config);
+        let parent_id = await this.touchParentID();
         //console.log(parent_id);
         let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
 
@@ -200,10 +201,10 @@ class AutoBookmarker {
             await browser.bookmarks.create({ parentId: folder_id, title, url });
         }
 
-        pdata.last_time = Date.now();
-        pdata.next_time = pdata.last_time + config.interval;
+        this.pdata.last_time = Date.now();
+        this.pdata.next_time = this.pdata.last_time + this.config.interval;
 
-        let nudate = new Date(pdata.last_time);
+        let nudate = new Date(this.pdata.last_time);
         let message = `${nudate.getHours()}:${nudate.getMinutes()} - tabs were bookmarked`;
 
         browser.notifications.create({
@@ -213,9 +214,9 @@ class AutoBookmarker {
             "message": message
         });
 
-        await browser.storage.local.set({ last: pdata.last_time, next: pdata.next_time });
+        await browser.storage.local.set({ last: this.pdata.last_time, next: this.pdata.next_time });
 
-        await delete_old_folders(config);
+        await this.removeOldFolders();
     }
     async loadDataFromLocalStorage() {
         await this.loadAndSetInterval();
@@ -223,17 +224,28 @@ class AutoBookmarker {
         await this.loadAndSetNaming();
     }
     /**
-     * Start Restart
+     * Start
      */
     async start() {
+        //if process is running then not start again
+        //restart is seperate function
         if (this.pdata.runner_id !== undefined) {
             return false;
         }
+        this.runner();
         let interval = this.config.interval;
         const runner_bounded = this.runner.bind(this);
         this.pdata.runner_id = window.setInterval(runner_bounded, interval);
     }
+    /**
+     * Restart
+     * @returns 
+     */
     async restart() {
+        if (this.pdata.runner_id === undefined) {
+            return false;
+        }
+        this.runner();
         window.clearInterval(this.pdata.runner_id);
         let interval = this.config.interval;
         const runner_bounded = this.runner.bind(this);
@@ -242,6 +254,7 @@ class AutoBookmarker {
 }
 
 const mdBooker = new AutoBookmarker();
+mdBooker.loadDataFromLocalStorage();
 mdBooker.start();
 
 browser.storage.onChanged.addListener(async () => {
