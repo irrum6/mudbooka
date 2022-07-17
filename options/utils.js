@@ -84,7 +84,7 @@ const Utils = (() => {
     o.convertInterval = (value) => {
         const VALID_INTERVALS = ["1h", "2h", "3h", "4h", "5h", "6h", "7h", "8h"];
         if (!Utils.contains(VALID_INTERVALS, value)) {
-            return input_to_interval(VALID_INTERVALS[0]);
+            return o.convertInterval(VALID_INTERVALS[0]);
         }
         let replaced = value.replace("h", "");
         return HOUR * Number(replaced);
@@ -98,7 +98,7 @@ const Utils = (() => {
         const VALID_KEEPS = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
         if (!Utils.contains(VALID_KEEPS, value)) {
             //falback to safe value
-            return input_to_keepfor(VALID_KEEPS[0]);
+            return o.convertKeepfor(VALID_KEEPS[0]);
         }
         if ("12h" === value) {
             return HOUR * 12;

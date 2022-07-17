@@ -20,7 +20,7 @@ class AutoBookmarker {
             suffix: "_tabs",
             formatOptions,
             locale: "default",
-            debuging: true,
+            debuging: false,
             debugEntropy: 64,
             debugRandomRadix: "16",
             folder_name: "mudbooker_tabs",
@@ -29,8 +29,8 @@ class AutoBookmarker {
         }
     }
     async touchParentID() {
-        let { config } = this;
-        let bookers = await browser.bookmarks.search({ query: config.folder_name });
+        let folder_name = this.config.folder_name;
+        let bookers = await browser.bookmarks.search({ query: folder_name });
 
         if (bookers.length < 1) {
             //if doesn't exist, then create it
