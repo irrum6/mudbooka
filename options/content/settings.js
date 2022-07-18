@@ -271,9 +271,9 @@ async function SaveNaming() {
 
 }
 
-async function SaveFolderName(){
+async function SaveFolderName() {
     let folder_name = query("#folder_naming").value;
-    await browser.storage.local.set({folder_name});
+    await browser.storage.local.set({ folder_name });
 }
 
 query("#save_interval")[on]("click", SaveIntervalValue);
@@ -285,7 +285,13 @@ query("#save_folder_name")[on]("click", SaveFolderName);
 browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);
 browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);
 
-browser.storage.local.get(["prefix", "suffix","format_year", "format_mon", "format_day"], set_naming_format_values);
+browser.storage.local.get(["prefix", "suffix", "format_year", "format_mon", "format_day"], set_naming_format_values);
+browser.storage.local.get(["folder_name"], (data) => {
+    let { folder_name } = data;
+    if (folder_name !== undefined && folder_name !== null) {
+        query("#folder_naming").value = folder_name;
+    }
+});
 
 // setup event listeners for prefix/suffix inputs
 query("#naming_prefix")[on]("change", display_example_name);
@@ -302,9 +308,9 @@ query("#naming_suffix")[on]("keydown", display_example_name);
 let fy = query_all("[name=format_year]");
 let fm = query_all("[name=format_mon]");
 let fd = query_all("[name=format_day]");
-let fullSet = new Set([...fy,...fm,...fd])
+let fullSet = new Set([...fy, ...fm, ...fd])
 
-for(const elem of fullSet){
+for (const elem of fullSet) {
     elem[on]("click", display_example_name);
     elem[on]("focus", display_example_name);
     elem[on]("change", display_example_name);
