@@ -43,6 +43,8 @@ const Utils = (() => {
         return Array.prototype.map.call(arrayarra, e => e.toString(radix)).join("")
     }
 
+    o.isPositiveInteger = n => Number.isInteger(n) && n > 0;
+
     o.isString = s => typeof s === "string";
 
     o.is_actual_object = s => (typeof s === "object" & s !== null);
@@ -82,9 +84,9 @@ const Utils = (() => {
     * @returns {Number}
     */
     o.convertInterval = (value) => {
-        const VALID_INTERVALS = ["1h", "2h", "3h", "4h", "5h", "6h", "7h", "8h"];
-        if (!Utils.contains(VALID_INTERVALS, value)) {
-            return o.convertInterval(VALID_INTERVALS[0]);
+        const VALID_VALUES = ["1h", "2h", "3h", "4h", "5h", "6h", "7h", "8h"];
+        if (!Utils.contains(VALID_VALUES, value)) {
+            return o.convertInterval(VALID_VALUES[0]);
         }
         let replaced = value.replace("h", "");
         return HOUR * Number(replaced);
@@ -95,16 +97,32 @@ const Utils = (() => {
     * @returns {Number}
     */
     o.convertKeepfor = (value) => {
-        const VALID_KEEPS = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
-        if (!Utils.contains(VALID_KEEPS, value)) {
+        const VALID_VALUES = ["12h", "1d", "2d", "3d", "4d", "5d", "6d", "7d"];
+        if (!Utils.contains(VALID_VALUES, value)) {
             //falback to safe value
-            return o.convertKeepfor(VALID_KEEPS[0]);
+            return o.convertKeepfor(VALID_VALUES[0]);
         }
         if ("12h" === value) {
             return HOUR * 12;
         }
         let replaced = value.replace("d", "");
         return HOUR * 24 * Number(replaced);
+    }
+
+    o.parseIntervalRange = (value) => {
+        if (!o.isPositiveInteger(value)) {
+            //fallback to safe value
+            return o.convertInterval("1h");
+        }
+        return MINUTE * value;
+    }
+
+    o.parseKeepforRange = (value) => {
+        if (!o.isPositiveInteger(value)) {
+            //fallback to safe value
+            return o.convertKeepfor("12h");
+        }
+        return HOUR * value;
     }
 
     Object.freeze(o);

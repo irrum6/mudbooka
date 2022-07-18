@@ -3,39 +3,212 @@ const MINUTE = SECOND * 60;
 const HOUR = SECOND * 3600;
 const DAY = HOUR * 24;
 
+class AutoBookmarkerConfig {
+    constructor() {
+        this.conf = Object.create(null);
+        this.loadDefaults();
+    }
+    loadDefaults() {
+        const defaultFormat = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+        this.conf.formatOptions = Object.create(null);
+        for (const k in defaultFormat) {
+            this.conf.formatOptions[k] = defaultFormat[k];
+        }
+
+        this.conf.prefix = "";
+        this.conf.suffix = "_tabs";
+        this.conf.locale = "default";
+        this.conf.debuging = false;
+        this.conf.debugEntropy = 64;
+        this.conf.debugRandomRadix = "16";
+        this.conf.folderName = "mudbooker_tabs";
+        this.conf.interval = HOUR * 1;
+        this.conf.keepfor = DAY * 2;
+    }
+
+    get prefix() {
+        return this.conf.prefix;
+    }
+    set prefix(pfx) {
+        if (!Utils.isNoneEmptyString(pfx)) {
+            return false;
+        }
+        this.conf.prefix = pfx;
+        return true;
+    }
+
+    get suffix() {
+        return this.conf.prefix;
+    }
+    set suffix(sfx) {
+        if (!Utils.isNoneEmptyString(sfx)) {
+            return false;
+        }
+        this.conf.suffix = sfx;
+        return true;
+    }
+
+    get format() {
+        return this.conf.formatOptions;
+    }
+
+    set format(fmt) {
+        //hour and minute stay as they are (2-digit)
+        const VALID_KEYS = {
+            year: ["2-digit", "numeric"],
+            month: ["numeric", "long", "short"],
+            day: ["2-digit", "numeric"],
+        };
+        for (const k in fmt) {
+            //ignore undescribed keys
+            if (VALID_KEYS[k] === undefined) {
+                continue;
+            }
+            let validValues = VALID_KEYS[k];
+            let value = fmt[k];
+            // ignore nondescribed values
+            if (!Utils.contains(validValues, value)) {
+                continue;
+            }
+            //assign correct value
+            this.conf.formatOptions[k] = value;
+        }
+    }
+
+    get folderName() {
+        return this.conf.folderName;
+    }
+
+    set folderName(fold) {
+        if (!Utils.isNoneEmptyString(fold)) {
+            return false;
+        }
+        this.conf.folderName = fold;
+        return true;
+    }
+
+    async loadNaming() {
+        let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day", "folder_name"];
+
+        let data = await browser.storage.local.get(sarraya);
+
+        if (undefined === data || null === data) {
+            return;
+        }
+        let { prefix, suffix, format_year, format_mon, format_day, folder_name } = data;
+
+        this.prefix = prefix;
+        this.suffix = suffix;
+
+        const fmt = { year: format_year, month: format_mon, day: format_day }
+
+        this.format = fmt;
+        this.folderName = folder_name;
+    }
+
+    get debug() {
+        let debug = Object.create(null);
+        debug.enabled = this.conf.debuging;
+        debug.entropy = this.conf.debugEntropy;
+        debug.radix = this.conf.debugRandomRadix;
+        return debug;
+    }
+
+    set debug(dbg) {
+        if (typeof dbg !== "boolean") {
+            return false;
+        }
+        this.conf.debuging = dbg;
+    }
+
+    get interval() {
+        return this.conf.interval;
+    }
+    set interval(num) {
+        if (!Utils.isPositiveInteger(num)) {
+            return false;
+        }
+        this.conf.interval = num;
+    }
+    /**
+     * @returns {Promise<Integer>}
+     */
+    async loadInterval() {
+        if (this.debuging) {
+            return this.interval;
+        }
+        let data = await browser.storage.local.get(["interval", "custom_interval"]);
+        if (undefined === data || null === data) {
+            //if no valid data, do nothing and return existing value
+            return this.interval;
+        }
+
+        let { interval, custom_interval } = data;
+        if ("c" === interval) {
+            let intervalRangeParsed = MINUTE * custom_interval
+            interval = intervalRangeParsed;
+        } else {
+            interval = Utils.convertInterval(interval);
+        }
+
+        this.interval = interval;
+        return interval;
+    }
+
+    get keepfor() {
+        return this.conf.keepfor;
+    }
+
+    set keepfor(num) {
+        if (!Utils.isPositiveInteger(num)) {
+            return false;
+        }
+        this.conf.interval = num;
+    }
+
+    /**
+     * @returns {Promise<Integer>}
+     */
+    async loadKeepfor() {
+        if (this.debug) {
+            //return existing value
+            return this.keepfor;
+        }
+        let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
+        if (undefined === data || null === data) {
+            //if no valid data, do nothing and return existing value
+            return this.keepfor;
+        }
+
+        let { keepfor, custom_keepfor } = data;
+        if ("c" === keepfor) {
+            keepfor = Utils.parseKeepforRange(custom_keepfor);
+        } else {
+            keepfor = Utils.convertKeepfor(keepfor);
+        }
+
+        this.keepfor = keepfor;
+        return keepfor;
+    }
+
+}
 class AutoBookmarker {
     constructor() {
-        this.setupConfig();
+        this.config = new AutoBookmarkerConfig();
         // process data
         const pdata = Object.create(null);
         pdata.last_time = 0;
         pdata.next_time = 0;
         this.pdata = pdata;
     }
-    setupConfig() {
-        const formatOptions = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-
-        this.config = {
-            prefix: "",
-            suffix: "_tabs",
-            formatOptions,
-            locale: "default",
-            debuging: false,
-            debugEntropy: 64,
-            debugRandomRadix: "16",
-            folder_name: "mudbooker_tabs",
-            interval: HOUR * 1,
-            keepfor: DAY * 2
-        }
-    }
     async touchParentID() {
-        let folder_name = this.config.folder_name;
+        let folder_name = this.config.folderName;
         let bookers = await browser.bookmarks.search({ query: folder_name });
 
         if (bookers.length < 1) {
             //if doesn't exist, then create it
             let booker = await browser.bookmarks.create({
-                title: config.folder_name,
+                title: this.config.folderName,
                 parentId: "toolbar_____"
             });
             return booker.id;
@@ -90,90 +263,24 @@ class AutoBookmarker {
     * @returns {Promise<Boolean>}
     */
     async loadAndSetInterval() {
-        if (this.config.debuging) {
-            return false;
-        }
-        let data = await browser.storage.local.get(["interval", "custom_interval"]);
-        if (undefined === data || null === data) {
-            return false;
-        }
-
-        let { interval, custom_interval } = data;
-        if ("c" === interval) {
-            let intervalRangeParsed = MINUTE * custom_interval
-            interval = intervalRangeParsed;
-        } else {
-            interval = Utils.convertInterval(interval);
-        }
+        let oldInterval = this.config.interval;
+        let interval = await this.config.loadInterval();
         //if interval was changed
-        if (interval != this.config.interval) {
+        if (oldInterval !== interval) {
             this.restart();
         }
         return true;
     }
 
-    /** 
-     * @returns {Promise<Boolean>}
-     */
-    async loadAndSetKeepfor() {
-        if (this.config.debuging) {
-            return false;
-        }
-        let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
-        if (undefined === data || null === data) {
-            return false;
-        }
-        const parse_keepfor_range = value => HOUR * Number(value);
-
-        let { keepfor, custom_keepfor } = data;
-        if ("c" === keepfor) {
-            this.config.keepfor = parse_keepfor_range(custom_keepfor);
-        } else {
-            this.config.keepfor = Utils.convertKeepfor(keepfor);
-        }
-        return true;
-    }
-
-    async loadAndSetNaming() {
-        let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day", "folder_name"];
-
-        let data = await browser.storage.local.get(sarraya);
-
-        if (undefined === data || null === data) {
-            return;
-        }
-        let { prefix, suffix, format_year, format_mon, format_day, folder_name } = data;
-
-        if (Utils.isString(prefix)) {
-            this.config.prefix = prefix;
-        }
-        if (Utils.isString(suffix)) {
-            this.config.suffix = suffix;
-        }
-
-        if (Utils.isNoneEmptyString(format_year)) {
-            this.config.formatOptions.year = format_year;
-        }
-        if (Utils.isNoneEmptyString(format_mon)) {
-            this.config.formatOptions.month = format_mon;
-        }
-        if (Utils.isNoneEmptyString(format_day)) {
-            this.config.formatOptions.day = format_day;
-        }
-        if (Utils.isNoneEmptyString(folder_name)) {
-            this.config.folder_name = folder_name;
-        }
-    }
     //the main function
     async runner() {
-        //debugger;
         //search tabs
         let tabs = await browser.tabs.query({});
 
         //load variables
-        let { locale, formatOptions, prefix, suffix, debuging, debugEntropy, debugRandomRadix } = this.config;
+        let { locale, format, prefix, suffix, debug } = this.config;
 
-        let formated = new Date().toLocaleString(locale, formatOptions).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
+        let formated = new Date().toLocaleString(locale, format).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
         //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)
         let title = `${formated}`
         if (Utils.isNoneEmptyString(prefix)) {
@@ -183,9 +290,9 @@ class AutoBookmarker {
             title = `${title}${suffix}`;
         }
 
-        if (debuging) {
+        if (debug.enabled) {
             //add some randomness
-            let _substr = `_${Utils.GetRandomString(debugEntropy, debugRandomRadix)}`;
+            let _substr = `_${Utils.GetRandomString(debug.entropy, debug.radix)}`;
             title = title.concat(_substr);
         }
 
@@ -220,8 +327,8 @@ class AutoBookmarker {
     }
     async loadDataFromLocalStorage() {
         await this.loadAndSetInterval();
-        await this.loadAndSetKeepfor();
-        await this.loadAndSetNaming();
+        await this.config.loadKeepfor();
+        await this.config.loadNaming();
     }
     /**
      * Start
