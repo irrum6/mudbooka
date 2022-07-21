@@ -30,7 +30,7 @@ class AutoBookmarkerConfig {
         return this.conf.prefix;
     }
     set prefix(pfx) {
-        if (!Utils.isNoneEmptyString(pfx)) {
+        if (!Utils.isString(pfx)) {
             return false;
         }
         this.conf.prefix = pfx;
@@ -38,10 +38,13 @@ class AutoBookmarkerConfig {
     }
 
     get suffix() {
-        return this.conf.prefix;
+        return this.conf.suffix;
     }
+    /**
+     * @param {String} sfx
+     */
     set suffix(sfx) {
-        if (!Utils.isNoneEmptyString(sfx)) {
+        if (!Utils.isString(sfx)) {
             return false;
         }
         this.conf.suffix = sfx;
@@ -56,8 +59,7 @@ class AutoBookmarkerConfig {
         //hour and minute stay as they are (2-digit)
         const VALID_KEYS = {
             year: ["2-digit", "numeric"],
-            month: ["numeric", "long", "short"],
-            day: ["2-digit", "numeric"],
+            month: ["numeric", "long", "short"]
         };
         for (const k in fmt) {
             //ignore undescribed keys
@@ -88,19 +90,19 @@ class AutoBookmarkerConfig {
     }
 
     async loadNaming() {
-        let sarraya = ["prefix", "suffix", "format_year", "format_mon", "format_day", "folder_name"];
+        let sarraya = ["prefix", "suffix", "format_year", "format_mon", "folder_name"];
 
         let data = await browser.storage.local.get(sarraya);
 
         if (undefined === data || null === data) {
             return;
         }
-        let { prefix, suffix, format_year, format_mon, format_day, folder_name } = data;
+        let { prefix, suffix, format_year, format_mon, folder_name } = data;
 
         this.prefix = prefix;
         this.suffix = suffix;
 
-        const fmt = { year: format_year, month: format_mon, day: format_day }
+        const fmt = { year: format_year, month: format_mon }
 
         this.format = fmt;
         this.folderName = folder_name;
@@ -279,6 +281,7 @@ class AutoBookmarker {
 
         //load variables
         let { locale, format, prefix, suffix, debug } = this.config;
+        debugger;
 
         let formated = new Date().toLocaleString(locale, format).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
         //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)

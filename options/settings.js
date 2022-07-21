@@ -2,11 +2,7 @@ class AutoBookmarkerSettingsInterface {
     displayExampleName() {
         let prefix = val("naming_prefix");
 
-        let enable_sufx = val("enable_sufx");
-        let suffix = "";
-        if (enable_sufx) {
-            suffix = val("naming_suffix");
-        }
+        let suffix = val("naming_suffix");        
 
         let year = "numeric";
         let radio = this.getRadioValue("format_year");
@@ -115,7 +111,6 @@ class AutoBookmarkerSettingsInterface {
         // try generic query
         let fy = query_all("[name=format_year]");
         let fm = query_all("[name=format_mon]");
-        let fd = query_all("[name=format_day]");
         let fullSet = new Set([...fy, ...fm, ...fd]);
 
         for (const elem of fullSet) {
@@ -124,14 +119,6 @@ class AutoBookmarkerSettingsInterface {
             elem[on]("change", dxn_bound);
             elem[on]("input", dxn_bound);
         }
-
-        query("#enable_sufx")[on]("click", e => {
-            if (true === e.target.checked) {
-                Utils.ToggleInputEnabledState("naming_suffix", true);
-                return;
-            }
-            Utils.ToggleInputEnabledState("naming_suffix", false);
-        });
     }
 }
 class AutoBookmarkerSettings {
@@ -211,13 +198,11 @@ class AutoBookmarkerSettings {
 
         let { prefix, suffix, format_year, format_mon } = data;
 
-        if (Utils.isNoneEmptyString(prefix)) {
+        if (Utils.isString(prefix)) {
             query("#naming_prefix").value = prefix;
         }
 
-        if (Utils.isNoneEmptyString(suffix)) {
-            query("#enable_sufx").checked = true;
-            query("#naming_suffix").disabled = false;
+        if (Utils.isString(suffix)) {
             query("#naming_suffix").value = suffix;
         }
 
@@ -282,11 +267,7 @@ class AutoBookmarkerSettings {
     async SaveNaming() {
         let prefix = query("#naming_prefix").value;
 
-        let enable_sufx = query("#enable_sufx").checked;
-        let suffix = "";
-        if (enable_sufx) {
-            suffix = query("#naming_suffix").value;
-        }
+        let suffix = query("#naming_suffix").value;
 
         await browser.storage.local.set({ prefix, suffix });
 
@@ -303,14 +284,6 @@ class AutoBookmarkerSettings {
             format_mon = radio.value;
         }
         await browser.storage.local.set({ format_mon });
-
-        let format_day = "numeric";
-        radio = query("input[name=format_day]:checked");
-        if (radio !== undefined && radio !== null) {
-            format_day = radio.value;
-        }
-        await browser.storage.local.set({ format_day });
-
     }
 
     async SaveOtherSettings() {
