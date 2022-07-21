@@ -110,7 +110,8 @@ const Utils = (() => {
         return HOUR * 24 * Number(replaced);
     }
 
-    o.parseIntervalRange = (value) => {
+    o.parseIntervalRange = (val) => {
+        let value = Number(val); 
         if (!o.isPositiveInteger(value)) {
             //fallback to safe value
             return o.convertInterval("1h");
@@ -118,7 +119,8 @@ const Utils = (() => {
         return MINUTE * value;
     }
 
-    o.parseKeepforRange = (value) => {
+    o.parseKeepforRange = (val) => {
+        let value = Number(val); 
         if (!o.isPositiveInteger(value)) {
             //fallback to safe value
             return o.convertKeepfor("12h");

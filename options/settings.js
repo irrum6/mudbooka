@@ -111,7 +111,7 @@ class AutoBookmarkerSettingsInterface {
         // try generic query
         let fy = query_all("[name=format_year]");
         let fm = query_all("[name=format_mon]");
-        let fullSet = new Set([...fy, ...fm, ...fd]);
+        let fullSet = new Set([...fy, ...fm]);
 
         for (const elem of fullSet) {
             elem[on]("click", dxn_bound);

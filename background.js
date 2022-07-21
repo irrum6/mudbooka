@@ -146,9 +146,11 @@ class AutoBookmarkerConfig {
         }
 
         let { interval, custom_interval } = data;
+        if (undefined === interval || undefined === custom_interval) {
+            return this.interval;
+        }
         if ("c" === interval) {
-            let intervalRangeParsed = MINUTE * custom_interval
-            interval = intervalRangeParsed;
+            interval = Utils.parseIntervalRange(custom_interval);
         } else {
             interval = Utils.convertInterval(interval);
         }
@@ -165,14 +167,14 @@ class AutoBookmarkerConfig {
         if (!Utils.isPositiveInteger(num)) {
             return false;
         }
-        this.conf.interval = num;
+        this.conf.keepfor = num;
     }
 
     /**
      * @returns {Promise<Integer>}
      */
     async loadKeepfor() {
-        if (this.debug) {
+        if (this.debug.enabled) {
             //return existing value
             return this.keepfor;
         }
@@ -183,6 +185,10 @@ class AutoBookmarkerConfig {
         }
 
         let { keepfor, custom_keepfor } = data;
+        if (undefined === keepfor || undefined === custom_keepfor) {
+            return this.keepfor;
+        }
+
         if ("c" === keepfor) {
             keepfor = Utils.parseKeepforRange(custom_keepfor);
         } else {
@@ -220,6 +226,7 @@ class AutoBookmarker {
     }
 
     async removeOldFolders() {
+        //debugger;
         let keep = this.config.keepfor;
         //for max number use reverse sort
         //168 * 4 = 672
@@ -269,6 +276,7 @@ class AutoBookmarker {
         let interval = await this.config.loadInterval();
         //if interval was changed
         if (oldInterval !== interval) {
+            console.log(oldInterval, interval);
             this.restart();
         }
         return true;
@@ -276,12 +284,12 @@ class AutoBookmarker {
 
     //the main function
     async runner() {
+        console.log(281);
         //search tabs
         let tabs = await browser.tabs.query({});
 
         //load variables
         let { locale, format, prefix, suffix, debug } = this.config;
-        debugger;
 
         let formated = new Date().toLocaleString(locale, format).replace(/[\s.,]+/gi, "_").replace(/:/, "h");
         //fix undefined prefix/suffix bug , caused of which is not determined yet (on loading/set naming bug might be)
@@ -368,6 +376,7 @@ mdBooker.loadDataFromLocalStorage();
 mdBooker.start();
 
 browser.storage.onChanged.addListener(async () => {
+    console.log(372);
     await mdBooker.loadDataFromLocalStorage();
 });
 

@@ -51,23 +51,31 @@ class RangeWithControls extends HTMLElement {
     }
 
     increase() {
-        if(this.disabled){
+        if (this.disabled) {
             return;
         }
         let input = this.getInput();
         let step = Number(input.step);
         let value = Number(input.value);
+        let max = Number(input.max);
+        if (max < value + step) {
+            return;
+        }
         value += step;
         input.value = value;
         this.fireChange();
     }
     decrease() {
-        if(this.disabled){
+        if (this.disabled) {
             return;
         }
         let input = this.getInput();
         let step = Number(input.step);
         let value = Number(input.value);
+        let min = Number(input.min);
+        if (min > value - step) {
+            return;
+        }
         value -= step;
         input.value = value;
         this.fireChange();
@@ -100,10 +108,16 @@ class RangeWithControls extends HTMLElement {
     }
     set value(_num) {
         let num = Number(_num);
-        if (Number.isInteger(num) && num > 0) {
-            let input = this.getInput();
-            input.value = num;
+        if (!Number.isInteger(num) || num <= 0) {
+            return;
         }
+        let input = this.getInput();
+        let min = Number(input.min);
+        let max = Number(input.max);
+        if (max < num || min > num) {
+            return;
+        }
+        input.value = num;
     }
     get disabled() {
         return this.getInput().disabled;
