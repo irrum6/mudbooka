@@ -156,7 +156,7 @@ query("#action")[on]("click", onSetParameters);
 
 const onFullSettingsOpen = async () => {
     let createProperties = {
-        url: "content/settings.html",
+        url: "settings.html",
         active: true
     }
     await browser.tabs.create(

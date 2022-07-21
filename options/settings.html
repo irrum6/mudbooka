@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../utils.css">
+    <link rel="stylesheet" href="utils.css">
     <link rel="stylesheet" href="settings.css">
     <title>Mudbooker:Full Settings</title>
 </head>
@@ -75,12 +75,7 @@
                     custom
                 </label>
             </div>
-            <div class="w-75">
-                <button class="circle ranger" data-action="minus" data-target="interval_range">-</button>
-                <input type="range" class="w-75" id="interval_range" min="15" max="480" step="15" value="60" disabled>
-                <button class="circle ranger" data-action="plus" data-target="interval_range">+</button>
-                <div>You can use slider or controls</div>
-            </div>
+            <ranger-wc id="interval_range" data-min="15" data-max="480" data-step="15" data-value="60"></ranger-wc>
             <div>
                 <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
             </div>
@@ -147,12 +142,7 @@
                     custom
                 </label>
             </div>
-            <div class="w-75">
-                <button class="circle ranger" data-action="minus" data-target="keepfor_range">-</button>
-                <input type="range" class="w-75" id="keepfor_range" min="3" max="168" step="3" value="48" disabled>
-                <button class="circle ranger" data-action="plus" data-target="keepfor_range">+</button>
-                <div>You can use slider or controls</div>
-            </div>
+            <ranger-wc id="keepfor_range" data-min="3" data-max="168" data-step="3" data-value="48"></ranger-wc>
             <div>
                 <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
             </div>
@@ -209,7 +199,7 @@
                 <label class="f3">
                     <input type="radio" name="format_mon" data-fm="short" value="short" checked>Short
                 </label>
-            </div>           
+            </div>
             <div>
                 <span class="f25 bold">Example:
                     <span id="display_name_example"></span>
@@ -228,7 +218,7 @@
                 Save in
             </div>
             <div class="flex-row-center grow1 ml-4">
-                <label class ="f25" for="folder_naming">Bookmarks Toolbar/</label>
+                <label class="f25" for="folder_naming">Bookmarks Toolbar/</label>
                 <input type="text" class="f3" name="prefix" id="folder_naming" value="mudbooker_tabs">
             </div>
             <div class="mt-4">
@@ -236,7 +226,16 @@
             </div>
         </div>
     </div>
-    <script src="../utils.js"></script>
+    <template id="range_with_controls">
+        <div class="w-75">
+            <button class="ranger-wc minus">-</button>
+            <input type="range" class="w-75" min="15" max="480" step="15" value="60" disabled>
+            <button class="ranger-wc plus">+</button>
+            <div>You can use slider or controls</div>
+        </div>
+    </template>
+    <script src="ranger.js"></script>
+    <script src="utils.js"></script>
     <script src="settings.js"></script>
 </body>
 
