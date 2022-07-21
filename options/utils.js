@@ -2,6 +2,7 @@ const on = "addEventListener";
 const query = s => document.body.querySelector(s);
 const query_all = s => document.body.querySelectorAll(s);
 const val = id => document.getElementById(id).value;
+const getbid = id => document.getElementById(id);
 
 const Utils = (() => {
     const SECOND = 1000;
