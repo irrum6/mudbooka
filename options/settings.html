@@ -21,60 +21,8 @@
             <div>
                 <span class="f3 bold"> Every:</span>
             </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="1h" data-int="1h" checked>
-                    1 hour
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="2h" data-int="2h">
-                    2 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="3h" data-int="3h">
-                    3 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="4h" data-int="4h">
-                    4 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="5h" data-int="5h">
-                    5 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="6h" data-int="6h">
-                    6 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="7h" data-int="7h">
-                    7 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="8h" data-int="8h">
-                    8 hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="interval" value="c" data-int="c">
-                    custom
-                </label>
-            </div>
+            <radio-list id="interval" data-names="1 hour;2 hours;3 hours;4 hours;5 hours;6 hours;7 hours;8 hours;custom"
+                data-values="1h;2h;3h;4h;5h;6h;7h;8h;c" data-value="2d"></radio-list>
             <ranger-wc id="interval_range" data-min="15" data-max="480" data-step="15" data-value="60"></ranger-wc>
             <div>
                 <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
@@ -88,60 +36,8 @@
             <div class="text-center">
                 <span class="f4 bold900">Keep For:</span>
             </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="12h" data-keep="12h" checked>
-                    12 Hours
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="1d" data-keep="1d">
-                    1 day
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="2d" data-keep="2d">
-                    2 days
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="3d" data-keep="3d">
-                    3 days
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="4d" data-keep="4d">
-                    4 days
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="5d" data-keep="5d">
-                    5 days
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="6d" data-keep="6d">
-                    6 days
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="7d" data-keep="7d">
-                    1 week
-                </label>
-            </div>
-            <div>
-                <label class="f3">
-                    <input type="radio" name="keepfor" value="c" data-keep="c">
-                    custom
-                </label>
-            </div>
+            <radio-list id="keepfor" data-names="12 Hours;1 day;2 days;3 days;4 days;5 days;6 days;1 week;custom"
+                data-values="12h;1d;2d;3d;4d;5d;6d;7d;c" data-value="2d"></radio-list>
             <ranger-wc id="keepfor_range" data-min="3" data-max="168" data-step="3" data-value="48"></ranger-wc>
             <div>
                 <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
@@ -232,6 +128,12 @@
             <div>You can use slider or controls</div>
         </div>
     </template>
+    <template id="radiolist">
+        <div class="radiobox">
+            <!-- built automatically based on data-names,data-values : div>label> span input -->
+        </div>
+    </template>
+    <script src="radiolist.js"></script>
     <script src="ranger.js"></script>
     <script src="utils.js"></script>
     <script src="settings.js"></script>
