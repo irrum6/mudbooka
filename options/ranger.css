@@ -12,8 +12,8 @@ button {
     padding: 0;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    font-size: 1.5rem;
-    background-color: rgb(100, 40, 40);
-    color: rgb(224,255,224);
+    font-size: 1.75rem;
+    background-color: black;
+    color: white;
     border: none;
 }
