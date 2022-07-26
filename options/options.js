@@ -1,171 +1,152 @@
-function SetIntervalValues(data) {
-    if (undefined === data || null === data) {
-        return;
+class AutoBookmarkerOptionsInterface {
+    /**
+     * query and retrieve radio value with name provided
+     * @param {String} name 
+     * @returns {String}
+     */
+    getRadioValue(name) {
+        let selector = "input[name=$name$]:checked".replace("$name$", name);
+        let radio = query(selector);
+        if (radio !== undefined && radio !== null) {
+            let ok = true;
+            let value = radio.value;
+            return { ok, value };
+        }
+        let ok = false;
+        let value = null;
+        return { ok, value };
     }
-    const { interval, custom_interval } = data;
-    if (interval === undefined) {
-        return;
-    }
-    query(`[data-int='${interval}']`).checked = true;
-    if ("c" === interval) {
-        Utils.ToggleInputEnabledState("interval_range", true);
-    }
-    if (custom_interval === undefined) {
-        return;
-    }
-    query("#interval_range").value = custom_interval;
-    query("#display_interval_range").textContent = custom_interval;
-}
 
-function SetKeepValues(data) {
-    if (undefined === data || null === data) {
-        return;
+    onRangeValueChange(event) {
+        let id = event.target.id;
+        let displayid = `display_${id}`;
+        let display = getbid(displayid);
+        let value = event.target.value;
+        display.textContent = value;
     }
-    const { keepfor, custom_keepfor } = data;
-    if (keepfor === undefined) {
-        return;
-    }
-    query(`[data-keep='${keepfor}']`).checked = true;
-    if ("c" === keepfor) {
-        Utils.ToggleInputEnabledState("keepfor_range", true);
-    }
-    if (custom_keepfor === undefined) {
-        return;
-    }
-    query("#keepfor_range").value = custom_keepfor;
-    query("#display_keepfor_range").textContent = custom_keepfor;
-}
 
-
-// interval range functions 
-const onIntervalRangeValueChange = e => query("#display_interval_range").textContent = e.target.value;
-
-query("#interval_range")[on]("change", onIntervalRangeValueChange);
-query("#interval_range")[on]("progchange", onIntervalRangeValueChange);
-query("#interval_range")[on]("input", onIntervalRangeValueChange);
-
-
-function ChangeRangeValue(event) {
-    let targetid = event.target.getAttribute("data-target");
-    let action = event.target.getAttribute("data-action");
-    let targetElement = query(`#${targetid}`);
-    if (targetElement.disabled) {
-        return false;
-    }
-    let value = Number(targetElement.value);
-    let step = Number(targetElement.step);
-    switch (action) {
-        case "minus":
-            value -= step;
-            break;
-        case "plus":
-            value += step;
-            break;
-        default:
-            //nothing
-            break;
-    }
-    targetElement.value = value;
-    //programatically changing values does not fire change or input events
-    //so we create custom event and fire on input element
-    const eventor = new Event("progchange");
-    targetElement.dispatchEvent(eventor);
-
-}
-//setup event listeners
-const rangers = query_all("button.ranger");
-for (const ranger of rangers) {
-    ranger[on]("click", ChangeRangeValue);
-}
-
-const toggleIntervalRangeValueEnabledState = v => {
-    if (true === v) {
-        query("#interval_range").disabled = false;
-        return;
-    }
-    query("#interval_range").disabled = true;
-}
-
-const interval_inputs = query_all("input[name=interval]");
-for (const input of interval_inputs) {
-    input[on]("change", e => {
-        if ("c" === e.target.value) {
-            toggleIntervalRangeValueEnabledState(true);
+    onRadioChange(event) {
+        let id = event.target.id;
+        let value = event.target.value;
+        let rangeID = `${id}_range`;
+        if ("c" === value) {
+            Utils.ToggleInputEnabledState(rangeID, true);
             return;
         }
-        toggleIntervalRangeValueEnabledState(false);
-    })
-}
-// keepfor range functions 
-const onKeepForRangeValueChange = e => {
-    query("#display_keepfor_range").textContent = e.target.value;
-}
-query("#keepfor_range")[on]("change", onKeepForRangeValueChange);
-query("#keepfor_range")[on]("progchange", onKeepForRangeValueChange);
-query("#keepfor_range")[on]("input", onKeepForRangeValueChange);
-
-const toggleKeepForRangeValueEnabledState = v => {
-    if (true === v) {
-        query("#keepfor_range").disabled = false;
-        return;
+        Utils.ToggleInputEnabledState(rangeID, false);
     }
-    query("#keepfor_range").disabled = true;
-}
 
-const keepfor_inputs = query_all("input[name=keepfor]");
-for (const input of keepfor_inputs) {
-    input[on]("change", e => {
-        if ("c" === e.target.value) {
-            toggleKeepForRangeValueEnabledState(true);
+    setEvents() {
+        // interval range functions
+        let intrange = query("#interval_range");
+        intrange[on]("rangechange", this.onRangeValueChange.bind(this));
+
+        let interval = query("#interval");
+        interval[on]("radiochange", this.onRadioChange.bind(this));
+        // keepfor range functions
+        let keeprange = query("#keepfor_range");
+        keeprange[on]("rangechange", this.onRangeValueChange.bind(this));
+
+        let keepfor = query("#keepfor");
+        keepfor[on]("radiochange", this.onRadioChange.bind(this));
+    }
+}
+class AutoBookmarkerOptions {
+    constructor() {
+        this.data = this.setDefaultData();
+        this.interface = new AutoBookmarkerOptionsInterface();
+    }
+    setDefaultData() {
+        let data = Object.create(null);
+        data.interval = "";
+        data.keepfor = "";
+        return data;
+    }
+
+    async loadData() {
+        await this.loadInterval();
+        await this.loadKeepfor();
+    }
+
+    async loadInterval() {
+        let data = await browser.storage.local.get(["interval", "custom_interval"]);
+        if (undefined === data || null === data) {
             return;
         }
-        toggleKeepForRangeValueEnabledState(false);
-    })
+        const { interval, custom_interval } = data;
+        if (interval === undefined) {
+            return;
+        }
+        query("#interval").value = interval;
+        if ("c" === interval) {
+            Utils.ToggleInputEnabledState("interval_range", true);
+        }
+        if (custom_interval === undefined) {
+            return;
+        }
+        query("#interval_range").value = custom_interval;
+        query("#display_interval_range").textContent = custom_interval;
+    }
+    async loadKeepfor() {
+        let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
+        if (undefined === data || null === data) {
+            return;
+        }
+        const { keepfor, custom_keepfor } = data;
+        if (keepfor === undefined) {
+            return;
+        }
+        query("#keepfor").value = keepfor;
+        if ("c" === keepfor) {
+            Utils.ToggleInputEnabledState("keepfor_range", true);
+        }
+        if (custom_keepfor === undefined) {
+            return;
+        }
+        query("#keepfor_range").value = custom_keepfor;
+        query("#display_keepfor_range").textContent = custom_keepfor;
+    }
+
+    /**
+    * Retrieves input values and sets interval and keepfor values
+    */
+    async saveOptions() {
+        let interval = query("#interval").value;
+
+        let custom_interval = "60";
+
+        if ("c" === interval) {
+            custom_interval = query("#interval_range").value;
+        }
+        await browser.storage.local.set({ interval, custom_interval });
+
+        let keepfor = query("#keepfor").value;
+
+        let custom_keepfor = "48";
+
+        if ("c" === keepfor) {
+            custom_keepfor = query("#keepfor_range").value;
+        }
+        await browser.storage.local.set({ keepfor, custom_keepfor });
+    }
+
+    async openFullSettings() {
+        let createProperties = {
+            url: "settings.html",
+            active: true
+        }
+        await browser.tabs.create(
+            createProperties
+        )
+    }
+
+    setEvents() {
+        this.interface.setEvents();
+        query("#action")[on]("click", this.saveOptions.bind(this));
+        query("#full_throtle")[on]("click", this.openFullSettings.bind(this));
+    }
 }
 
-/**
- * Retrieves input values and sets interval and keepfor values
- */
-const onSetParameters = async () => {
-    let interval = "1h";
-    let keepfor = "2d";
-    let inter = query("input[name=interval]:checked");
-    if (inter !== undefined && inter !== null) {
-        interval = inter.value;
-    }
-    let keeper = query("input[name=keepfor]:checked");
-    if (keeper !== undefined && keeper !== null) {
-        keepfor = keeper.value;
-    }
-    let custom_interval = "60";
-    let custom_keepfor = "48";
-
-    if ("c" === interval) {
-        custom_interval = query("#interval_range").value;
-    }
-    if ("c" === keepfor) {
-        custom_keepfor = query("#keepfor_range").value;
-    }
-
-    // console.log(custom_interval, custom_keepfor);
-
-    await browser.storage.local.set({ interval, keepfor, custom_interval, custom_keepfor });
-}
-
-query("#action")[on]("click", onSetParameters);
-
-const onFullSettingsOpen = async () => {
-    let createProperties = {
-        url: "settings.html",
-        active: true
-    }
-    await browser.tabs.create(
-        createProperties
-    )
-}
-
-query("#full_throtle")[on]("click", onFullSettingsOpen);
-
-//set input values from storage
-browser.storage.local.get(["interval", "custom_interval"]).then(SetIntervalValues);
-browser.storage.local.get(["keepfor", "custom_keepfor"]).then(SetKeepValues);
+const options = new AutoBookmarkerOptions();
+options.loadData();
+options.setEvents();
