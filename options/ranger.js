@@ -16,34 +16,50 @@ class RangeWithControls extends HTMLElement {
         this.setup();
     }
     setup() {
-        let min = this.getAttribute("data-min");
-        let max = this.getAttribute("data-max");
-        let step = this.getAttribute("data-step");
-        let value = this.getAttribute("data-value");
-        let input = this.getInput();
-        input.min = min;
-        input.max = max;
-        input.step = step;
-        input.value = value;
+        let min = this.getAttribute("min");
+        let max = this.getAttribute("max");
+        let step = this.getAttribute("step");
+        let value = this.getAttribute("value");
+        this.min = Number(min);
+        this.max = Number(max);
+        this.step = Number(step);
+        this.value = Number(value);
         this.setControls();
         this.setEvents();
+        this.updateDisplay();
+
     }
     getInput() {
         return this.query("input");
     }
-    setStep(num) {
+
+    get step() {
+        return this.getInput().step;
+    }
+
+    set step(num) {
         if (Number.isInteger(num) && num > 0) {
             let input = this.getInput();
             input.step = num;
         }
     }
-    setMinimalValue(num) {
+
+    get min() {
+        return this.getInput().min;
+    }
+
+    set min(num) {
         if (Number.isInteger(num) && num > 0) {
             let input = this.getInput();
             input.min = num;
         }
     }
-    setMaximumValue(num) {
+
+    get max() {
+        return this.getInput().max;
+    }
+
+    set max(num) {
         if (Number.isInteger(num) && num > 0) {
             let input = this.getInput();
             input.max = num;
@@ -80,6 +96,11 @@ class RangeWithControls extends HTMLElement {
         input.value = value;
         this.fireChange();
     }
+    updateDisplay() {
+        let value = this.value;
+        let valueDisplay = this.query("span.display");
+        valueDisplay.textContent = value;
+    }
     setEvents() {
         const on = "addEventListener";
         let input = this.getInput();
@@ -87,6 +108,7 @@ class RangeWithControls extends HTMLElement {
         input[on]("input", this.fireChange.bind(this));
     }
     fireChange() {
+        this.updateDisplay();
         const eventor = new Event("rangechange");
         this.dispatchEvent(eventor);
     }
@@ -119,10 +141,10 @@ class RangeWithControls extends HTMLElement {
         }
         input.value = num;
     }
-    get disabled() {
+    isDisabled() {
         return this.getInput().disabled;
     }
-    set disabled(dis) {
+    disable(dis) {
         if (typeof dis === "boolean") {
             let input = this.getInput();
             input.disabled = dis;

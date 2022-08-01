@@ -21,12 +21,12 @@
             <div>
                 <span class="f3 bold"> Every:</span>
             </div>
-            <radio-list id="interval" data-names="1 hour;2 hours;3 hours;4 hours;5 hours;6 hours;7 hours;8 hours;custom"
-                data-values="1h;2h;3h;4h;5h;6h;7h;8h;c" data-value="2d"></radio-list>
-            <ranger-wc id="interval_range" data-min="15" data-max="480" data-step="15" data-value="60"></ranger-wc>
-            <div>
-                <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
-            </div>
+            <radio-list id="interval"
+                data-radios="1 hour=>1h;2 hours=>2h;3 hours=>3h;4 hours=>4h;5 hours=>5h;6 hours=>6h;7 hours=>7h;8 hours=>8h;custom=>c"
+                data-value="1h"></radio-list>
+            <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
+                <span class="f3" slot="unit">minutes</span>
+            </ranger-wc>
             <div>
                 <button id="save_interval" class="f3">Save Interval</button>
             </div>
@@ -38,10 +38,12 @@
             </div>
             <div>
                 <span class="f3 bold">For:</span>
-            </div> 
-            <radio-list id="keepfor" data-names="12 Hours;1 day;2 days;3 days;4 days;5 days;6 days;1 week;custom"
-                data-values="12h;1d;2d;3d;4d;5d;6d;7d;c" data-value="2d"></radio-list>
+            </div>
+            <radio-list id="keepfor"
+                data-radios="12 Hours=>12h;1 day=>1d;2 days=>2d;3 days=>3d;4 days=>4d;5 days=>5d;6 days=>6d;1 week=>7d;custom=>c"
+                data-value="2d"></radio-list>
             <ranger-wc id="keepfor_range" data-min="3" data-max="168" data-step="3" data-value="48"></ranger-wc>
+            <ranger-wc id="keepfor_range" data-min="2" data-max="672" data-step="2" data-value="48"></ranger-wc>
             <div>
                 <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
             </div>
@@ -126,18 +128,31 @@
     <template id="range_with_controls">
         <div class="w-75">
             <button class="ranger-wc minus">&minus;</button>
-            <input type="range" class="w-75" min="15" max="480" step="15" value="60" disabled>
+            <input type="range" class="w-75" disabled>
             <button class="ranger-wc plus">&plus;</button>
             <div>You can use slider or controls</div>
+            <div>
+                <span class="f3 display"></span>
+                <slot name="unit">
+            </div>
         </div>
     </template>
     <template id="radiolist">
         <div class="radiobox">
-            <!-- built automatically based on data-names,data-values : div>label> span input -->
-            <!-- div -->
-            <!--    label -->
-            <!--        span input -->
+            <!-- radioitem -->
         </div>
+    </template>
+    <template id="radioitem">
+        <div class="rad-item">
+            <label>
+                <input type="radio">
+                <span></span>
+            </label>
+        </div>
+    </template>
+    <template id="radioitem_with_range">
+        <radio-item></radio-item>
+        <ranger-wc></ranger-wc>
     </template>
     <script src="radiolist.js"></script>
     <script src="ranger.js"></script>

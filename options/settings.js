@@ -60,8 +60,8 @@ class AutoBookmarkerSettingsInterface {
     // interval interface 
     setIntervalEvents() {
         // interval range functions
-        let element = query("#interval_range");
-        element[on]("rangechange", this.onRangeValueChange.bind(this));
+        //let element = query("#interval_range");
+        //element[on]("rangechange", this.onRangeValueChange.bind(this));
 
         let interval = query("#interval");
         interval[on]("radiochange", this.onRadioChange.bind(this));
@@ -163,7 +163,7 @@ class AutoBookmarkerSettings {
             return;
         }
         query("#interval_range").value = custom_interval;
-        query("#display_interval_range").textContent = custom_interval;
+        // query("#display_interval_range").textContent = custom_interval;
     }
     async loadKeepfor() {
         let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
