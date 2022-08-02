@@ -41,9 +41,18 @@
             </div>
             <radio-list id="keepfor"
                 data-radios="12 Hours=>12h;1 day=>1d;2 days=>2d;3 days=>3d;4 days=>4d;5 days=>5d;6 days=>6d;1 week=>7d;custom=>c"
-                data-value="2d"></radio-list>
-            <ranger-wc id="keepfor_range" data-min="3" data-max="168" data-step="3" data-value="48"></ranger-wc>
-            <ranger-wc id="keepfor_range" data-min="2" data-max="672" data-step="2" data-value="48"></ranger-wc>
+                data-value="2d">
+            </radio-list>
+            <ranger-wc id="keepfor_range" data-min="3" data-max="168" data-step="3" data-value="48" hasDisplay="true">
+                <span class="f3" slot="unit">hours</span>
+            </ranger-wc>
+            <div>
+                <input type="checkbox" name="set_max_number" id="set_max">
+                <span class="f3">net Maximum number intead</span>
+            </div>
+            <ranger-wc id="keepfor_items" data-min="2" data-max="672" data-step="2" data-value="48">
+                <span class="f3" slot="unit">items</span>
+            </ranger-wc>
             <div>
                 <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
             </div>
@@ -149,10 +158,6 @@
                 <span></span>
             </label>
         </div>
-    </template>
-    <template id="radioitem_with_range">
-        <radio-item></radio-item>
-        <ranger-wc></ranger-wc>
     </template>
     <script src="radiolist.js"></script>
     <script src="ranger.js"></script>

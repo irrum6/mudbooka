@@ -144,6 +144,11 @@ class RangeWithControls extends HTMLElement {
     isDisabled() {
         return this.getInput().disabled;
     }
+
+    enable() {
+        this.disable(false);
+    }
+    
     disable(dis) {
         if (typeof dis === "boolean") {
             let input = this.getInput();

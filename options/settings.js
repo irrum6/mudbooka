@@ -49,23 +49,6 @@ class AutoBookmarkerSettingsInterface {
         return { ok, value };
     }
 
-    onRangeValueChange(event) {
-        let id = event.target.id;
-        let displayid = `display_${id}`;
-        let display = getbid(displayid);
-        let value = event.target.value;
-        display.textContent = value;
-    }
-
-    // interval interface 
-    setIntervalEvents() {
-        // interval range functions
-        //let element = query("#interval_range");
-        //element[on]("rangechange", this.onRangeValueChange.bind(this));
-
-        let interval = query("#interval");
-        interval[on]("radiochange", this.onRadioChange.bind(this));
-    }
     onRadioChange(event){
         let id = event.target.id;
         let value = event.target.value;
@@ -76,19 +59,12 @@ class AutoBookmarkerSettingsInterface {
         }
         Utils.ToggleInputEnabledState(rangeID, false);
     }
-    // keepfor interface     
-    setKeepforEvents() {
-        // keepfor range functions
-        let element = query("#keepfor_range");
-        element[on]("rangechange", this.onRangeValueChange.bind(this));        
-
-        let keepfor = query("#keepfor");
-        keepfor[on]("radiochange", this.onRadioChange.bind(this));
-    }
 
     setEvents() {
-        this.setIntervalEvents();
-        this.setKeepforEvents();
+        let interval = query("#interval");
+        interval[on]("radiochange", this.onRadioChange.bind(this));
+        let keepfor = query("#keepfor");
+        keepfor[on]("radiochange", this.onRadioChange.bind(this));
 
         const dxn_bound = this.displayExampleName.bind(this);
         // setup event listeners for prefix/suffix inputs
@@ -163,7 +139,6 @@ class AutoBookmarkerSettings {
             return;
         }
         query("#interval_range").value = custom_interval;
-        // query("#display_interval_range").textContent = custom_interval;
     }
     async loadKeepfor() {
         let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
@@ -182,7 +157,6 @@ class AutoBookmarkerSettings {
             return;
         }
         query("#keepfor_range").value = custom_keepfor;
-        query("#display_keepfor_range").textContent = custom_keepfor;
     }
     async loadNaming() {
         let data = await browser.storage.local.get(["prefix", "suffix", "format_year", "format_mon", "format_day"]);
