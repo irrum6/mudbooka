@@ -2,7 +2,7 @@ class AutoBookmarkerSettingsInterface {
     displayExampleName() {
         let prefix = val("naming_prefix");
 
-        let suffix = val("naming_suffix");        
+        let suffix = val("naming_suffix");
 
         let year = "numeric";
         let radio = this.getRadioValue("format_year");
@@ -49,15 +49,31 @@ class AutoBookmarkerSettingsInterface {
         return { ok, value };
     }
 
-    onRadioChange(event){
+    enableRange(id) {
+        let range = getbid(id);
+        if ("rangewc" !== range.type) {
+            throw "wrong id";
+        }
+        range.enable();
+    }
+
+    disableRange(id) {
+        let range = getbid(id);
+        if ("rangewc" !== range.type) {
+            throw "wrong id";
+        }
+        range.disable();
+    }
+
+    onRadioChange(event) {
         let id = event.target.id;
         let value = event.target.value;
         let rangeID = `${id}_range`;
         if ("c" === value) {
-            Utils.ToggleInputEnabledState(rangeID, true);
+            this.enableRange(rangeID);
             return;
         }
-        Utils.ToggleInputEnabledState(rangeID, false);
+        this.disableRange(rangeID);
     }
 
     setEvents() {
@@ -77,7 +93,7 @@ class AutoBookmarkerSettingsInterface {
         sfxelm[on]("change", dxn_bound);
         sfxelm[on]("input", dxn_bound);
         sfxelm[on]("keydown", dxn_bound);
-        
+
         // setup event listeners for date format inputs
         // try generic query
         let fy = query_all("[name=format_year]");
@@ -181,7 +197,7 @@ class AutoBookmarkerSettings {
         if (Utils.isNoneEmptyString(format_mon)) {
             query(`[data-fm='${format_mon}']`).checked = true;
         }
-        
+
         this.displayExampleName();
     }
 

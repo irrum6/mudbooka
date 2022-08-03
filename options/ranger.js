@@ -150,10 +150,15 @@ class RangeWithControls extends HTMLElement {
     }
     
     disable(dis) {
+        let input = this.getInput();
         if (typeof dis === "boolean") {
-            let input = this.getInput();
             input.disabled = dis;
+            return;
         }
+        input.disabled = true;
+    }
+    get type(){
+        return "rangewc" 
     }
 }
 customElements.define("ranger-wc", RangeWithControls);
