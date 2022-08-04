@@ -24,6 +24,7 @@ class AutoBookmarkerConfig {
         this.conf.folderName = "mudbooker_tabs";
         this.conf.interval = HOUR * 1;
         this.conf.keepfor = DAY * 2;
+        this.conf.keepItems = 24;
     }
 
     get prefix() {
@@ -170,6 +171,18 @@ class AutoBookmarkerConfig {
         this.conf.keepfor = num;
     }
 
+    get items() {
+        return this.conf.keepItems;
+    }
+
+    set items(num) {
+        console.log(num);
+        if (!Utils.isPositiveInteger(num)) {
+            throw "NaNi"
+        }
+        this.conf.keepItems = num;
+    }
+
     /**
      * @returns {Promise<Integer>}
      */
@@ -178,15 +191,19 @@ class AutoBookmarkerConfig {
             //return existing value
             return this.keepfor;
         }
-        let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
+        let data = await browser.storage.local.get(["keepfor", "custom_keepfor", "keep_items"]);
         if (undefined === data || null === data) {
             //if no valid data, do nothing and return existing value
             return this.keepfor;
         }
-
-        let { keepfor, custom_keepfor } = data;
+        console.log(data);
+        let { keepfor, custom_keepfor, keep_items } = data;
         if (undefined === keepfor || undefined === custom_keepfor) {
             return this.keepfor;
+        }
+        
+        if ("mx" === keepfor) {
+            this.items = Number(keep_items);
         }
 
         if ("c" === keepfor) {
@@ -194,6 +211,8 @@ class AutoBookmarkerConfig {
         } else {
             keepfor = Utils.convertKeepfor(keepfor);
         }
+        
+        console.log(keepfor);
 
         this.keepfor = keepfor;
         return keepfor;
@@ -227,6 +246,7 @@ class AutoBookmarker {
 
     async removeOldFolders() {
         //debugger;
+        console.log(this.config);
         let keep = this.config.keepfor;
         //for max number use reverse sort
         //168 * 4 = 672
@@ -240,11 +260,33 @@ class AutoBookmarker {
             return 0;
         }
 
+        const reverse_sorter = (a, b) => {
+            if (a.dateAdded < b.dateAdded) {
+                return 1;
+            }
+            if (a.dateAdded > b.dateAdded) {
+                return -1;
+            }
+            return 0;
+        }
+
         let parent_id = await this.touchParentID();
 
         let children = await browser.bookmarks.getChildren(parent_id);
 
         let earlyDate = new Date(Date.now() - keep);
+
+        //save only few items
+        if (this.config.items > 0) {
+            children.sort(reverse_sorter);
+            while (children.length > this.config.items) {
+                let child = children.pop();
+                let dat = new Date(child.dateAdded);
+                console.log(`Now deleting bookmark added on ${dat.toLocaleString()}`);
+                await browser.bookmarks.removeTree(child.id);
+            }
+            return;
+        }
 
         //do split
         let selectedForDeletion = children.filter(e => e.dateAdded <= earlyDate);

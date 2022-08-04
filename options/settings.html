@@ -21,9 +21,60 @@
             <div>
                 <span class="f3 bold"> Every:</span>
             </div>
-            <radio-list id="interval"
-                data-radios="1 hour=>1h;2 hours=>2h;3 hours=>3h;4 hours=>4h;5 hours=>5h;6 hours=>6h;7 hours=>7h;8 hours=>8h;custom=>c"
-                data-value="1h"></radio-list>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="1h">
+                    <span class="f3">1 hour</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="2h">
+                    <span class="f3">2 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="3h">
+                    <span class="f3">3 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="4h">
+                    <span class="f3">4 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="5h">
+                    <span class="f3">5 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="6h">
+                    <span class="f3">6 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="7h">
+                    <span class="f3">7 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="8h">
+                    <span class="f3">8 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="c">
+                    <span class="f3">Custom</span>
+                </label>
+            </div>
             <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
                 <span class="f3" slot="unit">minutes</span>
             </ranger-wc>
@@ -39,23 +90,72 @@
             <div>
                 <span class="f3 bold">For:</span>
             </div>
-            <radio-list id="keepfor"
-                data-radios="12 Hours=>12h;1 day=>1d;2 days=>2d;3 days=>3d;4 days=>4d;5 days=>5d;6 days=>6d;1 week=>7d;custom=>c"
-                data-value="2d">
-            </radio-list>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="12h">
+                    <span class="f3">12 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="1d">
+                    <span class="f3">1 day</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="2d" checked>
+                    <span class="f3">2 day</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="3d">
+                    <span class="f3">3 day</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="4d">
+                    <span class="f3">4 day</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="5d">
+                    <span class="f3">5 day</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="6d">
+                    <span class="f3">6 day</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="7d">
+                    <span class="f3">1 week</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="keepfor" value="c">
+                    <span class="f3">Custom</span>
+                </label>
+            </div>
             <ranger-wc id="keepfor_range" min="3" max="168" step="3" value="48" hasDisplay="true">
                 <span class="f3" slot="unit">hours</span>
             </ranger-wc>
             <div>
-                <input type="checkbox" name="set_max_number" id="set_max">
-                <span class="f3">net Maximum number intead</span>
+                <label>
+                    <input type="radio" name="keepfor" value="mx">
+                    <span class="f25">Set maximum number intead </span>
+                </label>
             </div>
-            <ranger-wc id="keepfor_items" data-min="2" data-max="672" data-step="2" data-value="48">
+            <ranger-wc id="keepfor_items" min="2" max="672" step="2" value="48">
                 <span class="f3" slot="unit">items</span>
             </ranger-wc>
-            <div>
-                <span class="f3"><span id="display_keepfor_range">48</span> hours </span>
-            </div>
             <div>
                 <button id="save_keep" class="f3">Save Keep Duration</button>
             </div>

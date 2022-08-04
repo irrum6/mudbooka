@@ -140,6 +140,7 @@ class RangeWithControls extends HTMLElement {
             return;
         }
         input.value = num;
+        this.updateDisplay();
     }
     isDisabled() {
         return this.getInput().disabled;

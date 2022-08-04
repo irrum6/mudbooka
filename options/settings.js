@@ -75,12 +75,68 @@ class AutoBookmarkerSettingsInterface {
         }
         this.disableRange(rangeID);
     }
+    onKeepforChange(event) {
+        //custom range
+        let range = getbid("keepfor_range");
+        //max numbers range
+        let items = getbid("keepfor_items");
+        let value = event.target.value;
+        if ("c" === value) {
+            range.enable();
+            return;
+        }
+        if ("mx" === value) {
+            items.enable();
+            return;
+        }
+        range.disable();
+        items.disable();
+    }
+    /**
+     * 
+     * @param {*} keepfor 
+     * @param {*} custom_keepfor 
+     * @param {*} keep_items
+     */
+    setKeepforValue(keepfor, custom_keepfor, keep_items) {
+        let range = getbid("keepfor_range");
+        //max numbers range
+        let items = getbid("keepfor_items");
+
+        let keepers = query_all("input[name=keepfor]");
+        for (const keep of keepers) {
+            if (keep.value === keepfor) {
+                keep.checked = true;
+            }
+        }
+        if ("c" === keepfor) {
+            range.enable();
+            range.value = custom_keepfor;
+            return;
+        }
+        if ("mx" === keepfor) {
+            items.enable();
+            items.value = keep_items;
+            return;
+        }
+    }
+    getKeepforValue() {
+        let keepers = query_all("input[name=keepfor]");
+        for (const keep of keepers) {
+            if (keep.checked) {
+                return keep.value;
+            }
+        }
+    }
 
     setEvents() {
         let interval = query("#interval");
         interval[on]("radiochange", this.onRadioChange.bind(this));
-        let keepfor = query("#keepfor");
-        keepfor[on]("radiochange", this.onRadioChange.bind(this));
+
+        let keepers = query_all("input[name=keepfor]");
+        for (const keep of keepers) {
+            keep[on]("change", this.onKeepforChange.bind(this));
+        }
 
         const dxn_bound = this.displayExampleName.bind(this);
         // setup event listeners for prefix/suffix inputs
@@ -157,22 +213,15 @@ class AutoBookmarkerSettings {
         query("#interval_range").value = custom_interval;
     }
     async loadKeepfor() {
-        let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
+        let data = await browser.storage.local.get(["keepfor", "custom_keepfor","keep_items"]);
         if (undefined === data || null === data) {
             return;
         }
-        const { keepfor, custom_keepfor } = data;
+        const { keepfor, custom_keepfor, keep_items } = data;
         if (keepfor === undefined) {
             return;
         }
-        query("#keepfor").value = keepfor;
-        if ("c" === keepfor) {
-            Utils.ToggleInputEnabledState("keepfor_range", true);
-        }
-        if (custom_keepfor === undefined) {
-            return;
-        }
-        query("#keepfor_range").value = custom_keepfor;
+        this.interface.setKeepforValue(keepfor, custom_keepfor, keep_items);
     }
     async loadNaming() {
         let data = await browser.storage.local.get(["prefix", "suffix", "format_year", "format_mon", "format_day"]);
@@ -232,14 +281,19 @@ class AutoBookmarkerSettings {
     }
 
     async saveKeepfor() {
-        let keepfor = query("#keepfor").value;
+        let keepfor = this.interface.getKeepforValue();
 
         let custom_keepfor = "48";
 
         if ("c" === keepfor) {
             custom_keepfor = query("#keepfor_range").value;
         }
-        await browser.storage.local.set({ keepfor, custom_keepfor });
+        let keep_items = "48";
+        if ("mx" === keepfor) {
+            //debugger;
+            keep_items = query("#keepfor_items").value;
+        }
+        await browser.storage.local.set({ keepfor, custom_keepfor, keep_items });
     }
 
     async SaveNaming() {
