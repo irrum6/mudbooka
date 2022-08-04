@@ -1,56 +1,111 @@
 class AutoBookmarkerOptionsInterface {
-    /**
-     * query and retrieve radio value with name provided
-     * @param {String} name 
-     * @returns {String}
-     */
-    getRadioValue(name) {
-        let selector = "input[name=$name$]:checked".replace("$name$", name);
-        let radio = query(selector);
-        if (radio !== undefined && radio !== null) {
-            let ok = true;
-            let value = radio.value;
-            return { ok, value };
-        }
-        let ok = false;
-        let value = null;
-        return { ok, value };
-    }
 
-    onRangeValueChange(event) {
-        let id = event.target.id;
-        let displayid = `display_${id}`;
-        let display = getbid(displayid);
+    onIntervalChange(event) {
+        //custom range
+        let range = getbid("interval_range");
         let value = event.target.value;
-        display.textContent = value;
-    }
-
-    onRadioChange(event) {
-        let id = event.target.id;
-        let value = event.target.value;
-        let rangeID = `${id}_range`;
         if ("c" === value) {
-            Utils.ToggleInputEnabledState(rangeID, true);
+            range.enable();
             return;
         }
-        Utils.ToggleInputEnabledState(rangeID, false);
+
+        range.disable();
+    }
+    /**
+     * 
+     * @param {*} interval 
+     * @param {*} custom_interval
+     */
+    setIntervalValue(interval, custom_interval) {
+        let range = getbid("interval_range");
+
+        let intervals = query_all("input[name=interval]");
+        for (const inter of intervals) {
+            if (inter.value === interval) {
+                inter.checked = true;
+            }
+        }
+        if ("c" === interval) {
+            range.enable();
+            range.value = custom_interval;
+            return;
+        }
+    }
+    getIntervalValue() {
+        let intervals = query_all("input[name=interval]");
+        for (const inter of intervals) {
+            if (inter.checked) {
+                return inter.value;
+            }
+        }
+    }
+    onKeepforChange(event) {
+        //custom range
+        let range = getbid("keepfor_range");
+        //max numbers range
+        let items = getbid("keepfor_items");
+        let value = event.target.value;
+        if ("c" === value) {
+            range.enable();
+            return;
+        }
+        if ("mx" === value) {
+            items.enable();
+            return;
+        }
+        range.disable();
+        items.disable();
+    }
+    /**
+     * 
+     * @param {*} keepfor 
+     * @param {*} custom_keepfor 
+     * @param {*} keep_items
+     */
+    setKeepforValue(keepfor, custom_keepfor, keep_items) {
+        let range = getbid("keepfor_range");
+        //max numbers range
+        let items = getbid("keepfor_items");
+
+        let keepers = query_all("input[name=keepfor]");
+        for (const keep of keepers) {
+            if (keep.value === keepfor) {
+                keep.checked = true;
+            }
+        }
+        if ("c" === keepfor) {
+            range.enable();
+            range.value = custom_keepfor;
+            return;
+        }
+        if ("mx" === keepfor) {
+            items.enable();
+            items.value = keep_items;
+            return;
+        }
+    }
+    getKeepforValue() {
+        let keepers = query_all("input[name=keepfor]");
+        for (const keep of keepers) {
+            if (keep.checked) {
+                return keep.value;
+            }
+        }
     }
 
     setEvents() {
-        // interval range functions
-        let intrange = query("#interval_range");
-        intrange[on]("rangechange", this.onRangeValueChange.bind(this));
+        let intervals = query_all("input[name=interval]");
+        for (const inter of intervals) {
+            inter[on]("change", this.onIntervalChange.bind(this));
+        }
 
-        let interval = query("#interval");
-        interval[on]("radiochange", this.onRadioChange.bind(this));
-        // keepfor range functions
-        let keeprange = query("#keepfor_range");
-        keeprange[on]("rangechange", this.onRangeValueChange.bind(this));
-
-        let keepfor = query("#keepfor");
-        keepfor[on]("radiochange", this.onRadioChange.bind(this));
+        let keepers = query_all("input[name=keepfor]");
+        for (const keep of keepers) {
+            keep[on]("change", this.onKeepforChange.bind(this));
+        }
     }
 }
+
 class AutoBookmarkerOptions {
     constructor() {
         this.data = this.setDefaultData();
@@ -77,41 +132,25 @@ class AutoBookmarkerOptions {
         if (interval === undefined) {
             return;
         }
-        query("#interval").value = interval;
-        if ("c" === interval) {
-            Utils.ToggleInputEnabledState("interval_range", true);
-        }
-        if (custom_interval === undefined) {
-            return;
-        }
-        query("#interval_range").value = custom_interval;
-        query("#display_interval_range").textContent = custom_interval;
+        this.interface.setIntervalValue(interval, custom_interval);
     }
     async loadKeepfor() {
-        let data = await browser.storage.local.get(["keepfor", "custom_keepfor"]);
+        let data = await browser.storage.local.get(["keepfor", "custom_keepfor", "keep_items"]);
         if (undefined === data || null === data) {
             return;
         }
-        const { keepfor, custom_keepfor } = data;
+        const { keepfor, custom_keepfor, keep_items } = data;
         if (keepfor === undefined) {
             return;
         }
-        query("#keepfor").value = keepfor;
-        if ("c" === keepfor) {
-            Utils.ToggleInputEnabledState("keepfor_range", true);
-        }
-        if (custom_keepfor === undefined) {
-            return;
-        }
-        query("#keepfor_range").value = custom_keepfor;
-        query("#display_keepfor_range").textContent = custom_keepfor;
+        this.interface.setKeepforValue(keepfor, custom_keepfor, keep_items);
     }
 
     /**
     * Retrieves input values and sets interval and keepfor values
     */
-    async saveOptions() {
-        let interval = query("#interval").value;
+    async saveInterval() {
+        let interval = this.interface.getIntervalValue();
 
         let custom_interval = "60";
 
@@ -119,15 +158,22 @@ class AutoBookmarkerOptions {
             custom_interval = query("#interval_range").value;
         }
         await browser.storage.local.set({ interval, custom_interval });
+    }
 
-        let keepfor = query("#keepfor").value;
+    async saveKeepfor() {
+        let keepfor = this.interface.getKeepforValue();
 
         let custom_keepfor = "48";
 
         if ("c" === keepfor) {
             custom_keepfor = query("#keepfor_range").value;
         }
-        await browser.storage.local.set({ keepfor, custom_keepfor });
+        let keep_items = "48";
+        if ("mx" === keepfor) {
+            //debugger;
+            keep_items = query("#keepfor_items").value;
+        }
+        await browser.storage.local.set({ keepfor, custom_keepfor, keep_items });
     }
 
     async openFullSettings() {
@@ -140,10 +186,14 @@ class AutoBookmarkerOptions {
         )
     }
 
+    async saveOptions(){
+        await this.saveInterval();
+        await this.saveKeepfor();
+    }
     setEvents() {
         this.interface.setEvents();
-        query("#action")[on]("click", this.saveOptions.bind(this));
         query("#full_throtle")[on]("click", this.openFullSettings.bind(this));
+        query("#action")[on]("click", this.saveOptions.bind(this));
     }
 }
 

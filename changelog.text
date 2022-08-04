@@ -3,3 +3,8 @@ changed from creating folders in "Other Bookmarks" to adding subfolders in speci
 and saving bookmarked tabs there.
 
 removed "unlimitedStorage"  permission as no longer necessary (we no longer save folder ids).
+
+0.10
+refactor
+0.11.1
+added option to set max number of items instead of duration 

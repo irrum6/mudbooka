@@ -49,31 +49,44 @@ class AutoBookmarkerSettingsInterface {
         return { ok, value };
     }
 
-    enableRange(id) {
-        let range = getbid(id);
-        if ("rangewc" !== range.type) {
-            throw "wrong id";
-        }
-        range.enable();
-    }
-
-    disableRange(id) {
-        let range = getbid(id);
-        if ("rangewc" !== range.type) {
-            throw "wrong id";
-        }
-        range.disable();
-    }
-
-    onRadioChange(event) {
-        let id = event.target.id;
+    onIntervalChange(event) {
+        //custom range
+        let range = getbid("interval_range");
         let value = event.target.value;
-        let rangeID = `${id}_range`;
         if ("c" === value) {
-            this.enableRange(rangeID);
+            range.enable();
             return;
         }
-        this.disableRange(rangeID);
+
+        range.disable();
+    }
+    /**
+     * 
+     * @param {*} interval 
+     * @param {*} custom_interval
+     */
+    setIntervalValue(interval, custom_interval) {
+        let range = getbid("interval_range");
+
+        let intervals = query_all("input[name=interval]");
+        for (const inter of intervals) {
+            if (inter.value === interval) {
+                inter.checked = true;
+            }
+        }
+        if ("c" === interval) {
+            range.enable();
+            range.value = custom_interval;
+            return;
+        }
+    }
+    getIntervalValue() {
+        let intervals = query_all("input[name=interval]");
+        for (const inter of intervals) {
+            if (inter.checked) {
+                return inter.value;
+            }
+        }
     }
     onKeepforChange(event) {
         //custom range
@@ -130,8 +143,10 @@ class AutoBookmarkerSettingsInterface {
     }
 
     setEvents() {
-        let interval = query("#interval");
-        interval[on]("radiochange", this.onRadioChange.bind(this));
+        let intervals = query_all("input[name=interval]");
+        for (const inter of intervals) {
+            inter[on]("change", this.onIntervalChange.bind(this));
+        }
 
         let keepers = query_all("input[name=keepfor]");
         for (const keep of keepers) {
@@ -203,17 +218,10 @@ class AutoBookmarkerSettings {
         if (interval === undefined) {
             return;
         }
-        query("#interval").value = interval;
-        if ("c" === interval) {
-            Utils.ToggleInputEnabledState("interval_range", true);
-        }
-        if (custom_interval === undefined) {
-            return;
-        }
-        query("#interval_range").value = custom_interval;
+        this.interface.setIntervalValue(interval, custom_interval);
     }
     async loadKeepfor() {
-        let data = await browser.storage.local.get(["keepfor", "custom_keepfor","keep_items"]);
+        let data = await browser.storage.local.get(["keepfor", "custom_keepfor", "keep_items"]);
         if (undefined === data || null === data) {
             return;
         }
@@ -270,7 +278,7 @@ class AutoBookmarkerSettings {
     * Retrieves input values and sets interval and keepfor values
     */
     async saveInterval() {
-        let interval = query("#interval").value;
+        let interval = this.interface.getIntervalValue();
 
         let custom_interval = "60";
 

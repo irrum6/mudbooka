@@ -15,20 +15,68 @@
         <!-- interval -->
         <div class="flex-column-center grow1 mx-2">
             <div class="text-center">
-                <span class="f3 bold900">Select Interval</span>
+                <span class="f4 bold900">Select Interval</span>
             </div>
             <div>
-                <span class="f25 bold"> Every:</span>
+                <span class="f3 bold"> Every:</span>
             </div>
-            <radio-list id="interval"
-                data-radios="1 hour=>1h;2 hours=>2h;3 hours=>3h;4 hours=>4h;5 hours=>5h;6 hours=>6h;7 hours=>7h;8 hours=>8h;custom=>c"
-                data-value="1h"></radio-list>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="1h">
+                    <span class="f3">1 hour</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="2h">
+                    <span class="f3">2 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="3h">
+                    <span class="f3">3 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="4h">
+                    <span class="f3">4 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="5h">
+                    <span class="f3">5 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="6h">
+                    <span class="f3">6 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="7h">
+                    <span class="f3">7 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="8h">
+                    <span class="f3">8 hours</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input type="radio" name="interval" value="c">
+                    <span class="f3">Custom</span>
+                </label>
+            </div>
             <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
                 <span class="f3" slot="unit">minutes</span>
             </ranger-wc>
-            <div>
-                <span class="f3"> <span id="display_interval_range">60</span> minutes </span>
-            </div>
         </div>
         <!-- keepfor -->
         <div class="flex-column-center grow1 mx-2">
@@ -104,37 +152,22 @@
             <ranger-wc id="keepfor_items" min="2" max="672" step="2" value="48">
                 <span class="f3" slot="unit">items</span>
             </ranger-wc>
-            <div>
-                <button id="save_keep" class="f3">Save Keep Duration</button>
-            </div>
         </div>
     </div>
     <div class="mt-2 mb-2 flex-row-center">
-        <button id="action" class="w-25 mt-1 text-center f3">Set</button>
+        <button id="action" class="f3">Set</button>
         <button id="full_throtle" class="w-25 mt-1 ml-4 text-center f3">Full Settings</button>
     </div>
     <template id="range_with_controls">
         <div class="w-75">
             <button class="ranger-wc minus">&minus;</button>
-            <input type="range" class="w-75" min="15" max="480" step="15" value="60" disabled>
+            <input type="range" class="w-75" disabled>
             <button class="ranger-wc plus">&plus;</button>
             <div>You can use slider or controls</div>
-        </div>
-    </template>
-    <template id="radiolist">
-        <div class="radiobox">
-            <!-- built automatically based on data-names,data-values : div>label> span input -->
-            <!-- div -->
-            <!--    label -->
-            <!--        span input -->
-        </div>
-    </template>
-    <template id="radioitem">
-        <div class="rad-item">
-            <label>
-                <input type="radio">
-                <span></span>
-            </label>
+            <div>
+                <span class="f3 display"></span>
+                <slot name="unit">
+            </div>
         </div>
     </template>
     <script src="radiolist.js"></script>
