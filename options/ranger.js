@@ -67,7 +67,7 @@ class RangeWithControls extends HTMLElement {
     }
 
     increase() {
-        if (this.disabled) {
+        if (this.deactivated) {
             return;
         }
         let input = this.getInput();
@@ -82,7 +82,7 @@ class RangeWithControls extends HTMLElement {
         this.fireChange();
     }
     decrease() {
-        if (this.disabled) {
+        if (this.deactivated) {
             return;
         }
         let input = this.getInput();
@@ -144,6 +144,10 @@ class RangeWithControls extends HTMLElement {
     }
     isDisabled() {
         return this.getInput().disabled;
+    }
+
+    get deactivated(){
+        return this.isDisabled();
     }
 
     enable() {

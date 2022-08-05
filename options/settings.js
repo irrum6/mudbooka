@@ -95,10 +95,12 @@ class AutoBookmarkerSettingsInterface {
         let items = getbid("keepfor_items");
         let value = event.target.value;
         if ("c" === value) {
+            items.disable();
             range.enable();
             return;
         }
         if ("mx" === value) {
+            range.disable();
             items.enable();
             return;
         }
