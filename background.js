@@ -24,7 +24,7 @@ class AutoBookmarkerConfig {
         this.conf.folderName = "mudbooker_tabs";
         this.conf.interval = HOUR * 1;
         this.conf.keepfor = DAY * 2;
-        this.conf.keepItems = 24;
+        this.conf.keepItems = 1;
     }
 
     get prefix() {
@@ -176,7 +176,6 @@ class AutoBookmarkerConfig {
     }
 
     set items(num) {
-        console.log(num);
         if (!Utils.isPositiveInteger(num)) {
             throw "NaNi"
         }
@@ -196,23 +195,22 @@ class AutoBookmarkerConfig {
             //if no valid data, do nothing and return existing value
             return this.keepfor;
         }
-        console.log(data);
+       
         let { keepfor, custom_keepfor, keep_items } = data;
         if (undefined === keepfor || undefined === custom_keepfor) {
             return this.keepfor;
         }
-        
+        //resete before loading
+        this.items = 1;
         if ("mx" === keepfor) {
             this.items = Number(keep_items);
-        }
-
-        if ("c" === keepfor) {
+        } else if ("c" === keepfor) {
             keepfor = Utils.parseKeepforRange(custom_keepfor);
         } else {
             keepfor = Utils.convertKeepfor(keepfor);
         }
+
         
-        console.log(keepfor);
 
         this.keepfor = keepfor;
         return keepfor;
@@ -246,7 +244,6 @@ class AutoBookmarker {
 
     async removeOldFolders() {
         //debugger;
-        console.log(this.config);
         let keep = this.config.keepfor;
         //for max number use reverse sort
         //168 * 4 = 672
@@ -277,7 +274,7 @@ class AutoBookmarker {
         let earlyDate = new Date(Date.now() - keep);
 
         //save only few items
-        if (this.config.items > 0) {
+        if (this.config.items > 1) {
             children.sort(reverse_sorter);
             while (children.length > this.config.items) {
                 let child = children.pop();
@@ -350,7 +347,7 @@ class AutoBookmarker {
         }
 
         let parent_id = await this.touchParentID();
-        //console.log(parent_id);
+        
         let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
 
         const folder_id = newFolder.id;
