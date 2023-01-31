@@ -320,6 +320,7 @@ class AutoBookmarker {
                 this.pdata.last_time = Date.now();
             }
             this.pdata.next_time = this.pdata.last_time + this.config.interval;
+            await browser.storage.local.set({ last: this.pdata.last_time, next: this.pdata.next_time });
         }
         return true;
     }
@@ -420,7 +421,7 @@ browser.storage.onChanged.addListener(async () => {
 });
 
 browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    console.log(request.command);
+    // console.log(request.command);
     if (request.command == "runmenow") {
         await mdBooker.forced_run();
     }
