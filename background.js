@@ -195,7 +195,7 @@ class AutoBookmarkerConfig {
             //if no valid data, do nothing and return existing value
             return this.keepfor;
         }
-       
+
         let { keepfor, custom_keepfor, keep_items } = data;
         if (undefined === keepfor || undefined === custom_keepfor) {
             return this.keepfor;
@@ -210,7 +210,7 @@ class AutoBookmarkerConfig {
             keepfor = Utils.convertKeepfor(keepfor);
         }
 
-        
+
 
         this.keepfor = keepfor;
         return keepfor;
@@ -316,14 +316,22 @@ class AutoBookmarker {
         //if interval was changed
         if (oldInterval !== interval) {
             console.log(oldInterval, interval);
-            this.restart();
+            await this.forced_run();
         }
         return true;
     }
 
     //the main function
-    async runner() {
-        console.log(281);
+    /**
+     * @param {boolean} first
+     */
+    async runner(first) {
+        // console.log(281);
+
+        if (Date.now() < this.pdata.next_time || true != first) {
+            // console.log(new Date(this.pdata.next_time));
+            return;
+        }
         //search tabs
         let tabs = await browser.tabs.query({});
 
@@ -347,7 +355,7 @@ class AutoBookmarker {
         }
 
         let parent_id = await this.touchParentID();
-        
+
         let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
 
         const folder_id = newFolder.id;
@@ -385,28 +393,17 @@ class AutoBookmarker {
      */
     async start() {
         //if process is running then not start again
-        //restart is seperate function
         if (this.pdata.runner_id !== undefined) {
             return false;
         }
-        this.runner();
-        let interval = this.config.interval;
-        const runner_bounded = this.runner.bind(this);
-        this.pdata.runner_id = window.setInterval(runner_bounded, interval);
+        await this.runner(true);
+        this.pdata.runner_id = window.setInterval(this.runner.bind(this), SECOND * 5);
     }
     /**
-     * Restart
      * @returns 
      */
-    async restart() {
-        if (this.pdata.runner_id === undefined) {
-            return false;
-        }
-        this.runner();
-        window.clearInterval(this.pdata.runner_id);
-        let interval = this.config.interval;
-        const runner_bounded = this.runner.bind(this);
-        this.pdata.runner_id = window.setInterval(runner_bounded, interval);
+    async forced_run() {
+        await this.runner(true);
     }
 }
 
@@ -415,12 +412,12 @@ mdBooker.loadDataFromLocalStorage();
 mdBooker.start();
 
 browser.storage.onChanged.addListener(async () => {
-    console.log(372);
+    // console.log(372);
     await mdBooker.loadDataFromLocalStorage();
 });
 
 browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    if (request.command == "tuesday") {
-        mdBooker.restart();
+    if (request.command == "runmenow") {
+        mdBooker.forced_run();
     }
 });

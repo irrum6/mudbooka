@@ -7,7 +7,7 @@ query("#quickset")[on]("click", async () => {
 });
 query("#booknow")[on]("click", async () => {
     await browser.runtime.sendMessage(
-        { command: "tuesday" }
+        { command: "runmenow" }
     );
 });
 
