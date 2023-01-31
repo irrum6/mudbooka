@@ -315,8 +315,11 @@ class AutoBookmarker {
         let interval = await this.config.loadInterval();
         //if interval was changed
         if (oldInterval !== interval) {
-            console.log(oldInterval, interval);
-            await this.forced_run();
+            //change next time run
+            if (this.pdata.last_time == 0) {
+                this.pdata.last_time = Date.now();
+            }
+            this.pdata.next_time = this.pdata.last_time + this.config.interval;
         }
         return true;
     }
@@ -328,7 +331,7 @@ class AutoBookmarker {
     async runner(first) {
         // console.log(281);
 
-        if (Date.now() < this.pdata.next_time || true != first) {
+        if (Date.now() < this.pdata.next_time && (false === first || undefined === first)) {
             // console.log(new Date(this.pdata.next_time));
             return;
         }
@@ -417,7 +420,8 @@ browser.storage.onChanged.addListener(async () => {
 });
 
 browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+    console.log(request.command);
     if (request.command == "runmenow") {
-        mdBooker.forced_run();
+        await mdBooker.forced_run();
     }
 });
