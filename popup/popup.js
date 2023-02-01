@@ -11,6 +11,16 @@ query("#booknow")[on]("click", async () => {
     );
 });
 
+query("#last_title").textContent = browser.i18n.getMessage("lastrun");
+query("#next_title").textContent = browser.i18n.getMessage("nextrun");
+
+query("#open_tabs_title").textContent = browser.i18n.getMessage("open_tabs");
+query("#open_windows_title").textContent = browser.i18n.getMessage("open_windows");
+
+query("#win_normal").textContent = browser.i18n.getMessage("win_normal");
+query("#win_private").textContent = browser.i18n.getMessage("win_private");
+
+
 browser.storage.local.get(["last", "next"]).then(async (data) => {
     let last_date = new Date(Number(data.last))
     let next_date = new Date(Number(data.next));

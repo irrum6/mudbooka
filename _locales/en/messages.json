@@ -1,0 +1,26 @@
+{
+    "lastrun": {
+        "message": "Last run at",
+        "description": "When background script run last time"
+    },
+    "nextrun": {
+        "message": "Next run at",
+        "description": "When background script will run next time"
+    },
+    "open_tabs":{
+        "message": "Open tabs",
+        "description": "How many tabs are open"
+    },
+    "open_windows":{
+        "message": "Open windows",
+        "description": "How many windows are open"
+    },
+    "win_normal":{
+        "message": "Normal",
+        "description": "Non-private"
+    },
+    "win_private":{
+        "message": "Private",
+        "description": "Private"
+    }
+}

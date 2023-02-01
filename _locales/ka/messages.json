@@ -1,0 +1,26 @@
+{
+    "lastrun": {
+        "message": "ბოლოს გაეშვა",
+        "description": "When background script run last time"
+    },
+    "nextrun": {
+        "message": "შემდეგ გაეშვება",
+        "description": "When background script will run next time"
+    },
+    "open_tabs": {
+        "message": "გახსნილი ჩანართები",
+        "description": "How many tabs are open"
+    },
+    "open_windows": {
+        "message": "გახსნილი ფანჯრები",
+        "description": "How many windows are open"
+    },
+    "win_normal": {
+        "message": "ჩვეულებრივი",
+        "description": "Non-private"
+    },
+    "win_private": {
+        "message": "პირადი",
+        "description": "Private"
+    }
+}
