@@ -1,4 +1,5 @@
 const SECOND = 1000;
+const HALF_SECOND = 500;
 const MINUTE = SECOND * 60;
 const HOUR = SECOND * 3600;
 const DAY = HOUR * 24;
@@ -331,7 +332,7 @@ class AutoBookmarker {
      */
     async runner(first) {
         // console.log(281);
-
+        
         if (Date.now() < this.pdata.next_time && (false === first || undefined === first)) {
             // console.log(new Date(this.pdata.next_time));
             return;
@@ -401,7 +402,7 @@ class AutoBookmarker {
             return false;
         }
         await this.runner(true);
-        this.pdata.runner_id = window.setInterval(this.runner.bind(this), SECOND * 5);
+        this.pdata.runner_id = window.setInterval(this.runner.bind(this), HALF_SECOND);
     }
     /**
      * @returns 
