@@ -22,5 +22,29 @@
     "win_private": {
         "message": "პირადი",
         "description": "Private"
+    },
+    "every": {
+        "message": "",
+        "description": "every"
+    },
+    "hour": {
+        "message": "საათი",
+        "description": "hour"
+    },
+    "hours": {
+        "message": "საათი",
+        "description": "hours"
+    },
+    "select": {
+        "message": "აირჩიეთ",
+        "description": "hours"
+    },
+    "interval": {
+        "message": "შუალედი",
+        "description": "hours"
+    },
+    "custom": {
+        "message": "ხელით შერჩეული",
+        "description": "custom"
     }
 }

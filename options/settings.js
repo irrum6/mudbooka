@@ -68,7 +68,7 @@ class AutoBookmarkerSettingsInterface {
     setIntervalValue(interval, custom_interval) {
         let range = getbid("interval_range");
 
-        let intervals = query_all("input[name=interval]");
+        let intervals = query_all("extended-radio[name=interval]");
         for (const inter of intervals) {
             if (inter.value === interval) {
                 inter.checked = true;
@@ -81,7 +81,7 @@ class AutoBookmarkerSettingsInterface {
         }
     }
     getIntervalValue() {
-        let intervals = query_all("input[name=interval]");
+        let intervals = query_all("extended-radio[name=interval]");
         for (const inter of intervals) {
             if (inter.checked) {
                 return inter.value;
@@ -145,9 +145,9 @@ class AutoBookmarkerSettingsInterface {
     }
 
     setEvents() {
-        let intervals = query_all("input[name=interval]");
+        let intervals = query_all("extended-radio[name=interval]");
         for (const inter of intervals) {
-            inter[on]("change", this.onIntervalChange.bind(this));
+            inter[on]("xchanged", this.onIntervalChange.bind(this));
         }
 
         let keepers = query_all("input[name=keepfor]");

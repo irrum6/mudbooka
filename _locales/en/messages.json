@@ -22,5 +22,29 @@
     "win_private":{
         "message": "Private",
         "description": "Private"
+    },
+    "every": {
+        "message": "every",
+        "description": "every"
+    },
+    "hour": {
+        "message": "hour",
+        "description": "hour"
+    },
+    "hours": {
+        "message": "hours",
+        "description": "hours"
+    },
+    "select": {
+        "message": "select",
+        "description": "hours"
+    },
+    "interval": {
+        "message": "interval",
+        "description": "hours"
+    },
+    "custom": {
+        "message": "Custom",
+        "description": "custom"
     }
 }

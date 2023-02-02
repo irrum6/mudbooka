@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="utils.css">
     <link rel="stylesheet" href="options.css">
-    <title>Mudbooka:Settings</title>
+    <title>Mdbooker:Options</title>
 </head>
 
 <body>
@@ -73,7 +73,7 @@
                     <input type="radio" name="interval" value="c">
                     <span class="f3">Custom</span>
                 </label>
-            </div>
+            </div>            
             <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
                 <span class="f3" slot="unit">minutes</span>
             </ranger-wc>
@@ -169,7 +169,8 @@
                 <slot name="unit">
             </div>
         </div>
-    </template>
+    </template>   
+    <script src="extended_radio.js"></script>
     <script src="ranger.js"></script>
     <script src="utils.js"></script>
     <script src="options.js"></script>

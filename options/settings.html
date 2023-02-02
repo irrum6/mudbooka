@@ -20,61 +20,16 @@
             </div>
             <div>
                 <span class="f3 bold"> Every:</span>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="1h">
-                    <span class="f3">1 hour</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="2h">
-                    <span class="f3">2 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="3h">
-                    <span class="f3">3 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="4h">
-                    <span class="f3">4 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="5h">
-                    <span class="f3">5 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="6h">
-                    <span class="f3">6 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="7h">
-                    <span class="f3">7 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="8h">
-                    <span class="f3">8 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="c">
-                    <span class="f3">Custom</span>
-                </label>
-            </div>
+            </div>            
+            <extended-radio name="interval" value="1h" text1="1" text2="hour"></extended-radio>
+            <extended-radio name="interval" value="2h" text1="2" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="3h" text1="3" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="4h" text1="4" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="5h" text1="5" text2="hours"></extended-radio>            
+            <extended-radio name="interval" value="6h" text1="6" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="7h" text1="7" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="8h" text1="8" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="c" text1="" text2="custom"></extended-radio>
             <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
                 <span class="f3" slot="unit">minutes</span>
             </ranger-wc>
@@ -152,7 +107,7 @@
                     <input type="radio" name="keepfor" value="mx">
                     <span class="f25">Set maximum number intead </span>
                 </label>
-            </div>
+            </div>            
             <ranger-wc id="keepfor_items" min="2" max="672" step="2" value="48">
                 <span class="f3" slot="unit">items</span>
             </ranger-wc>
@@ -246,6 +201,7 @@
             </div>
         </div>
     </template>
+    <script src="extended_radio.js"></script>
     <script src="ranger.js"></script>
     <script src="utils.js"></script>
     <script src="settings.js"></script>
