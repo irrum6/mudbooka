@@ -31,31 +31,39 @@ class AutoBookmarkerSettingsInterface {
         }
         query("#display_name_example").textContent = title;
         // translations,translations
+        query("h1").textContent = browser.i18n.getMessage("full_settings");
+        // translate title as well
+        document.title = `Mudbooker:${browser.i18n.getMessage("full_settings")}`;
+
         query("span.inttext").textContent = browser.i18n.getMessage("select_interval");
-        query("span.everytext").textContent =  browser.i18n.getMessage("every");
-        query("span.minutetext").textContent =  browser.i18n.getMessage("minutes");
-        query("button.saveinttext").textContent =  browser.i18n.getMessage("save_interval");
-        
+        query("span.everytext").textContent = browser.i18n.getMessage("every");
+        query("span.minutetext").textContent = browser.i18n.getMessage("minutes");
+        query("button.saveinttext").textContent = browser.i18n.getMessage("save_interval");
+
         query("span.keeptext").textContent = browser.i18n.getMessage("keep_text");
-        query("span.fortext").textContent =  browser.i18n.getMessage("for_text");
-        query("span.hourstext").textContent =  browser.i18n.getMessage("hours");
-        query("span.itemtext").textContent =  browser.i18n.getMessage("items");
-        query("button.savekeep").textContent =  browser.i18n.getMessage("savekeep");
-        
+        query("span.fortext").textContent = browser.i18n.getMessage("for_text");
+        query("span.hourstext").textContent = browser.i18n.getMessage("hours");
+        query("span.itemtext").textContent = browser.i18n.getMessage("items");
+        query("button.savekeep").textContent = browser.i18n.getMessage("savekeep");
+
         query("span.naming").textContent = browser.i18n.getMessage("naming");
         query("span.prefix").textContent = browser.i18n.getMessage("prefix");
         query("span.suffix").textContent = browser.i18n.getMessage("suffix");
 
         query("span.yearformat").textContent = browser.i18n.getMessage("year_format");
-        query("span.twodigit").textContent =  browser.i18n.getMessage("2digit");
-        query("span.yearnumeric").textContent =  browser.i18n.getMessage("year_numeric");
+        query("span.twodigit").textContent = browser.i18n.getMessage("2digit");
+        query("span.yearnumeric").textContent = browser.i18n.getMessage("year_numeric");
 
         query("span.monformat").textContent = browser.i18n.getMessage("mon_format");
-        query("span.monumeric").textContent =  browser.i18n.getMessage("mon_numeric");
-        query("span.monlong").textContent =  browser.i18n.getMessage("mon_long");
-        query("span.monshort").textContent =  browser.i18n.getMessage("mon_short");
-        query("span.example").textContent =  browser.i18n.getMessage("example");
-        query("button.savenaming").textContent =  browser.i18n.getMessage("save_naming");
+        query("span.monumeric").textContent = browser.i18n.getMessage("mon_numeric");
+        query("span.monlong").textContent = browser.i18n.getMessage("mon_long");
+        query("span.monshort").textContent = browser.i18n.getMessage("mon_short");
+        query("span.example").textContent = browser.i18n.getMessage("example");
+        query("button.savenaming").textContent = browser.i18n.getMessage("save_naming");
+
+        query("span.othersettings").textContent = browser.i18n.getMessage("other_settings");
+        query("span.savein").textContent = browser.i18n.getMessage("savein");
+        query("button.saveothers").textContent = browser.i18n.getMessage("save");
     }
     /**
      * query and retrieve radio value with name provided

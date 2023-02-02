@@ -150,5 +150,21 @@
     "save_naming": {
         "message": "შეინახე",
         "description": "savenaming"
+    },
+    "other_settings": {
+        "message": "სხვა პარამეტრები",
+        "description": "othersettings"
+    },
+    "savein": {
+        "message": "შეინახე აქ",
+        "description": "savein"
+    },
+    "save": {
+        "message": "შეინახე",
+        "description": "save"
+    },
+    "full_settings": {
+        "message": "პარამეტრები სრულად",
+        "description": "full_settings"
     }
 }

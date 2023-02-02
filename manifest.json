@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Mudbooker",
-    "version": "0.13.6",
+    "version": "0.13.7",
     "description": "Automatically bookmarks active tabs",
     "default_locale": "en",
     "icons": {

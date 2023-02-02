@@ -150,5 +150,21 @@
     "save_naming": {
         "message": "Save Naming",
         "description": "savenaming"
+    },
+    "other_settings": {
+        "message": "Other Settings",
+        "description": "othersettings"
+    },
+    "savein": {
+        "message": "Save in",
+        "description": "savein"
+    },
+    "save": {
+        "message": "Save",
+        "description": "save"
+    },
+    "full_settings": {
+        "message": "Full Settings",
+        "description": "othersettings"
     }
 }
