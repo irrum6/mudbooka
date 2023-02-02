@@ -92,11 +92,11 @@
         "description": "for_text"
     },
     "item": {
-        "message": "ცალი",
+        "message": "item",
         "description": "item"
     },
     "items": {
-        "message": "ცალი",
+        "message": "items",
         "description": "items"
     },
     "savekeep": {
