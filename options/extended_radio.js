@@ -68,7 +68,7 @@ class ExtendedRadio extends HTMLElement {
         let input = this.#retrieve_input();
         input.checked = true === s;
     }
-    
+
     //make sure no other input with such name is selected
     #on_fire(e) {
         // check_exclusion
@@ -84,7 +84,7 @@ class ExtendedRadio extends HTMLElement {
             radio.checked = false;
         }
         //fire event
-        this.dispatchEvent(new CustomEvent('xchanged', { bubbles: true, detail: { text: () => textarea.value } }));
+        this.dispatchEvent(new CustomEvent('xchanged', { bubbles: false }));
     }
 }
 customElements.define("extended-radio", ExtendedRadio);

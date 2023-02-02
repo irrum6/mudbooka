@@ -37,11 +37,31 @@
     },
     "select": {
         "message": "აირჩიეთ",
-        "description": "hours"
+        "description": "select"
     },
     "interval": {
         "message": "შუალედი",
-        "description": "hours"
+        "description": "interval"
+    },
+    "select_interval": {
+        "message": "აირჩიეთ შუალედი",
+        "description": "select_interval"
+    },
+    "save_interval": {
+        "message": "შეინახეთ შუალედი",
+        "description": "save_interval"
+    },
+    "minute": {
+        "message": "წუთი",
+        "description": "minute"
+    },
+    "minutes": {
+        "message": "წუთი",
+        "description": "minutes"
+    },
+    "range_slider_text": {
+        "message": "გამოიყენეთ გასაწევი ან ღილაკები",
+        "description": "slider"
     },
     "custom": {
         "message": "ხელით შერჩეული",

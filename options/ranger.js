@@ -27,6 +27,7 @@ class RangeWithControls extends HTMLElement {
         this.setControls();
         this.setEvents();
         this.updateDisplay();
+        this.query("span.rangeslidertext").textContent = browser.i18n.getMessage("range_slider_text");
 
     }
     getInput() {

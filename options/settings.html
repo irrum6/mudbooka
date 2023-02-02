@@ -16,10 +16,10 @@
         <!-- interval -->
         <div class="flex-column-center grow1 mr-4">
             <div class="text-center">
-                <span class="f4 bold900">Select Interval</span>
+                <span class="f4 bold900 inttext">Select Interval</span>
             </div>
             <div>
-                <span class="f3 bold"> Every:</span>
+                <span class="f3 bold everytext">every</span>
             </div>            
             <extended-radio name="interval" value="1h" text1="1" text2="hour"></extended-radio>
             <extended-radio name="interval" value="2h" text1="2" text2="hours"></extended-radio>
@@ -31,10 +31,10 @@
             <extended-radio name="interval" value="8h" text1="8" text2="hours"></extended-radio>
             <extended-radio name="interval" value="c" text1="" text2="custom"></extended-radio>
             <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
-                <span class="f3" slot="unit">minutes</span>
+                <span class="f3 minutetext" slot="unit">minutes</span>
             </ranger-wc>
             <div>
-                <button id="save_interval" class="f3">Save Interval</button>
+                <button id="save_interval" class="f3 saveinttext">Save Interval</button>
             </div>
         </div>
         <!-- keepfor -->
@@ -194,7 +194,7 @@
             <button class="ranger-wc minus">&minus;</button>
             <input type="range" class="w-75" disabled>
             <button class="ranger-wc plus">&plus;</button>
-            <div>You can use slider or controls</div>
+            <div><span class="rangeslidertext">You can use slider or controls</span></div>
             <div>
                 <span class="f3 display"></span>
                 <slot name="unit">

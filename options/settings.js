@@ -30,6 +30,11 @@ class AutoBookmarkerSettingsInterface {
             title = `${title}${suffix}`;
         }
         query("#display_name_example").textContent = title;
+        query("span.inttext").textContent = browser.i18n.getMessage("select_interval");
+        query("span.everytext").textContent =  browser.i18n.getMessage("every");
+        query("span.minutetext").textContent =  browser.i18n.getMessage("minutes");
+        query("button.saveinttext").textContent =  browser.i18n.getMessage("save_interval");
+        
     }
     /**
      * query and retrieve radio value with name provided

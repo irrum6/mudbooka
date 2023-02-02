@@ -43,6 +43,26 @@
         "message": "interval",
         "description": "hours"
     },
+    "select_interval": {
+        "message": "Select Interval",
+        "description": "select_interval"
+    },
+    "save_interval": {
+        "message": "Save Interval",
+        "description": "save_interval"
+    },
+    "minute": {
+        "message": "minute",
+        "description": "minute"
+    },
+    "minutes": {
+        "message": "minutes",
+        "description": "minutes"
+    },
+    "range_slider_text": {
+        "message": "You can use slider or controls",
+        "description": "slider"
+    },
     "custom": {
         "message": "Custom",
         "description": "custom"
