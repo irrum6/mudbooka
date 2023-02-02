@@ -66,5 +66,41 @@
     "custom": {
         "message": "ხელით შერჩეული",
         "description": "custom"
+    },
+    "day": {
+        "message": "დღე",
+        "description": "day"
+    },
+    "days": {
+        "message": "დღე",
+        "description": "days"
+    },
+    "week": {
+        "message": "კვირა",
+        "description": "week"
+    },
+    "keep_max_text": {
+        "message": "დაადგინეთ ზღვრული ოდენობა",
+        "description": "keep_max"
+    },
+    "keep_text": {
+        "message": "შენახვის ხანგრძლივობა",
+        "description": "keep_text"
+    },
+    "for_text": {
+        "message": "",
+        "description": "for_text"
+    },
+    "item": {
+        "message": "ცალი",
+        "description": "item"
+    },
+    "items": {
+        "message": "ცალი",
+        "description": "items"
+    },
+    "savekeep": {
+        "message": "დაადგინეთ შენახვის ხანგრძლივობა",
+        "description": "items"
     }
 }

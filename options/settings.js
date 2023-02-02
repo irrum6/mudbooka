@@ -30,11 +30,17 @@ class AutoBookmarkerSettingsInterface {
             title = `${title}${suffix}`;
         }
         query("#display_name_example").textContent = title;
+
         query("span.inttext").textContent = browser.i18n.getMessage("select_interval");
         query("span.everytext").textContent =  browser.i18n.getMessage("every");
         query("span.minutetext").textContent =  browser.i18n.getMessage("minutes");
         query("button.saveinttext").textContent =  browser.i18n.getMessage("save_interval");
         
+        query("span.keeptext").textContent = browser.i18n.getMessage("keep_text");
+        query("span.fortext").textContent =  browser.i18n.getMessage("for_text");
+        query("span.hourstext").textContent =  browser.i18n.getMessage("hours");
+        query("span.itemtext").textContent =  browser.i18n.getMessage("items");
+        query("button.savekeep").textContent =  browser.i18n.getMessage("save_interval");        
     }
     /**
      * query and retrieve radio value with name provided
@@ -123,7 +129,7 @@ class AutoBookmarkerSettingsInterface {
         //max numbers range
         let items = getbid("keepfor_items");
 
-        let keepers = query_all("input[name=keepfor]");
+        let keepers = query_all("extended-radio[name=keepfor]");
         for (const keep of keepers) {
             if (keep.value === keepfor) {
                 keep.checked = true;
@@ -141,7 +147,7 @@ class AutoBookmarkerSettingsInterface {
         }
     }
     getKeepforValue() {
-        let keepers = query_all("input[name=keepfor]");
+        let keepers = query_all("extended-radio[name=keepfor]");
         for (const keep of keepers) {
             if (keep.checked) {
                 return keep.value;
@@ -155,9 +161,9 @@ class AutoBookmarkerSettingsInterface {
             inter[on]("xchanged", this.onIntervalChange.bind(this));
         }
 
-        let keepers = query_all("input[name=keepfor]");
+        let keepers = query_all("extended-radio[name=keepfor]");
         for (const keep of keepers) {
-            keep[on]("change", this.onKeepforChange.bind(this));
+            keep[on]("xchanged", this.onKeepforChange.bind(this));
         }
 
         const dxn_bound = this.displayExampleName.bind(this);

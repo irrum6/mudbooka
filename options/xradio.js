@@ -21,7 +21,7 @@ class ExtendedRadio extends HTMLElement {
 
         const stylee = document.createElement('link');
         stylee.setAttribute('rel', 'stylesheet');
-        stylee.setAttribute('href', 'ranger.css');
+        stylee.setAttribute('href', 'xradio.css');
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(stylee);
@@ -47,9 +47,16 @@ class ExtendedRadio extends HTMLElement {
         this.#q(".text1").textContent = text1;
         //translate
         this.#q(".text2").textContent = browser.i18n.getMessage(text2);
+        let text2class = this.getAttribute("text2class");
+        if (Utils.isNoneEmptyString(text2class)) {
+            this.#q(".text2").classList.remove("f3");
+            this.#q(".text2").classList.add(text2class);
+        }
         let input = this.#q("input");
         input.name = name;
         input.value = value;
+
+
         input.addEventListener("click", this.#on_fire.bind(this));
     }
     #retrieve_input() {

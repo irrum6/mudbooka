@@ -40,79 +40,29 @@
         <!-- keepfor -->
         <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
-                <span class="f4 bold900">Keep</span>
+                <span class="f4 bold900 keeptext">Keep</span>
             </div>
             <div>
-                <span class="f3 bold">For:</span>
+                <span class="f3 bold fortext">for</span>
             </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="12h">
-                    <span class="f3">12 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="1d">
-                    <span class="f3">1 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="2d" checked>
-                    <span class="f3">2 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="3d">
-                    <span class="f3">3 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="4d">
-                    <span class="f3">4 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="5d">
-                    <span class="f3">5 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="6d">
-                    <span class="f3">6 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="7d">
-                    <span class="f3">1 week</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="c">
-                    <span class="f3">Custom</span>
-                </label>
-            </div>
+            <extended-radio name="keepfor" value="12h" text1="12" text2="hours"></extended-radio>
+            <extended-radio name="keepfor" value="1d" text1="1" text2="day"></extended-radio>
+            <extended-radio name="keepfor" value="2d" text1="2" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="3d" text1="3" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="4d" text1="4" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="5d" text1="5" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="6d" text1="6" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="7d" text1="1" text2="week"></extended-radio>
+            <extended-radio name="keepfor" value="c" text1="" text2="custom"></extended-radio>            
             <ranger-wc id="keepfor_range" min="3" max="168" step="3" value="48" hasDisplay="true">
-                <span class="f3" slot="unit">hours</span>
+                <span class="f3 hourstext" slot="unit">hours</span>
             </ranger-wc>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="mx">
-                    <span class="f25">Set maximum number intead </span>
-                </label>
-            </div>            
+            <extended-radio name="keepfor" value="mx" text1="" text2="keep_max_text" text2class="f25"></extended-radio>            
             <ranger-wc id="keepfor_items" min="2" max="672" step="2" value="48">
-                <span class="f3" slot="unit">items</span>
+                <span class="f3 itemtext" slot="unit">items</span>
             </ranger-wc>
             <div>
-                <button id="save_keep" class="f3">Save Keep Duration</button>
+                <button id="save_keep" class="f3 savekeep">Save Keep Duration</button>
             </div>
         </div>
         <!-- naming -->
@@ -201,9 +151,9 @@
             </div>
         </div>
     </template>
-    <script src="extended_radio.js"></script>
-    <script src="ranger.js"></script>
     <script src="utils.js"></script>
+    <script src="xradio.js"></script>
+    <script src="ranger.js"></script>    
     <script src="settings.js"></script>
 </body>
 

@@ -7,19 +7,19 @@
         "message": "Next run at",
         "description": "When background script will run next time"
     },
-    "open_tabs":{
+    "open_tabs": {
         "message": "Open tabs",
         "description": "How many tabs are open"
     },
-    "open_windows":{
+    "open_windows": {
         "message": "Open windows",
         "description": "How many windows are open"
     },
-    "win_normal":{
+    "win_normal": {
         "message": "Normal",
         "description": "Non-private"
     },
-    "win_private":{
+    "win_private": {
         "message": "Private",
         "description": "Private"
     },
@@ -66,5 +66,41 @@
     "custom": {
         "message": "Custom",
         "description": "custom"
+    },
+    "day": {
+        "message": "day",
+        "description": "day"
+    },
+    "days": {
+        "message": "days",
+        "description": "days"
+    },
+    "week": {
+        "message": "week",
+        "description": "week"
+    },
+    "keep_max_text": {
+        "message": "Set maximum number intead",
+        "description": "keep_max"
+    },
+    "keep_text": {
+        "message": "Keep",
+        "description": "keep_text"
+    },
+    "for_text": {
+        "message": "for",
+        "description": "for_text"
+    },
+    "item": {
+        "message": "ცალი",
+        "description": "item"
+    },
+    "items": {
+        "message": "ცალი",
+        "description": "items"
+    },
+    "savekeep": {
+        "message": "Save Keep Duration",
+        "description": "items"
     }
 }
