@@ -100,7 +100,55 @@
         "description": "items"
     },
     "savekeep": {
-        "message": "დაადგინეთ შენახვის ხანგრძლივობა",
+        "message": "დაადგინეთ ხანგრძლივობა",
         "description": "items"
+    },
+    "naming": {
+        "message": "დასახელება",
+        "description": "naming"
+    },
+    "prefix": {
+        "message": "თავსართი",
+        "description": "prefix"
+    },
+    "suffix": {
+        "message": "ბოლოსართი",
+        "description": "suffix"
+    },
+    "year_format": {
+        "message": "წლის ფორმატი",
+        "description": "year_format"
+    },
+    "2digit": {
+        "message": "ორნიშნა",
+        "description": "2digit"
+    },
+    "year_numeric": {
+        "message": "სრულად",
+        "description": "year_numeric"
+    },
+    "mon_format": {
+        "message": "თვის ფორმატი",
+        "description": "mon_format"
+    },
+    "mon_numeric": {
+        "message": "რიცხვი",
+        "description": "mon_numeric"
+    },
+    "mon_long": {
+        "message": "სრულად",
+        "description": "mon_long"
+    },
+    "mon_short": {
+        "message": "შემოკლებით",
+        "description": "mon_short"
+    },
+    "example": {
+        "message": "ნიმუში",
+        "description": "example"
+    },
+    "save_naming": {
+        "message": "შეინახე",
+        "description": "savenaming"
     }
 }

@@ -68,59 +68,67 @@
         <!-- naming -->
         <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
-                <span class="f4 bold900">Naming</span>
+                <span class="f4 bold900 naming">Naming</span>
             </div>
             <!-- prefix -->
             <div>
-                <label class="f3" for="naming_prefix">
-                    Prefix:
+                <label class="f25" for="naming_prefix">
+                    <span class="prefix">Prefix</span>                    
                     <input type="text" class="f3" name="prefix" id="naming_prefix" value="">
                 </label>
             </div>
             <!-- suffix -->
             <div>
-                <label class="f3" for="naming_suffix">
-                    Suffix:
+                <label class="f25" for="naming_suffix">
+                    <span class="suffix">Suffix</span>                    
                     <input type="text" class="f3" name="suffix" id="naming_suffix">
                 </label>
             </div>
             <!-- year format -->
             <div class="text-center">
-                <span class="f3 bold">
+                <span class="f3 bold yearformat">
                     Year Format
                 </span>
             </div>
             <div>
                 <label class="f3">
-                    <input type="radio" name="format_year" data-fy="2-digit" value="2-digit">2-digit
+                    <input type="radio" name="format_year" data-fy="2-digit" value="2-digit">
+                    <span class="twodigit">2-digit</span>
                 </label>
                 <label class="f3">
-                    <input type="radio" name="format_year" data-fy="numeric" value="numeric" checked>Numeric
+                    <input type="radio" name="format_year" data-fy="numeric" value="numeric" checked>
+                    <span class="yearnumeric">Numeric</span>
                 </label>
             </div>
             <!-- month format -->
             <div class="text-center">
-                <span class="f3 bold">Month Format</span>
+                <span class="f3 bold monformat">Month Format</span>
             </div>
             <div>
-                <label class="f3">
-                    <input type="radio" name="format_mon" data-fm="numeric" value="numeric" checked>Numeric
+                <label class="f275">
+                    <input type="radio" name="format_mon" data-fm="numeric" value="numeric" checked>
+                    <span class="monumeric">Numeric</span>
                 </label>
-                <label class="f3">
-                    <input type="radio" name="format_mon" data-fm="long" value="long" checked>Long
+                <label class="f275">
+                    <input type="radio" name="format_mon" data-fm="long" value="long" checked>
+                    <span class="monlong">Long</span>
                 </label>
-                <label class="f3">
-                    <input type="radio" name="format_mon" data-fm="short" value="short" checked>Short
+                <label class="f275">
+                    <input type="radio" name="format_mon" data-fm="short" value="short" checked>
+                    <span class="monshort">Short</span>
                 </label>
             </div>
             <div>
-                <span class="f25 bold">Example:
+                <span class="f25 bold">
+                    <span class="example">Example</span>:
                     <span id="display_name_example"></span>
                 </span>
             </div>
+            <!-- hour format -->
+            <!-- 12/24 -->
             <div class="mt-4">
-                <button id="save_naming" class="f3">Save Naming</button>
-            </div>
+                <button id="save_naming" class="f3 savenaming">Save Naming</button>
+            </div>            
         </div>
         <!-- other options -->
         <div class="flex-column-center grow1 ml-4">

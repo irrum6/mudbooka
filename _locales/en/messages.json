@@ -102,5 +102,53 @@
     "savekeep": {
         "message": "Save Keep Duration",
         "description": "items"
+    },
+    "naming": {
+        "message": "Naming",
+        "description": "naming"
+    },
+    "prefix": {
+        "message": "Prefix",
+        "description": "prefix"
+    },
+    "suffix": {
+        "message": "Suffix",
+        "description": "suffix"
+    },
+    "year_format": {
+        "message": "Year Format",
+        "description": "year_format"
+    },
+    "2digit": {
+        "message": "2-digit",
+        "description": "2digit"
+    },
+    "year_numeric": {
+        "message": "Numeric",
+        "description": "year_numeric"
+    },
+    "mon_format": {
+        "message": "Month Format",
+        "description": "mon_format"
+    },
+    "mon_numeric": {
+        "message": "Numeric",
+        "description": "mon_numeric"
+    },
+    "mon_long": {
+        "message": "Long",
+        "description": "mon_long"
+    },
+    "mon_short": {
+        "message": "Short",
+        "description": "mon_short"
+    },
+    "example": {
+        "message": "Example",
+        "description": "example"
+    },
+    "save_naming": {
+        "message": "Save Naming",
+        "description": "savenaming"
     }
 }
