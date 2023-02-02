@@ -375,7 +375,9 @@ class AutoBookmarker {
         this.pdata.next_time = this.pdata.last_time + this.config.interval;
 
         let nudate = new Date(this.pdata.last_time);
-        let message = `${nudate.getHours()}:${nudate.getMinutes()} - tabs were bookmarked`;
+        let hours = nudate.getHours().toString().padStart(2,"0");
+        let minutes = nudate.getMinutes().toString().padStart(2,"0");
+        let message = `${hours}:${minutes} - tabs were bookmarked`;
 
         browser.notifications.create({
             "type": "basic",
