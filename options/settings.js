@@ -30,6 +30,8 @@ class AutoBookmarkerSettingsInterface {
             title = `${title}${suffix}`;
         }
         query("#display_name_example").textContent = title;
+    }
+    doTheTranslation() {
         // translations,translations
         query("h1").textContent = browser.i18n.getMessage("full_settings");
         // translate title as well
@@ -64,6 +66,13 @@ class AutoBookmarkerSettingsInterface {
         query("span.othersettings").textContent = browser.i18n.getMessage("other_settings");
         query("span.savein").textContent = browser.i18n.getMessage("savein");
         query("button.saveothers").textContent = browser.i18n.getMessage("save");
+    }
+
+    #translate(s, text) {
+        if (!Utils.isNoneEmptyString(s) || !Utils.isNoneEmptyString(s)) {
+            console.warn("empty selector or empty text");
+        }
+        query(s).textContent = browser.i18n.getMessage(text);
     }
     /**
      * query and retrieve radio value with name provided
@@ -243,6 +252,7 @@ class AutoBookmarkerSettings {
         await this.loadKeepfor();
         await this.loadNaming();
         await this.loadOtherSettings();
+        this.translation();
     }
 
     async loadInterval() {
@@ -305,6 +315,9 @@ class AutoBookmarkerSettings {
         if (Utils.isNoneEmptyString(folder_name)) {
             query("#folder_naming").value = folder_name;
         }
+    }
+    translation() {
+        this.interface.doTheTranslation();
     }
 
     displayExampleName() {

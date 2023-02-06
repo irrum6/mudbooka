@@ -13,166 +13,59 @@
 <body>
     <div class="flex-row-center" style="align-items: start;">
         <!-- interval -->
-        <div class="flex-column-center grow1 mx-2">
+        <div class="flex-column-center grow1 mr-4">
             <div class="text-center">
-                <span class="f4 bold900">Select Interval</span>
+                <span class="f4 bold900 inttext">Select Interval</span>
             </div>
             <div>
-                <span class="f3 bold"> Every:</span>
+                <span class="f3 bold everytext">every</span>
             </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="1h">
-                    <span class="f3">1 hour</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="2h">
-                    <span class="f3">2 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="3h">
-                    <span class="f3">3 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="4h">
-                    <span class="f3">4 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="5h">
-                    <span class="f3">5 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="6h">
-                    <span class="f3">6 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="7h">
-                    <span class="f3">7 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="8h">
-                    <span class="f3">8 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="interval" value="c">
-                    <span class="f3">Custom</span>
-                </label>
-            </div>            
+            <extended-radio name="interval" value="1h" text1="1" text2="hour"></extended-radio>
+            <extended-radio name="interval" value="2h" text1="2" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="3h" text1="3" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="4h" text1="4" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="5h" text1="5" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="6h" text1="6" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="7h" text1="7" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="8h" text1="8" text2="hours"></extended-radio>
+            <extended-radio name="interval" value="c" text1="" text2="custom"></extended-radio>
             <ranger-wc id="interval_range" min="15" max="480" step="15" value="60" hasDisplay="true">
-                <span class="f3" slot="unit">minutes</span>
+                <span class="f3 minutetext" slot="unit">minutes</span>
             </ranger-wc>
         </div>
         <!-- keepfor -->
-        <div class="flex-column-center grow1 mx-2">
+        <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
-                <span class="f4 bold900">Keep</span>
+                <span class="f4 bold900 keeptext">Keep</span>
             </div>
             <div>
-                <span class="f3 bold">For:</span>
+                <span class="f3 bold fortext">for</span>
             </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="12h">
-                    <span class="f3">12 hours</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="1d">
-                    <span class="f3">1 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="2d" checked>
-                    <span class="f3">2 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="3d">
-                    <span class="f3">3 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="4d">
-                    <span class="f3">4 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="5d">
-                    <span class="f3">5 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="6d">
-                    <span class="f3">6 day</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="7d">
-                    <span class="f3">1 week</span>
-                </label>
-            </div>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="c">
-                    <span class="f3">Custom</span>
-                </label>
-            </div>
+            <extended-radio name="keepfor" value="12h" text1="12" text2="hours"></extended-radio>
+            <extended-radio name="keepfor" value="1d" text1="1" text2="day"></extended-radio>
+            <extended-radio name="keepfor" value="2d" text1="2" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="3d" text1="3" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="4d" text1="4" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="5d" text1="5" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="6d" text1="6" text2="days"></extended-radio>
+            <extended-radio name="keepfor" value="7d" text1="1" text2="week"></extended-radio>
+            <extended-radio name="keepfor" value="c" text1="" text2="custom"></extended-radio>
             <ranger-wc id="keepfor_range" min="3" max="168" step="3" value="48" hasDisplay="true">
-                <span class="f3" slot="unit">hours</span>
+                <span class="f3 hourstext" slot="unit">hours</span>
             </ranger-wc>
-            <div>
-                <label>
-                    <input type="radio" name="keepfor" value="mx">
-                    <span class="f25">Set maximum number intead </span>
-                </label>
-            </div>
+            <extended-radio name="keepfor" value="mx" text1="" text2="keep_max_text" text2class="f25"></extended-radio>
             <ranger-wc id="keepfor_items" min="2" max="672" step="2" value="48">
-                <span class="f3" slot="unit">items</span>
+                <span class="f3 itemtext" slot="unit">items</span>
             </ranger-wc>
         </div>
     </div>
     <div class="mt-2 mb-2 flex-row-center">
-        <button id="action" class="f3">Set</button>
-        <button id="full_throtle" class="w-25 mt-1 ml-4 text-center f3">Full Settings</button>
+        <button id="action" class="w-25 text-center f3">Set</button>
+        <button id="full_throtle" class="w-30 mt-1 ml-4 text-center f3">Full Settings</button>
     </div>
-    <template id="range_with_controls">
-        <div class="w-75">
-            <button class="ranger-wc minus">&minus;</button>
-            <input type="range" class="w-75" disabled>
-            <button class="ranger-wc plus">&plus;</button>
-            <div>You can use slider or controls</div>
-            <div>
-                <span class="f3 display"></span>
-                <slot name="unit">
-            </div>
-        </div>
-    </template>   
-    <script src="extended_radio.js"></script>
-    <script src="ranger.js"></script>
     <script src="utils.js"></script>
+    <script src="xradio.js"></script>
+    <script src="ranger.js"></script>
     <script src="options.js"></script>
 </body>
 

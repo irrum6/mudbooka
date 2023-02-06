@@ -29,6 +29,10 @@ input[type="range"] {
     width: 25%;
 }
 
+.w-30 {
+    width: 30%;
+}
+
 .w-50 {
     width: 50%;
 }

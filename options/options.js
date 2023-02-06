@@ -1,4 +1,24 @@
 class AutoBookmarkerOptionsInterface {
+    doTheTranslation() {
+        query("span.inttext").textContent = browser.i18n.getMessage("select_interval");
+        query("span.everytext").textContent = browser.i18n.getMessage("every");
+        query("span.minutetext").textContent = browser.i18n.getMessage("minutes");
+
+        query("span.keeptext").textContent = browser.i18n.getMessage("keep_text");
+        query("span.fortext").textContent = browser.i18n.getMessage("for_text");
+        query("span.hourstext").textContent = browser.i18n.getMessage("hours");
+        query("span.itemtext").textContent = browser.i18n.getMessage("items");
+
+        query("button#action").textContent = browser.i18n.getMessage("save");
+        query("button#full_throtle").textContent = browser.i18n.getMessage("full_settings");
+        
+    }
+    #translate(s, text) {
+        if (!Utils.isNoneEmptyString(s) || !Utils.isNoneEmptyString(s)) {
+            console.warn("empty selector or empty text");
+        }
+        query(s).textContent = browser.i18n.getMessage(text);
+    }
 
     onIntervalChange(event) {
         //custom range
@@ -19,7 +39,7 @@ class AutoBookmarkerOptionsInterface {
     setIntervalValue(interval, custom_interval) {
         let range = getbid("interval_range");
 
-        let intervals = query_all("input[name=interval]");
+        let intervals = query_all("extended-radio[name=interval]");
         for (const inter of intervals) {
             if (inter.value === interval) {
                 inter.checked = true;
@@ -32,7 +52,7 @@ class AutoBookmarkerOptionsInterface {
         }
     }
     getIntervalValue() {
-        let intervals = query_all("input[name=interval]");
+        let intervals = query_all("extended-radio[name=interval]");
         for (const inter of intervals) {
             if (inter.checked) {
                 return inter.value;
@@ -47,10 +67,12 @@ class AutoBookmarkerOptionsInterface {
         let value = event.target.value;
         if ("c" === value) {
             range.enable();
+            items.disable();
             return;
         }
         if ("mx" === value) {
             items.enable();
+            range.disable();
             return;
         }
         range.disable();
@@ -67,7 +89,7 @@ class AutoBookmarkerOptionsInterface {
         //max numbers range
         let items = getbid("keepfor_items");
 
-        let keepers = query_all("input[name=keepfor]");
+        let keepers = query_all("extended-radio[name=keepfor]");
         for (const keep of keepers) {
             if (keep.value === keepfor) {
                 keep.checked = true;
@@ -85,7 +107,7 @@ class AutoBookmarkerOptionsInterface {
         }
     }
     getKeepforValue() {
-        let keepers = query_all("input[name=keepfor]");
+        let keepers = query_all("extended-radio[name=keepfor]");
         for (const keep of keepers) {
             if (keep.checked) {
                 return keep.value;
@@ -94,14 +116,14 @@ class AutoBookmarkerOptionsInterface {
     }
 
     setEvents() {
-        let intervals = query_all("input[name=interval]");
+        let intervals = query_all("extended-radio[name=interval]");
         for (const inter of intervals) {
-            inter[on]("change", this.onIntervalChange.bind(this));
+            inter[on]("xchanged", this.onIntervalChange.bind(this));
         }
 
-        let keepers = query_all("input[name=keepfor]");
+        let keepers = query_all("extended-radio[name=keepfor]");
         for (const keep of keepers) {
-            keep[on]("change", this.onKeepforChange.bind(this));
+            keep[on]("xchanged", this.onKeepforChange.bind(this));
         }
     }
 }
@@ -186,7 +208,7 @@ class AutoBookmarkerOptions {
         )
     }
 
-    async saveOptions(){
+    async saveOptions() {
         await this.saveInterval();
         await this.saveKeepfor();
     }
@@ -195,8 +217,12 @@ class AutoBookmarkerOptions {
         query("#full_throtle")[on]("click", this.openFullSettings.bind(this));
         query("#action")[on]("click", this.saveOptions.bind(this));
     }
+    translation() {
+        this.interface.doTheTranslation();
+    }
 }
 
 const options = new AutoBookmarkerOptions();
 options.loadData();
 options.setEvents();
+options.translation();
