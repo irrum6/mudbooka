@@ -170,5 +170,13 @@
     "separate_folders_text": {
         "message": "Separate folder for each window",
         "description": "full_settings"
+    },
+    "yes": {
+        "message": "yes",
+        "description": "yes"
+    },
+    "no": {
+        "message": "no",
+        "description": "no"
     }
 }

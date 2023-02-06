@@ -33,41 +33,43 @@ class AutoBookmarkerSettingsInterface {
     }
     doTheTranslation() {
         // translations,translations
-        query("h1").textContent = browser.i18n.getMessage("full_settings");
+        this.#translate("h1", "full_settings");
         // translate title as well
         document.title = `Mudbooker:${browser.i18n.getMessage("full_settings")}`;
+        //moore
+        this.#translate("span.inttext", "select_interval");
+        this.#translate("span.everytext", "every");
+        this.#translate("span.minutetext", "minutes");
+        this.#translate("button.saveinttext", "save_interval");
 
-        query("span.inttext").textContent = browser.i18n.getMessage("select_interval");
-        query("span.everytext").textContent = browser.i18n.getMessage("every");
-        query("span.minutetext").textContent = browser.i18n.getMessage("minutes");
-        query("button.saveinttext").textContent = browser.i18n.getMessage("save_interval");
+        this.#translate("span.keeptext", "keep_text");
+        this.#translate("span.fortext", "for_text");
+        this.#translate("span.hourstext", "hours");
+        this.#translate("span.itemtext", "items");
+        this.#translate("button.savekeep", "savekeep");
 
-        query("span.keeptext").textContent = browser.i18n.getMessage("keep_text");
-        query("span.fortext").textContent = browser.i18n.getMessage("for_text");
-        query("span.hourstext").textContent = browser.i18n.getMessage("hours");
-        query("span.itemtext").textContent = browser.i18n.getMessage("items");
-        query("button.savekeep").textContent = browser.i18n.getMessage("savekeep");
+        this.#translate("span.naming", "naming");
+        this.#translate("span.prefix", "prefix");
+        this.#translate("span.suffix", "suffix");
 
-        query("span.naming").textContent = browser.i18n.getMessage("naming");
-        query("span.prefix").textContent = browser.i18n.getMessage("prefix");
-        query("span.suffix").textContent = browser.i18n.getMessage("suffix");
+        this.#translate("span.yearformat", "year_format");
+        this.#translate("span.twodigit", "2digit");
+        this.#translate("span.yearnumeric", "year_numeric");
 
-        query("span.yearformat").textContent = browser.i18n.getMessage("year_format");
-        query("span.twodigit").textContent = browser.i18n.getMessage("2digit");
-        query("span.yearnumeric").textContent = browser.i18n.getMessage("year_numeric");
+        this.#translate("span.monformat", "mon_format");
+        this.#translate("span.monumeric", "mon_numeric");
+        this.#translate("span.monlong", "mon_long");
+        this.#translate("span.monshort", "mon_short");
+        this.#translate("span.example", "example");
+        this.#translate("button.savenaming", "save_naming");
 
-        query("span.monformat").textContent = browser.i18n.getMessage("mon_format");
-        query("span.monumeric").textContent = browser.i18n.getMessage("mon_numeric");
-        query("span.monlong").textContent = browser.i18n.getMessage("mon_long");
-        query("span.monshort").textContent = browser.i18n.getMessage("mon_short");
-        query("span.example").textContent = browser.i18n.getMessage("example");
-        query("button.savenaming").textContent = browser.i18n.getMessage("save_naming");
+        this.#translate("span.othersettings", "other_settings");
+        this.#translate("span.savein", "savein");
+        this.#translate("button.saveothers", "save");
 
-        query("span.othersettings").textContent = browser.i18n.getMessage("other_settings");
-        query("span.savein").textContent = browser.i18n.getMessage("savein");
-        query("button.saveothers").textContent = browser.i18n.getMessage("save");
-
-        query("span.foldsep").textContent = browser.i18n.getMessage("separate_folders_text");
+        this.#translate("span.foldsep", "separate_folders_text");
+        this.#translate("span.yes", "yes");
+        this.#translate("span.no", "no");
     }
 
     #translate(s, text) {

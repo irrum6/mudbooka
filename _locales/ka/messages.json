@@ -170,5 +170,13 @@
     "separate_folders_text": {
         "message": "ცალკე საქაღალდე ყოველი ფანჯრისათვის",
         "description": "full_settings"
+    },
+    "yes": {
+        "message": "დიახ",
+        "description": "yes"
+    },
+    "no": {
+        "message": "არა",
+        "description": "no"
     }
 }
