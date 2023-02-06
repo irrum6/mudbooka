@@ -26,6 +26,11 @@ class AutoBookmarkerConfig {
         this.conf.interval = HOUR * 1;
         this.conf.keepfor = DAY * 2;
         this.conf.keepItems = 1;
+        this.conf.separateFolders = false;
+    }
+
+    get separateFolders() {
+        return this.conf.separateFolders;
     }
 
     get prefix() {
@@ -92,14 +97,14 @@ class AutoBookmarkerConfig {
     }
 
     async loadNaming() {
-        let sarraya = ["prefix", "suffix", "format_year", "format_mon", "folder_name"];
+        let sarraya = ["prefix", "suffix", "format_year", "format_mon", "folder_name", "separateFolders"];
 
         let data = await browser.storage.local.get(sarraya);
 
         if (undefined === data || null === data) {
             return;
         }
-        let { prefix, suffix, format_year, format_mon, folder_name } = data;
+        let { prefix, suffix, format_year, format_mon, folder_name, separateFolders } = data;
 
         this.prefix = prefix;
         this.suffix = suffix;
@@ -108,6 +113,7 @@ class AutoBookmarkerConfig {
 
         this.format = fmt;
         this.folderName = folder_name;
+        this.conf.separateFolders = (separateFolders === "yes");
     }
 
     get debug() {
@@ -227,6 +233,9 @@ class AutoBookmarker {
         pdata.next_time = 0;
         this.pdata = pdata;
     }
+    /**Creates parent folder
+     * @returns {Number}
+    */
     async touchParentID() {
         let folder_name = this.config.folderName;
         let bookers = await browser.bookmarks.search({ query: folder_name });
@@ -332,7 +341,7 @@ class AutoBookmarker {
      */
     async runner(first) {
         // console.log(281);
-        
+
         if (Date.now() < this.pdata.next_time && (false === first || undefined === first)) {
             // console.log(new Date(this.pdata.next_time));
             return;
@@ -361,22 +370,38 @@ class AutoBookmarker {
 
         let parent_id = await this.touchParentID();
 
-        let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
+        let idMaps = new Map();
+        if (this.config.separateFolders) {
+            let windows = await browser.windows.getAll();
+            for (let wIndex = 0, wLen = windows.length; wIndex < wLen; wIndex++) {
+                let win = windows[wIndex];
+                let titlet = `${title}_w${wIndex + 1}`;
+                let newFolder = await browser.bookmarks.create({ title: titlet, parentId: parent_id });
+                idMaps.set(win.id, newFolder.id);
+            }
+        } else {
+            let newFolder = await browser.bookmarks.create({ title, parentId: parent_id });
+            idMaps.set("default", newFolder.id);
+        }
 
-        const folder_id = newFolder.id;
+        let defaultFolderId = idMaps.get("default");
 
-        //save tabs to folder
         for (const t of tabs) {
-            const { title, url } = t;
-            await browser.bookmarks.create({ parentId: folder_id, title, url });
+            const { title, url, windowId } = t;
+            if (this.config.separateFolders) {
+                let parentId = idMaps.get(windowId);
+                await browser.bookmarks.create({ parentId: parentId, title, url });
+                continue;
+            }
+            await browser.bookmarks.create({ parentId: defaultFolderId, title, url });
         }
 
         this.pdata.last_time = Date.now();
         this.pdata.next_time = this.pdata.last_time + this.config.interval;
 
         let nudate = new Date(this.pdata.last_time);
-        let hours = nudate.getHours().toString().padStart(2,"0");
-        let minutes = nudate.getMinutes().toString().padStart(2,"0");
+        let hours = nudate.getHours().toString().padStart(2, "0");
+        let minutes = nudate.getMinutes().toString().padStart(2, "0");
         let message = `${hours}:${minutes} - tabs were bookmarked`;
 
         browser.notifications.create({

@@ -305,15 +305,18 @@ class AutoBookmarkerSettings {
     }
 
     async loadOtherSettings() {
-        let data = await browser.storage.local.get(["folder_name"]);
+        let data = await browser.storage.local.get(["folder_name", "separateFolders"]);
 
         if (undefined === data || null === data) {
             return;
         }
 
-        let { folder_name } = data;
+        let { folder_name, separateFolders } = data;
         if (Utils.isNoneEmptyString(folder_name)) {
             query("#folder_naming").value = folder_name;
+        }
+        if (Utils.isNoneEmptyString(separateFolders)) {
+            query(`[data-sepf='${separateFolders}']`).checked = true;
         }
     }
     translation() {
@@ -377,7 +380,14 @@ class AutoBookmarkerSettings {
 
     async SaveOtherSettings() {
         let folder_name = val("folder_naming");
-        await browser.storage.local.set({ folder_name });
+
+        let separateFolders = "yes";
+        let radio = query("input[name=fold_sep]:checked");
+        if (radio !== undefined && radio !== null) {
+            separateFolders = radio.value;
+        }
+
+        await browser.storage.local.set({ folder_name, separateFolders });
     }
 
     setEvents() {

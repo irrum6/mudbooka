@@ -20,12 +20,12 @@
             </div>
             <div>
                 <span class="f3 bold everytext">every</span>
-            </div>            
+            </div>
             <extended-radio name="interval" value="1h" text1="1" text2="hour"></extended-radio>
             <extended-radio name="interval" value="2h" text1="2" text2="hours"></extended-radio>
             <extended-radio name="interval" value="3h" text1="3" text2="hours"></extended-radio>
             <extended-radio name="interval" value="4h" text1="4" text2="hours"></extended-radio>
-            <extended-radio name="interval" value="5h" text1="5" text2="hours"></extended-radio>            
+            <extended-radio name="interval" value="5h" text1="5" text2="hours"></extended-radio>
             <extended-radio name="interval" value="6h" text1="6" text2="hours"></extended-radio>
             <extended-radio name="interval" value="7h" text1="7" text2="hours"></extended-radio>
             <extended-radio name="interval" value="8h" text1="8" text2="hours"></extended-radio>
@@ -53,11 +53,11 @@
             <extended-radio name="keepfor" value="5d" text1="5" text2="days"></extended-radio>
             <extended-radio name="keepfor" value="6d" text1="6" text2="days"></extended-radio>
             <extended-radio name="keepfor" value="7d" text1="1" text2="week"></extended-radio>
-            <extended-radio name="keepfor" value="c" text1="" text2="custom"></extended-radio>            
+            <extended-radio name="keepfor" value="c" text1="" text2="custom"></extended-radio>
             <ranger-wc id="keepfor_range" min="3" max="168" step="3" value="48" hasDisplay="true">
                 <span class="f3 hourstext" slot="unit">hours</span>
             </ranger-wc>
-            <extended-radio name="keepfor" value="mx" text1="" text2="keep_max_text" text2class="f25"></extended-radio>            
+            <extended-radio name="keepfor" value="mx" text1="" text2="keep_max_text" text2class="f25"></extended-radio>
             <ranger-wc id="keepfor_items" min="2" max="672" step="2" value="48">
                 <span class="f3 itemtext" slot="unit">items</span>
             </ranger-wc>
@@ -73,14 +73,14 @@
             <!-- prefix -->
             <div>
                 <label class="f25" for="naming_prefix">
-                    <span class="prefix">Prefix</span>                    
+                    <span class="prefix">Prefix</span>
                     <input type="text" class="f3" name="prefix" id="naming_prefix" value="">
                 </label>
             </div>
             <!-- suffix -->
             <div>
                 <label class="f25" for="naming_suffix">
-                    <span class="suffix">Suffix</span>                    
+                    <span class="suffix">Suffix</span>
                     <input type="text" class="f3" name="suffix" id="naming_suffix">
                 </label>
             </div>
@@ -128,28 +128,46 @@
             <!-- 12/24 -->
             <div class="mt-4">
                 <button id="save_naming" class="f3 savenaming">Save Naming</button>
-            </div>            
+            </div>
         </div>
         <!-- other options -->
         <div class="flex-column-center grow1 ml-4">
             <div class="text-center">
                 <span class="f4 bold900 othersettings">Other settings</span>
             </div>
+            <!-- save in -->
             <div class="f25">
-                <span class="savein">Save in</span>                
+                <span class="savein">Save in</span>
             </div>
             <div class="flex-row-center grow1 ml-4">
                 <label class="f25" for="folder_naming">Bookmarks Toolbar/</label>
                 <input type="text" class="f3" name="prefix" id="folder_naming" value="mudbooker_tabs">
             </div>
+            <!-- separate by windows -->
+            <div class="text-center">
+                <span class="f3 bold yearformat">
+                    Separate folder for each window
+                </span>
+            </div>
+            <div>
+                <label class="f3">
+                    <input type="radio" data-sepf="yes" name="fold_sep" value="yes">
+                    <span class="yes">yes</span>
+                </label>
+                <label class="f3">
+                    <input type="radio" data-sepf="no" name="fold_sep" value="no" checked>
+                    <span class="no">no</span>
+                </label>
+            </div>
+            <!-- save button -->
             <div class="mt-4">
                 <button id="save_other" class="f3 saveothers">Save</button>
             </div>
         </div>
-    </div>    
+    </div>
     <script src="utils.js"></script>
     <script src="xradio.js"></script>
-    <script src="ranger.js"></script>    
+    <script src="ranger.js"></script>
     <script src="settings.js"></script>
 </body>
 
