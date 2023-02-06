@@ -66,6 +66,8 @@ class AutoBookmarkerSettingsInterface {
         query("span.othersettings").textContent = browser.i18n.getMessage("other_settings");
         query("span.savein").textContent = browser.i18n.getMessage("savein");
         query("button.saveothers").textContent = browser.i18n.getMessage("save");
+
+        query("span.foldsep").textContent = browser.i18n.getMessage("separate_folders_text");
     }
 
     #translate(s, text) {

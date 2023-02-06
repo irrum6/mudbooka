@@ -166,5 +166,9 @@
     "full_settings": {
         "message": "Full Settings",
         "description": "othersettings"
+    },
+    "separate_folders_text": {
+        "message": "Separate folder for each window",
+        "description": "full_settings"
     }
 }

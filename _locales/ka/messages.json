@@ -166,5 +166,9 @@
     "full_settings": {
         "message": "პარამეტრები სრულად",
         "description": "full_settings"
+    },
+    "separate_folders_text": {
+        "message": "ცალკე საქაღალდე ყოველი ფანჯრისათვის",
+        "description": "full_settings"
     }
 }
